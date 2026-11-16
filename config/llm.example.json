@@ -1,0 +1,15 @@
+{
+  "base_url": "https://llm.company.example/v1",
+  "model": "corporate-model",
+  "api_key_env": "SUPERSLIDE_LLM_API_KEY",
+  "timeout_seconds": 120,
+  "max_output_tokens": 6000,
+  "response_format": "json_object",
+  "temperature": 0.2,
+  "max_repair_attempts": 2,
+  "max_prompt_chars": 220000,
+  "context_window_tokens": null,
+  "token_limit_parameter": "max_tokens",
+  "reasoning_effort": null,
+  "trust_env_proxy": true
+}

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+output/
+config/llm.local.json
+config/*.local.key
+.env
+.env.*
+!.env.example

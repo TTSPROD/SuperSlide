@@ -1,0 +1,100 @@
+{
+  "images": [
+    {
+      "id": "steel_coils",
+      "file": "steel_coils.jpg",
+      "description": "Рулоны листовой стали в производственном цехе.",
+      "tags": [
+        "сталь",
+        "продукция",
+        "рулоны",
+        "производство",
+        "steel"
+      ],
+      "source_slide": 72,
+      "source_media": "ppt/media/image82.jpeg",
+      "width": 2499,
+      "height": 1666
+    },
+    {
+      "id": "steelworks_hall",
+      "file": "steelworks_hall.jpg",
+      "description": "Общий вид промышленного цеха с оборудованием и мостовыми кранами.",
+      "tags": [
+        "производство",
+        "цех",
+        "оборудование",
+        "промышленность",
+        "production"
+      ],
+      "source_slide": 8,
+      "source_media": "ppt/media/image16.jpeg",
+      "width": 2933,
+      "height": 1650
+    },
+    {
+      "id": "production_worker",
+      "file": "production_worker.jpg",
+      "description": "Работник в каске с ноутбуком на фоне промышленного оборудования.",
+      "tags": [
+        "люди",
+        "производство",
+        "сотрудник",
+        "цифровизация",
+        "people"
+      ],
+      "source_slide": 17,
+      "source_media": "ppt/media/image21.jpeg",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "id": "team_meeting",
+      "file": "team_meeting.jpg",
+      "description": "Командная встреча за столом с ноутбуками в офисе.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "сотрудничество",
+        "people"
+      ],
+      "source_slide": 75,
+      "source_media": "ppt/media/image89.jpeg",
+      "width": 923,
+      "height": 615
+    },
+    {
+      "id": "industrial_landscape",
+      "file": "industrial_landscape.jpg",
+      "description": "Промышленная площадка у воды с трубой и производственными зданиями.",
+      "tags": [
+        "ландшафт",
+        "промышленность",
+        "площадка",
+        "производство",
+        "landscape"
+      ],
+      "source_slide": 16,
+      "source_media": "ppt/media/image20.jpeg",
+      "width": 2933,
+      "height": 1650
+    },
+    {
+      "id": "bridge_landscape",
+      "file": "bridge_landscape.jpg",
+      "description": "Панорамный вид на мост через реку на закате.",
+      "tags": [
+        "ландшафт",
+        "мост",
+        "река",
+        "инфраструктура",
+        "landscape"
+      ],
+      "source_slide": 170,
+      "source_media": "ppt/media/image125.jpeg",
+      "width": 3754,
+      "height": 1723
+    }
+  ]
+}

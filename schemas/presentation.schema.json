@@ -1,0 +1,1153 @@
+{
+  "$defs": {
+    "BarChartSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "bar_chart",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "maxLength": 45,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Categories",
+          "type": "array"
+        },
+        "series": {
+          "items": {
+            "$ref": "#/$defs/ChartSeries"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Series",
+          "type": "array"
+        },
+        "unit": {
+          "default": "",
+          "maxLength": 60,
+          "title": "Unit",
+          "type": "string"
+        },
+        "takeaway": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Takeaway",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "categories",
+        "series"
+      ],
+      "title": "BarChartSlide",
+      "type": "object"
+    },
+    "BulletSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "accent_panel",
+            "two_columns"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "bullet_list",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "bullets": {
+          "items": {
+            "maxLength": 130,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "title": "Bullets",
+          "type": "array"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "bullets"
+      ],
+      "title": "BulletSlide",
+      "type": "object"
+    },
+    "ChartSeries": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 45,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "values": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Values",
+          "type": "array"
+        },
+        "role": {
+          "default": "company",
+          "enum": [
+            "company",
+            "comparison",
+            "neutral"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "values"
+      ],
+      "title": "ChartSeries",
+      "type": "object"
+    },
+    "ClosingSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "blue_minimal",
+            "white_graphic"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "closing",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "subtitle": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Subtitle",
+          "type": "string"
+        },
+        "contact": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Contact",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title"
+      ],
+      "title": "ClosingSlide",
+      "type": "object"
+    },
+    "Column": {
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Heading",
+          "type": "string"
+        },
+        "bullets": {
+          "items": {
+            "maxLength": 110,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "title": "Bullets",
+          "type": "array"
+        }
+      },
+      "required": [
+        "heading",
+        "bullets"
+      ],
+      "title": "Column",
+      "type": "object"
+    },
+    "ComparisonSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "comparison",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "left": {
+          "$ref": "#/$defs/Column"
+        },
+        "right": {
+          "$ref": "#/$defs/Column"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "left",
+        "right"
+      ],
+      "title": "ComparisonSlide",
+      "type": "object"
+    },
+    "GalleryImage": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "fit": {
+          "default": "cover",
+          "enum": [
+            "cover",
+            "contain"
+          ],
+          "title": "Fit",
+          "type": "string"
+        },
+        "alt_text": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Alt Text",
+          "type": "string"
+        },
+        "caption": {
+          "default": "",
+          "maxLength": 90,
+          "title": "Caption",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id"
+      ],
+      "title": "GalleryImage",
+      "type": "object"
+    },
+    "GallerySlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "gallery",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "images": {
+          "items": {
+            "$ref": "#/$defs/GalleryImage"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Images",
+          "type": "array"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "images"
+      ],
+      "title": "GallerySlide",
+      "type": "object"
+    },
+    "ImageRef": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "fit": {
+          "default": "cover",
+          "enum": [
+            "cover",
+            "contain"
+          ],
+          "title": "Fit",
+          "type": "string"
+        },
+        "alt_text": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Alt Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id"
+      ],
+      "title": "ImageRef",
+      "type": "object"
+    },
+    "ImageSpotlightSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "white_caption",
+            "side_panel"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "image_spotlight",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "image": {
+          "$ref": "#/$defs/ImageRef"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "caption": {
+          "default": "",
+          "maxLength": 140,
+          "title": "Caption",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "image",
+        "title"
+      ],
+      "title": "ImageSpotlightSlide",
+      "type": "object"
+    },
+    "KpiCard": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 65,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "maxLength": 110,
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "label"
+      ],
+      "title": "KpiCard",
+      "type": "object"
+    },
+    "KpiCardsSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "plain",
+            "accent_panel"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "kpi_cards",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "cards": {
+          "items": {
+            "$ref": "#/$defs/KpiCard"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Cards",
+          "type": "array"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "cards"
+      ],
+      "title": "KpiCardsSlide",
+      "type": "object"
+    },
+    "PhotoTextSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "photo_right",
+            "photo_band"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "photo_text",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "image": {
+          "$ref": "#/$defs/ImageRef"
+        },
+        "heading": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Heading",
+          "type": "string"
+        },
+        "bullets": {
+          "items": {
+            "maxLength": 110,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "title": "Bullets",
+          "type": "array"
+        },
+        "caption": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Caption",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "image",
+        "bullets"
+      ],
+      "title": "PhotoTextSlide",
+      "type": "object"
+    },
+    "QuoteSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "blue",
+            "accent"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "quote",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 220,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "author": {
+          "maxLength": 180,
+          "title": "Author",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "quote",
+        "author"
+      ],
+      "title": "QuoteSlide",
+      "type": "object"
+    },
+    "SectionDividerSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "circle_pattern",
+            "diagonal_pattern"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "section_divider",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "number": {
+          "default": "",
+          "maxLength": 12,
+          "title": "Number",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "subtitle": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Subtitle",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title"
+      ],
+      "title": "SectionDividerSlide",
+      "type": "object"
+    },
+    "TableSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "table",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "maxLength": 45,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "items": {
+              "maxLength": 80,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Rows",
+          "type": "array"
+        },
+        "footnote": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Footnote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "columns",
+        "rows"
+      ],
+      "title": "TableSlide",
+      "type": "object"
+    },
+    "TimelineSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "timeline",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/TimelineStep"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "steps"
+      ],
+      "title": "TimelineSlide",
+      "type": "object"
+    },
+    "TimelineStep": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "maxLength": 45,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 110,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "title": "TimelineStep",
+      "type": "object"
+    },
+    "TitleSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "default": "default",
+          "enum": [
+            "default",
+            "blue_minimal",
+            "blue_graphic",
+            "photo"
+          ],
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "title_slide",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "subtitle": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Subtitle",
+          "type": "string"
+        },
+        "author": {
+          "default": "",
+          "maxLength": 180,
+          "title": "Author",
+          "type": "string"
+        },
+        "date": {
+          "default": "",
+          "maxLength": 40,
+          "title": "Date",
+          "type": "string"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "layout_id",
+        "title"
+      ],
+      "title": "TitleSlide",
+      "type": "object"
+    },
+    "TwoColumnsSlide": {
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "const": "default",
+          "default": "default",
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Notes",
+          "type": "string"
+        },
+        "layout_id": {
+          "const": "two_columns",
+          "title": "Layout Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "left": {
+          "$ref": "#/$defs/Column"
+        },
+        "right": {
+          "$ref": "#/$defs/Column"
+        }
+      },
+      "required": [
+        "layout_id",
+        "title",
+        "left",
+        "right"
+      ],
+      "title": "TwoColumnsSlide",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "template_version": {
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2"
+      ],
+      "title": "Template Version",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 150,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "slides": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "bar_chart": "#/$defs/BarChartSlide",
+            "bullet_list": "#/$defs/BulletSlide",
+            "closing": "#/$defs/ClosingSlide",
+            "comparison": "#/$defs/ComparisonSlide",
+            "gallery": "#/$defs/GallerySlide",
+            "image_spotlight": "#/$defs/ImageSpotlightSlide",
+            "kpi_cards": "#/$defs/KpiCardsSlide",
+            "photo_text": "#/$defs/PhotoTextSlide",
+            "quote": "#/$defs/QuoteSlide",
+            "section_divider": "#/$defs/SectionDividerSlide",
+            "table": "#/$defs/TableSlide",
+            "timeline": "#/$defs/TimelineSlide",
+            "title_slide": "#/$defs/TitleSlide",
+            "two_columns": "#/$defs/TwoColumnsSlide"
+          },
+          "propertyName": "layout_id"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/TitleSlide"
+          },
+          {
+            "$ref": "#/$defs/BulletSlide"
+          },
+          {
+            "$ref": "#/$defs/TwoColumnsSlide"
+          },
+          {
+            "$ref": "#/$defs/QuoteSlide"
+          },
+          {
+            "$ref": "#/$defs/TableSlide"
+          },
+          {
+            "$ref": "#/$defs/BarChartSlide"
+          },
+          {
+            "$ref": "#/$defs/SectionDividerSlide"
+          },
+          {
+            "$ref": "#/$defs/PhotoTextSlide"
+          },
+          {
+            "$ref": "#/$defs/ImageSpotlightSlide"
+          },
+          {
+            "$ref": "#/$defs/GallerySlide"
+          },
+          {
+            "$ref": "#/$defs/KpiCardsSlide"
+          },
+          {
+            "$ref": "#/$defs/TimelineSlide"
+          },
+          {
+            "$ref": "#/$defs/ComparisonSlide"
+          },
+          {
+            "$ref": "#/$defs/ClosingSlide"
+          }
+        ]
+      },
+      "maxItems": 40,
+      "minItems": 1,
+      "title": "Slides",
+      "type": "array"
+    }
+  },
+  "required": [
+    "template_version",
+    "title",
+    "slides"
+  ],
+  "title": "PresentationSpec",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "superslide"
+version = "0.1.0"
+description = "Local, template-driven corporate PowerPoint generator"
+requires-python = ">=3.11"
+dependencies = [
+  "python-pptx>=1.0.2,<2",
+  "pydantic>=2.7,<3",
+  "python-docx>=1.1,<2",
+  "pypdf>=5,<8",
+  "Pillow>=10,<13",
+]
+
+[project.scripts]
+superslide = "superslide.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+superslide = ["static/*", "static/assets/*"]

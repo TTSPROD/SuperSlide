@@ -1,0 +1,2199 @@
+{
+  "template_version": "1.2",
+  "compatible_versions": [
+    "1.0",
+    "1.1",
+    "1.2"
+  ],
+  "template_file": "corporate_base.pptx",
+  "font_family": "Arial",
+  "colors": {
+    "primary": "002F6C",
+    "text": "002F6C",
+    "muted": "909090",
+    "background": "FFFFFF",
+    "accent": "FF0000",
+    "grid": "DEDEDE",
+    "light_background": "F4F4F4"
+  },
+  "layouts": {
+    "title_slide": {
+      "layout_name": "title_slide",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 425196,
+          "y": 2331720,
+          "width": 6492240,
+          "height": 1691640,
+          "font_size_pt": 36.0,
+          "min_font_size_pt": 30.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 3
+        },
+        "subtitle": {
+          "idx": 1,
+          "type": "text",
+          "x": 425196,
+          "y": 4251960,
+          "width": 6400800,
+          "height": 685800,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 2
+        },
+        "author": {
+          "idx": 2,
+          "type": "text",
+          "x": 713232,
+          "y": 5541264,
+          "width": 5943600,
+          "height": 283464,
+          "font_size_pt": 16.0,
+          "min_font_size_pt": 14.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 1
+        },
+        "date": {
+          "idx": 3,
+          "type": "text",
+          "x": 713232,
+          "y": 5888736,
+          "width": 5943600,
+          "height": 283464,
+          "font_size_pt": 16.0,
+          "min_font_size_pt": 14.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 1
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": false,
+      "variants": {
+        "blue_minimal": {
+          "layout_name": "title_slide__blue_minimal",
+          "description": "Синяя обложка без графики: вариант из брендбука, стр. 108.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 425196,
+              "y": 2267712,
+              "width": 10424160,
+              "height": 1417320,
+              "font_size_pt": 42.0,
+              "min_font_size_pt": 32.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 3
+            },
+            "subtitle": {
+              "idx": 1,
+              "type": "text",
+              "x": 425196,
+              "y": 3749040,
+              "width": 10424160,
+              "height": 731520,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 2
+            },
+            "author": {
+              "idx": 2,
+              "type": "text",
+              "x": 713232,
+              "y": 4544568,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            },
+            "date": {
+              "idx": 3,
+              "type": "text",
+              "x": 713232,
+              "y": 4892040,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              108
+            ],
+            "source_slides": [
+              4
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout24.xml"
+          },
+          "artwork_style": "original"
+        },
+        "blue_graphic": {
+          "layout_name": "title_slide__blue_graphic",
+          "description": "Синяя обложка с оригинальной диагональной суперграфикой, стр. 108.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 425196,
+              "y": 2267712,
+              "width": 6492240,
+              "height": 1417320,
+              "font_size_pt": 42.0,
+              "min_font_size_pt": 32.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 3
+            },
+            "subtitle": {
+              "idx": 1,
+              "type": "text",
+              "x": 425196,
+              "y": 3749040,
+              "width": 6492240,
+              "height": 731520,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 2
+            },
+            "author": {
+              "idx": 2,
+              "type": "text",
+              "x": 713232,
+              "y": 4544568,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            },
+            "date": {
+              "idx": 3,
+              "type": "text",
+              "x": 713232,
+              "y": 4892040,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              108
+            ],
+            "source_slides": [
+              3
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout23.xml"
+          },
+          "artwork_style": "original"
+        },
+        "photo": {
+          "layout_name": "title_slide__photo",
+          "description": "Фотообложка с оригинальной диагональной графикой и полупрозрачным синим слоем для читаемости, стр. 108.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 425196,
+              "y": 2267712,
+              "width": 6492240,
+              "height": 1417320,
+              "font_size_pt": 42.0,
+              "min_font_size_pt": 32.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 3
+            },
+            "subtitle": {
+              "idx": 1,
+              "type": "text",
+              "x": 425196,
+              "y": 3749040,
+              "width": 6492240,
+              "height": 731520,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 2
+            },
+            "author": {
+              "idx": 2,
+              "type": "text",
+              "x": 713232,
+              "y": 4544568,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            },
+            "date": {
+              "idx": 3,
+              "type": "text",
+              "x": 713232,
+              "y": 4892040,
+              "width": 5943600,
+              "height": 283464,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 1
+            },
+            "image": {
+              "idx": 4,
+              "type": "picture",
+              "x": 0,
+              "y": 0,
+              "width": 12192000,
+              "height": 6858000,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              108
+            ],
+            "source_slides": [
+              2,
+              8
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout23.xml"
+          },
+          "foreground_art": true,
+          "artwork_style": "photo_cover"
+        }
+      }
+    },
+    "bullet_list": {
+      "layout_name": "bullet_list",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 822960,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "bullets": {
+          "idx": 1,
+          "type": "text",
+          "x": 502920,
+          "y": 1508760,
+          "width": 11064240,
+          "height": 4526280,
+          "font_size_pt": 24.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 11
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true,
+      "variants": {
+        "accent_panel": {
+          "layout_name": "bullet_list__accent_panel",
+          "description": "Список на светлой плашке с фирменным синим акцентом; адаптация внутренних слайдов со стр. 110.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "bullets": {
+              "idx": 1,
+              "type": "text",
+              "x": 1051560,
+              "y": 1737360,
+              "width": 10195560,
+              "height": 4160520,
+              "font_size_pt": 24.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 11
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110
+            ],
+            "source_slides": [
+              28
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout3.xml"
+          },
+          "artwork_style": "bullet_accent"
+        },
+        "two_columns": {
+          "layout_name": "bullet_list__two_columns",
+          "description": "Список в двух колонках с красными акцентами; композиция внутренних слайдов со стр. 110 и исходного слайда 35.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "bullets": {
+              "idx": 1,
+              "type": "text",
+              "x": 685800,
+              "y": 1645920,
+              "width": 5074920,
+              "height": 4434840,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 11
+            },
+            "bullets_right": {
+              "idx": 2,
+              "type": "text",
+              "x": 6400800,
+              "y": 1645920,
+              "width": 5074920,
+              "height": 4434840,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 11
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110
+            ],
+            "source_slides": [
+              35
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout3.xml"
+          },
+          "artwork_style": "bullet_columns"
+        }
+      }
+    },
+    "two_columns": {
+      "layout_name": "two_columns",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 822960,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "left_heading": {
+          "idx": 1,
+          "type": "text",
+          "x": 502920,
+          "y": 1508760,
+          "width": 5257800,
+          "height": 502920,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 1
+        },
+        "left_bullets": {
+          "idx": 2,
+          "type": "text",
+          "x": 502920,
+          "y": 2148840,
+          "width": 5257800,
+          "height": 3840480,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 10
+        },
+        "right_heading": {
+          "idx": 3,
+          "type": "text",
+          "x": 6400800,
+          "y": 1508760,
+          "width": 5257800,
+          "height": 502920,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 1
+        },
+        "right_bullets": {
+          "idx": 4,
+          "type": "text",
+          "x": 6400800,
+          "y": 2148840,
+          "width": 5257800,
+          "height": 3840480,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 10
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "quote": {
+      "layout_name": "quote",
+      "fields": {
+        "quote": {
+          "idx": 0,
+          "type": "text",
+          "x": 914400,
+          "y": 1691640,
+          "width": 10287000,
+          "height": 2834640,
+          "font_size_pt": 34.0,
+          "min_font_size_pt": 28.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 5
+        },
+        "author": {
+          "idx": 1,
+          "type": "text",
+          "x": 914400,
+          "y": 4892040,
+          "width": 10287000,
+          "height": 594360,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true,
+      "variants": {
+        "blue": {
+          "layout_name": "quote__blue",
+          "description": "Белая цитата на оригинальном синем диагональном паттерне; исходный слайд 176, семейство паттернов со стр. 56.",
+          "fields": {
+            "quote": {
+              "idx": 0,
+              "type": "text",
+              "x": 914400,
+              "y": 1874520,
+              "width": 10287000,
+              "height": 2743200,
+              "font_size_pt": 34.0,
+              "min_font_size_pt": 28.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 5
+            },
+            "author": {
+              "idx": 1,
+              "type": "text",
+              "x": 914400,
+              "y": 5074920,
+              "width": 10287000,
+              "height": 594360,
+              "font_size_pt": 20.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 2
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              56,
+              112
+            ],
+            "source_slides": [
+              165,
+              176
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout29.xml"
+          },
+          "artwork_style": "quote_blue"
+        },
+        "accent": {
+          "layout_name": "quote__accent",
+          "description": "Крупная цитата на белом фоне с красным акцентом; адаптация цитатного слайда со стр. 112.",
+          "fields": {
+            "quote": {
+              "idx": 0,
+              "type": "text",
+              "x": 1051560,
+              "y": 1691640,
+              "width": 9921240,
+              "height": 3063240,
+              "font_size_pt": 34.0,
+              "min_font_size_pt": 28.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 5
+            },
+            "author": {
+              "idx": 1,
+              "type": "text",
+              "x": 1051560,
+              "y": 5166360,
+              "width": 9921240,
+              "height": 594360,
+              "font_size_pt": 20.0,
+              "min_font_size_pt": 18.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              112
+            ],
+            "source_slides": [
+              176
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout3.xml"
+          },
+          "artwork_style": "quote_accent"
+        }
+      }
+    },
+    "table": {
+      "layout_name": "table",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 822960,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "table": {
+          "idx": 1,
+          "type": "content",
+          "x": 502920,
+          "y": 1508760,
+          "width": 11064240,
+          "height": 4343400,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 14.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "footnote": {
+          "idx": 2,
+          "type": "text",
+          "x": 502920,
+          "y": 6016752,
+          "width": 11064240,
+          "height": 274320,
+          "font_size_pt": 11.0,
+          "min_font_size_pt": 10.0,
+          "color": "909090",
+          "bold": false,
+          "max_lines": 1
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "bar_chart": {
+      "layout_name": "bar_chart",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 822960,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "chart": {
+          "idx": 1,
+          "type": "content",
+          "x": 502920,
+          "y": 1755648,
+          "width": 7635240,
+          "height": 4343400,
+          "font_size_pt": 16.0,
+          "min_font_size_pt": 12.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "unit": {
+          "idx": 2,
+          "type": "text",
+          "x": 502920,
+          "y": 1280160,
+          "width": 7635240,
+          "height": 292608,
+          "font_size_pt": 14.0,
+          "min_font_size_pt": 12.0,
+          "color": "909090",
+          "bold": false,
+          "max_lines": 1
+        },
+        "takeaway": {
+          "idx": 3,
+          "type": "text",
+          "x": 8595360,
+          "y": 1965960,
+          "width": 2971800,
+          "height": 3566160,
+          "font_size_pt": 24.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 8
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "section_divider": {
+      "layout_name": "section_divider",
+      "fields": {
+        "number": {
+          "idx": 0,
+          "type": "text",
+          "x": 502920,
+          "y": 1783080,
+          "width": 2743200,
+          "height": 1417320,
+          "font_size_pt": 78.0,
+          "min_font_size_pt": 72.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 1
+        },
+        "title": {
+          "idx": 1,
+          "type": "text",
+          "x": 502920,
+          "y": 3429000,
+          "width": 6492240,
+          "height": 1508760,
+          "font_size_pt": 46.0,
+          "min_font_size_pt": 38.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 2
+        },
+        "subtitle": {
+          "idx": 2,
+          "type": "text",
+          "x": 502920,
+          "y": 5166360,
+          "width": 6492240,
+          "height": 1051560,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "FFFFFF",
+          "bold": false,
+          "max_lines": 3
+        }
+      },
+      "background_color": "002F6C",
+      "show_footer": false,
+      "variants": {
+        "circle_pattern": {
+          "layout_name": "section_divider__circle_pattern",
+          "description": "Разделитель с оригинальным монохромным круговым паттерном, стр. 109.",
+          "fields": {
+            "number": {
+              "idx": 0,
+              "type": "text",
+              "x": 502920,
+              "y": 1234440,
+              "width": 2743200,
+              "height": 914400,
+              "font_size_pt": 56.0,
+              "min_font_size_pt": 48.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 1
+            },
+            "title": {
+              "idx": 1,
+              "type": "text",
+              "x": 502920,
+              "y": 2423160,
+              "width": 9692640,
+              "height": 1645920,
+              "font_size_pt": 44.0,
+              "min_font_size_pt": 36.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 3
+            },
+            "subtitle": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 4617720,
+              "width": 8595360,
+              "height": 1051560,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 3
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              56,
+              109
+            ],
+            "source_slides": [
+              166
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout30.xml"
+          },
+          "artwork_style": "original"
+        },
+        "diagonal_pattern": {
+          "layout_name": "section_divider__diagonal_pattern",
+          "description": "Разделитель с оригинальным монохромным диагональным паттерном, стр. 109.",
+          "fields": {
+            "number": {
+              "idx": 0,
+              "type": "text",
+              "x": 502920,
+              "y": 1234440,
+              "width": 2743200,
+              "height": 914400,
+              "font_size_pt": 56.0,
+              "min_font_size_pt": 48.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 1
+            },
+            "title": {
+              "idx": 1,
+              "type": "text",
+              "x": 502920,
+              "y": 2423160,
+              "width": 9692640,
+              "height": 1645920,
+              "font_size_pt": 44.0,
+              "min_font_size_pt": 36.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 3
+            },
+            "subtitle": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 4617720,
+              "width": 8595360,
+              "height": 1051560,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 3
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              56,
+              109
+            ],
+            "source_slides": [
+              165
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout29.xml"
+          },
+          "artwork_style": "original"
+        }
+      }
+    },
+    "photo_text": {
+      "layout_name": "photo_text",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 1005840,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "image": {
+          "idx": 1,
+          "type": "picture",
+          "x": 502920,
+          "y": 1508760,
+          "width": 5760720,
+          "height": 4389120,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "heading": {
+          "idx": 2,
+          "type": "text",
+          "x": 6675120,
+          "y": 1508760,
+          "width": 4983480,
+          "height": 868680,
+          "font_size_pt": 24.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "bullets": {
+          "idx": 3,
+          "type": "text",
+          "x": 6675120,
+          "y": 2514600,
+          "width": 4983480,
+          "height": 3337560,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 8
+        },
+        "caption": {
+          "idx": 4,
+          "type": "text",
+          "x": 502920,
+          "y": 6053328,
+          "width": 5760720,
+          "height": 256032,
+          "font_size_pt": 11.0,
+          "min_font_size_pt": 10.0,
+          "color": "909090",
+          "bold": false,
+          "max_lines": 1
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true,
+      "variants": {
+        "photo_right": {
+          "layout_name": "photo_text__photo_right",
+          "description": "Текст слева и вертикальная фотография справа; композиция исходных слайдов 30–32 и стр. 110.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "image": {
+              "idx": 1,
+              "type": "picture",
+              "x": 7178040,
+              "y": 1508760,
+              "width": 4480560,
+              "height": 4498848,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false
+            },
+            "heading": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 1508760,
+              "width": 6217920,
+              "height": 868680,
+              "font_size_pt": 24.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "bullets": {
+              "idx": 3,
+              "type": "text",
+              "x": 502920,
+              "y": 2606040,
+              "width": 6217920,
+              "height": 3337560,
+              "font_size_pt": 22.0,
+              "min_font_size_pt": 18.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 9
+            },
+            "caption": {
+              "idx": 4,
+              "type": "text",
+              "x": 7178040,
+              "y": 6108192,
+              "width": 4480560,
+              "height": 256032,
+              "font_size_pt": 11.0,
+              "min_font_size_pt": 10.0,
+              "color": "909090",
+              "bold": false,
+              "max_lines": 1
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110
+            ],
+            "source_slides": [
+              30,
+              31,
+              32
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout32.xml"
+          },
+          "artwork_style": "plain"
+        },
+        "photo_band": {
+          "layout_name": "photo_text__photo_band",
+          "description": "Текст над широкой фотографией; адаптация допустимой фотокомпозиции со стр. 110 и нижней фотополосы слайда 177.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "image": {
+              "idx": 1,
+              "type": "picture",
+              "x": 502920,
+              "y": 3749040,
+              "width": 11155680,
+              "height": 2286000,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "crop_anchor_y": 0.08
+            },
+            "heading": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 1508760,
+              "width": 11155680,
+              "height": 594360,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "bullets": {
+              "idx": 3,
+              "type": "text",
+              "x": 502920,
+              "y": 2240280,
+              "width": 11155680,
+              "height": 1325880,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 5,
+              "space_after_pt": 6
+            },
+            "caption": {
+              "idx": 4,
+              "type": "text",
+              "x": 502920,
+              "y": 6117336,
+              "width": 11155680,
+              "height": 256032,
+              "font_size_pt": 11.0,
+              "min_font_size_pt": 10.0,
+              "color": "909090",
+              "bold": false,
+              "max_lines": 1
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110
+            ],
+            "source_slides": [
+              177
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout2.xml"
+          },
+          "artwork_style": "plain"
+        }
+      }
+    },
+    "image_spotlight": {
+      "layout_name": "image_spotlight",
+      "fields": {
+        "image": {
+          "idx": 0,
+          "type": "picture",
+          "x": 0,
+          "y": 0,
+          "width": 12192000,
+          "height": 4389120,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "title": {
+          "idx": 1,
+          "type": "text",
+          "x": 548640,
+          "y": 4645152,
+          "width": 9418320,
+          "height": 1143000,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 28.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 2
+        },
+        "caption": {
+          "idx": 2,
+          "type": "text",
+          "x": 548640,
+          "y": 5961888,
+          "width": 9418320,
+          "height": 566928,
+          "font_size_pt": 16.0,
+          "min_font_size_pt": 14.0,
+          "color": "FFFFFF",
+          "bold": false,
+          "max_lines": 2
+        }
+      },
+      "background_color": "002F6C",
+      "show_footer": false,
+      "variants": {
+        "white_caption": {
+          "layout_name": "image_spotlight__white_caption",
+          "description": "Крупная фотография с белой нижней плашкой; адаптация фотослайдов и цветных плашек со стр. 110.",
+          "fields": {
+            "image": {
+              "idx": 0,
+              "type": "picture",
+              "x": 0,
+              "y": 0,
+              "width": 12192000,
+              "height": 4754880,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false
+            },
+            "title": {
+              "idx": 1,
+              "type": "text",
+              "x": 548640,
+              "y": 4956048,
+              "width": 9418320,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 28.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "caption": {
+              "idx": 2,
+              "type": "text",
+              "x": 548640,
+              "y": 6108192,
+              "width": 9418320,
+              "height": 438912,
+              "font_size_pt": 16.0,
+              "min_font_size_pt": 14.0,
+              "color": "909090",
+              "bold": false,
+              "max_lines": 2
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              110
+            ],
+            "source_slides": [
+              177
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout2.xml"
+          },
+          "artwork_style": "white_caption"
+        },
+        "side_panel": {
+          "layout_name": "image_spotlight__side_panel",
+          "description": "Полноразмерное фото справа и синяя текстовая плашка слева; адаптация акцентных слайдов со стр. 112.",
+          "fields": {
+            "image": {
+              "idx": 0,
+              "type": "picture",
+              "x": 4709160,
+              "y": 0,
+              "width": 7482840,
+              "height": 6858000,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false
+            },
+            "title": {
+              "idx": 1,
+              "type": "text",
+              "x": 502920,
+              "y": 2286000,
+              "width": 3730752,
+              "height": 2011680,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 4
+            },
+            "caption": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 4983480,
+              "width": 3730752,
+              "height": 1051560,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 3
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              110,
+              112
+            ],
+            "source_slides": [
+              5,
+              172
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout18.xml"
+          },
+          "artwork_style": "side_panel"
+        }
+      }
+    },
+    "gallery": {
+      "layout_name": "gallery",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 1005840,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "image_1": {
+          "idx": 1,
+          "type": "picture",
+          "x": 502920,
+          "y": 1508760,
+          "width": 3566160,
+          "height": 3611880,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "image_2": {
+          "idx": 2,
+          "type": "picture",
+          "x": 4343400,
+          "y": 1508760,
+          "width": 3566160,
+          "height": 3611880,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "image_3": {
+          "idx": 3,
+          "type": "picture",
+          "x": 8183880,
+          "y": 1508760,
+          "width": 3566160,
+          "height": 3611880,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false
+        },
+        "caption_1": {
+          "idx": 4,
+          "type": "text",
+          "x": 685800,
+          "y": 5340096,
+          "width": 3200400,
+          "height": 685800,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 2
+        },
+        "caption_2": {
+          "idx": 5,
+          "type": "text",
+          "x": 4526280,
+          "y": 5340096,
+          "width": 3200400,
+          "height": 685800,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 2
+        },
+        "caption_3": {
+          "idx": 6,
+          "type": "text",
+          "x": 8366760,
+          "y": 5340096,
+          "width": 3200400,
+          "height": 685800,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 2
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "kpi_cards": {
+      "layout_name": "kpi_cards",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 502920,
+          "y": 365760,
+          "width": 9235440,
+          "height": 1005840,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 2
+        },
+        "value_1": {
+          "idx": 1,
+          "type": "text",
+          "x": 731520,
+          "y": 2212848,
+          "width": 3063240,
+          "height": 868680,
+          "font_size_pt": 46.0,
+          "min_font_size_pt": 38.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 1
+        },
+        "value_2": {
+          "idx": 2,
+          "type": "text",
+          "x": 4562856,
+          "y": 2212848,
+          "width": 3063240,
+          "height": 868680,
+          "font_size_pt": 46.0,
+          "min_font_size_pt": 38.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 1
+        },
+        "value_3": {
+          "idx": 3,
+          "type": "text",
+          "x": 8394192,
+          "y": 2212848,
+          "width": 3063240,
+          "height": 868680,
+          "font_size_pt": 46.0,
+          "min_font_size_pt": 38.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 1
+        },
+        "label_1": {
+          "idx": 4,
+          "type": "text",
+          "x": 731520,
+          "y": 3310128,
+          "width": 3063240,
+          "height": 822960,
+          "font_size_pt": 23.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "label_2": {
+          "idx": 5,
+          "type": "text",
+          "x": 4562856,
+          "y": 3310128,
+          "width": 3063240,
+          "height": 822960,
+          "font_size_pt": 23.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "label_3": {
+          "idx": 6,
+          "type": "text",
+          "x": 8394192,
+          "y": 3310128,
+          "width": 3063240,
+          "height": 822960,
+          "font_size_pt": 23.0,
+          "min_font_size_pt": 20.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "detail_1": {
+          "idx": 7,
+          "type": "text",
+          "x": 731520,
+          "y": 4407408,
+          "width": 3063240,
+          "height": 1280160,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 4
+        },
+        "detail_2": {
+          "idx": 8,
+          "type": "text",
+          "x": 4562856,
+          "y": 4407408,
+          "width": 3063240,
+          "height": 1280160,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 4
+        },
+        "detail_3": {
+          "idx": 9,
+          "type": "text",
+          "x": 8394192,
+          "y": 4407408,
+          "width": 3063240,
+          "height": 1280160,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 4
+        }
+      },
+      "background_color": "002F6C",
+      "show_footer": false,
+      "variants": {
+        "plain": {
+          "layout_name": "kpi_cards__plain",
+          "description": "Три числовых акцента на белом фоне с разделителями; адаптация числовой инфографики и внутренних слайдов.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "value_1": {
+              "idx": 1,
+              "type": "text",
+              "x": 731520,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_1": {
+              "idx": 4,
+              "type": "text",
+              "x": 731520,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_1": {
+              "idx": 7,
+              "type": "text",
+              "x": 731520,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 4
+            },
+            "value_2": {
+              "idx": 2,
+              "type": "text",
+              "x": 4562856,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_2": {
+              "idx": 5,
+              "type": "text",
+              "x": 4562856,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_2": {
+              "idx": 8,
+              "type": "text",
+              "x": 4562856,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 4
+            },
+            "value_3": {
+              "idx": 3,
+              "type": "text",
+              "x": 8394192,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_3": {
+              "idx": 6,
+              "type": "text",
+              "x": 8394192,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_3": {
+              "idx": 9,
+              "type": "text",
+              "x": 8394192,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 4
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110,
+              111
+            ],
+            "source_slides": [
+              44
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout3.xml"
+          },
+          "artwork_style": "kpi_plain"
+        },
+        "accent_panel": {
+          "layout_name": "kpi_cards__accent_panel",
+          "description": "Три карточки, первая на синей плашке; адаптация акцентов и цветных плашек со стр. 110.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 411480,
+              "y": 310896,
+              "width": 10332720,
+              "height": 1005840,
+              "font_size_pt": 32.0,
+              "min_font_size_pt": 26.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "value_1": {
+              "idx": 1,
+              "type": "text",
+              "x": 731520,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_1": {
+              "idx": 4,
+              "type": "text",
+              "x": 731520,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_1": {
+              "idx": 7,
+              "type": "text",
+              "x": 731520,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 4
+            },
+            "value_2": {
+              "idx": 2,
+              "type": "text",
+              "x": 4562856,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_2": {
+              "idx": 5,
+              "type": "text",
+              "x": 4562856,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_2": {
+              "idx": 8,
+              "type": "text",
+              "x": 4562856,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 4
+            },
+            "value_3": {
+              "idx": 3,
+              "type": "text",
+              "x": 8394192,
+              "y": 2212848,
+              "width": 3063240,
+              "height": 868680,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 1
+            },
+            "label_3": {
+              "idx": 6,
+              "type": "text",
+              "x": 8394192,
+              "y": 3310128,
+              "width": 3063240,
+              "height": 822960,
+              "font_size_pt": 23.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "detail_3": {
+              "idx": 9,
+              "type": "text",
+              "x": 8394192,
+              "y": 4407408,
+              "width": 3063240,
+              "height": 1280160,
+              "font_size_pt": 18.0,
+              "min_font_size_pt": 16.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 4
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": true,
+          "source_reference": {
+            "brandbook_pages": [
+              110,
+              111
+            ],
+            "source_slides": [
+              44
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout3.xml"
+          },
+          "artwork_style": "kpi_accent"
+        }
+      }
+    },
+    "timeline": {
+      "layout_name": "timeline",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 1005840,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "step_title_1": {
+          "idx": 1,
+          "type": "text",
+          "x": 502920,
+          "y": 2788920,
+          "width": 2423160,
+          "height": 841248,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "step_title_2": {
+          "idx": 2,
+          "type": "text",
+          "x": 3429000,
+          "y": 2788920,
+          "width": 2423160,
+          "height": 841248,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "step_title_3": {
+          "idx": 3,
+          "type": "text",
+          "x": 6355080,
+          "y": 2788920,
+          "width": 2423160,
+          "height": 841248,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "step_title_4": {
+          "idx": 4,
+          "type": "text",
+          "x": 9281160,
+          "y": 2788920,
+          "width": 2423160,
+          "height": 841248,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "step_text_1": {
+          "idx": 5,
+          "type": "text",
+          "x": 502920,
+          "y": 3858768,
+          "width": 2423160,
+          "height": 1965960,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 6
+        },
+        "step_text_2": {
+          "idx": 6,
+          "type": "text",
+          "x": 3429000,
+          "y": 3858768,
+          "width": 2423160,
+          "height": 1965960,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 6
+        },
+        "step_text_3": {
+          "idx": 7,
+          "type": "text",
+          "x": 6355080,
+          "y": 3858768,
+          "width": 2423160,
+          "height": 1965960,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 6
+        },
+        "step_text_4": {
+          "idx": 8,
+          "type": "text",
+          "x": 9281160,
+          "y": 3858768,
+          "width": 2423160,
+          "height": 1965960,
+          "font_size_pt": 18.0,
+          "min_font_size_pt": 16.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 6
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "comparison": {
+      "layout_name": "comparison",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 411480,
+          "y": 310896,
+          "width": 10332720,
+          "height": 1005840,
+          "font_size_pt": 32.0,
+          "min_font_size_pt": 26.0,
+          "color": "002F6C",
+          "bold": true,
+          "max_lines": 2
+        },
+        "left_heading": {
+          "idx": 1,
+          "type": "text",
+          "x": 731520,
+          "y": 1746504,
+          "width": 4846320,
+          "height": 420624,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 20.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 1
+        },
+        "left_bullets": {
+          "idx": 2,
+          "type": "text",
+          "x": 731520,
+          "y": 2670048,
+          "width": 4709160,
+          "height": 3200400,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 8
+        },
+        "right_heading": {
+          "idx": 3,
+          "type": "text",
+          "x": 6611112,
+          "y": 1746504,
+          "width": 4846320,
+          "height": 420624,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 20.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 1
+        },
+        "right_bullets": {
+          "idx": 4,
+          "type": "text",
+          "x": 6611112,
+          "y": 2670048,
+          "width": 4709160,
+          "height": 3200400,
+          "font_size_pt": 22.0,
+          "min_font_size_pt": 18.0,
+          "color": "002F6C",
+          "bold": false,
+          "max_lines": 8
+        }
+      },
+      "background_color": "FFFFFF",
+      "show_footer": true
+    },
+    "closing": {
+      "layout_name": "closing",
+      "fields": {
+        "title": {
+          "idx": 0,
+          "type": "text",
+          "x": 502920,
+          "y": 2286000,
+          "width": 6492240,
+          "height": 1463040,
+          "font_size_pt": 46.0,
+          "min_font_size_pt": 38.0,
+          "color": "FFFFFF",
+          "bold": true,
+          "max_lines": 2
+        },
+        "subtitle": {
+          "idx": 1,
+          "type": "text",
+          "x": 502920,
+          "y": 4114800,
+          "width": 6492240,
+          "height": 868680,
+          "font_size_pt": 24.0,
+          "min_font_size_pt": 20.0,
+          "color": "FFFFFF",
+          "bold": false,
+          "max_lines": 2
+        },
+        "contact": {
+          "idx": 2,
+          "type": "text",
+          "x": 502920,
+          "y": 5486400,
+          "width": 6492240,
+          "height": 731520,
+          "font_size_pt": 20.0,
+          "min_font_size_pt": 18.0,
+          "color": "FFFFFF",
+          "bold": false,
+          "max_lines": 2
+        }
+      },
+      "background_color": "002F6C",
+      "show_footer": false,
+      "variants": {
+        "blue_minimal": {
+          "layout_name": "closing__blue_minimal",
+          "description": "Финальный слайд на синем фоне без суперграфики; адаптация минимальной обложки со стр. 108.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 502920,
+              "y": 2286000,
+              "width": 10424160,
+              "height": 1463040,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "FFFFFF",
+              "bold": true,
+              "max_lines": 2
+            },
+            "subtitle": {
+              "idx": 1,
+              "type": "text",
+              "x": 502920,
+              "y": 4114800,
+              "width": 10424160,
+              "height": 868680,
+              "font_size_pt": 24.0,
+              "min_font_size_pt": 20.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 2
+            },
+            "contact": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 5486400,
+              "width": 10424160,
+              "height": 731520,
+              "font_size_pt": 20.0,
+              "min_font_size_pt": 18.0,
+              "color": "FFFFFF",
+              "bold": false,
+              "max_lines": 2
+            }
+          },
+          "background_color": "002F6C",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              108
+            ],
+            "source_slides": [
+              4,
+              14
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout24.xml"
+          },
+          "artwork_style": "closing_minimal"
+        },
+        "white_graphic": {
+          "layout_name": "closing__white_graphic",
+          "description": "Белый финальный слайд с оригинальным логотипом и диагональной суперграфикой исходного слайда 12.",
+          "fields": {
+            "title": {
+              "idx": 0,
+              "type": "text",
+              "x": 502920,
+              "y": 2286000,
+              "width": 6492240,
+              "height": 1463040,
+              "font_size_pt": 46.0,
+              "min_font_size_pt": 38.0,
+              "color": "002F6C",
+              "bold": true,
+              "max_lines": 2
+            },
+            "subtitle": {
+              "idx": 1,
+              "type": "text",
+              "x": 502920,
+              "y": 4114800,
+              "width": 6492240,
+              "height": 868680,
+              "font_size_pt": 24.0,
+              "min_font_size_pt": 20.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 2
+            },
+            "contact": {
+              "idx": 2,
+              "type": "text",
+              "x": 502920,
+              "y": 5486400,
+              "width": 6492240,
+              "height": 731520,
+              "font_size_pt": 20.0,
+              "min_font_size_pt": 18.0,
+              "color": "002F6C",
+              "bold": false,
+              "max_lines": 2
+            }
+          },
+          "background_color": "FFFFFF",
+          "show_footer": false,
+          "source_reference": {
+            "brandbook_pages": [
+              108
+            ],
+            "source_slides": [
+              12
+            ],
+            "source_layout_part": "ppt/slideLayouts/slideLayout22.xml"
+          },
+          "artwork_style": "original"
+        }
+      }
+    }
+  }
+}
