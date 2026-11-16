@@ -2,6 +2,7 @@
 
 import copy
 import http.client
+import io
 import json
 import os
 import tempfile
@@ -13,6 +14,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.parse import quote
 
+from PIL import Image
 from pptx import Presentation
 
 from superslide.llm import GenerationResult, LLMError
@@ -203,6 +205,58 @@ class WebTests(unittest.TestCase):
         self.assertTrue(errors)
         self.assertIn("Сократи или суммаризуй", errors[0])
         self.assertIn("Слайд 2, поле bullets", errors[0])
+
+    def test_image_catalog_upload_and_build_with_user_photo(self):
+        status, data, _ = self.request("GET", "/api/images")
+        self.assertEqual(status, 200)
+        self.assertEqual(len(data["images"]), 6)
+        self.assertTrue(data["images"][0]["url"].startswith("/api/images/"))
+        status, raw, headers = self.request("GET", data["images"][0]["url"])
+        self.assertEqual(status, 200)
+        self.assertIn(headers["Content-Type"], ("image/png", "image/jpeg"))
+        self.assertGreater(len(raw), 1000)
+
+        buffer = io.BytesIO()
+        Image.new("RGB", (40, 30), "#002F6C").save(buffer, "PNG")
+        status, uploaded, _ = self.request("POST", "/api/images?filename=" + quote("цех.png"), buffer.getvalue(),
+                                           {"Content-Type": "application/octet-stream"})
+        self.assertEqual(status, 201)
+        self.assertTrue(uploaded["id"].startswith("upload_"))
+        status, listing, _ = self.request("GET", "/api/images")
+        self.assertEqual(len(listing["images"]), 7)
+        self.assertIn(uploaded["id"], [item["id"] for item in listing["images"]])
+        self.assertEqual(self.request("GET", "/api/images/invented/file")[0], 404)
+
+        draft = {"template_version": "1.2", "title": "Фото", "slides": [
+            {"layout_id": "photo_text", "title": "Производство", "heading": "Цех",
+             "bullets": ["Демонстрация загруженного фото"],
+             "image": {"asset_id": uploaded["id"], "alt_text": "Фото пользователя"}}]}
+        status, created, _ = self.request("POST", "/api/build", {"draft": draft}, json_body=True)
+        self.assertEqual(status, 202)
+        job = self.poll(created["job_id"])
+        self.assertEqual(job["status"], "succeeded", job)
+        status, raw, _ = self.request("GET", job["downloads"]["pptx"])
+        path = Path(self.directory.name) / "user-photo.pptx"
+        path.write_bytes(raw)
+        deck = Presentation(path)
+        self.assertIn(f"superslide_image_{uploaded['id']}",
+                      [shape.name for shape in deck.slides[0].shapes])
+
+    def test_image_uploads_are_validated_and_guarded(self):
+        before = len(self.request("GET", "/api/images")[1]["images"])
+        buffer = io.BytesIO()
+        Image.new("RGB", (10, 10), "red").save(buffer, "PNG")
+        png = buffer.getvalue()
+        octet = {"Content-Type": "application/octet-stream"}
+        self.assertEqual(self.request("POST", "/api/images?filename=notes.txt", png, octet)[0], 415)
+        self.assertEqual(self.request("POST", "/api/images?filename=broken.png", b"not an image", octet)[0], 400)
+        self.assertEqual(self.request("POST", "/api/images?filename=empty.png", b"", octet)[0], 400)
+        self.assertEqual(self.request("POST", "/api/images?filename=../x.png", png, octet)[0], 400)
+        self.assertEqual(self.request("POST", "/api/images?filename=plain.png", png, {"Content-Type": "text/plain"})[0], 415)
+        self.assertEqual(self.request("POST", "/api/images?filename=nokey.png", png,
+                                      {"X-SuperSlide-Request": ""})[0], 403)
+        after = len(self.request("GET", "/api/images")[1]["images"])
+        self.assertEqual(after, before)
 
     def test_api_key_is_memory_only_and_never_returned(self):
         key = "temporary-secret-should-not-escape"

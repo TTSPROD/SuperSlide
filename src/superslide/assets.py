@@ -71,11 +71,14 @@ class AssetCatalog:
     _files: dict[str, str] = field(repr=False)
     _expected_sizes: dict[str, tuple[int | None, int | None]] = field(repr=False)
     _verified: dict[str, tuple[Path, int, int]] = field(default_factory=dict, repr=False)
+    _extra: dict[str, Path] = field(default_factory=dict, repr=False)
 
     def resolve(self, asset_id: str) -> Path:
-        if not isinstance(asset_id, str) or asset_id not in self._files:
+        if not isinstance(asset_id, str) or (asset_id not in self._files and asset_id not in self._extra):
             raise AssetError("Неизвестный asset_id: выберите изображение из локального каталога.")
-        path = _resolve_local_file(self._root, self._files[asset_id], asset_id)
+        path = self._extra.get(asset_id)
+        if path is None:
+            path = _resolve_local_file(self._root, self._files[asset_id], asset_id)
         try:
             stat = path.stat()
             signature = (path, stat.st_size, stat.st_mtime_ns)
@@ -90,6 +93,23 @@ class AssetCatalog:
             raise
         except OSError:
             raise AssetError(f"Ассет {asset_id}: изображение недоступно.") from None
+
+    def register(self, asset_id: str, path: Path, description: str, tags: list[str] | None = None) -> tuple[int, int]:
+        """Register a verified image stored outside the catalog directory (local web uploads)."""
+        if not isinstance(asset_id, str) or not _ASSET_ID.fullmatch(asset_id) \
+                or asset_id in self._files or asset_id in self._extra:
+            raise AssetError("Недопустимый или повторяющийся id изображения.")
+        if not isinstance(description, str) or not description or len(description) > 2000:
+            raise AssetError("description должен быть строкой до 2000 символов.")
+        path = Path(path)
+        width, height = _verify_image(path, asset_id)
+        record = {"id": asset_id, "file": path.name, "description": description, "tags": list(tags or []),
+                  "width": width, "height": height, "uploaded": True}
+        self.records.append(record)
+        self._extra[asset_id] = path
+        self._expected_sizes[asset_id] = (width, height)
+        self._verified[asset_id] = (path, path.stat().st_size, path.stat().st_mtime_ns)
+        return width, height
 
     def prompt_catalog(self) -> list[dict[str, Any]]:
         return [{"id": record["id"], "description": record["description"], "tags": list(record["tags"])}

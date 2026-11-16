@@ -69,6 +69,25 @@ class AssetCatalogTests(unittest.TestCase):
         empty = load_asset_catalog(self.catalog_path)
         self.assertEqual(empty.prompt_catalog(), [])
 
+    def test_register_adds_verified_external_image(self):
+        self.write_catalog()
+        catalog = load_asset_catalog(self.catalog_path)
+        external = self.root / "outside" / "user photo.png"
+        external.parent.mkdir()
+        Image.new("RGB", (64, 48), "green").save(external)
+        dimensions = catalog.register("user_photo", external, "Фото пользователя", ["своё"])
+        self.assertEqual(dimensions, (64, 48))
+        self.assertEqual(catalog.resolve("user_photo"), external.resolve())
+        self.assertEqual(catalog.prompt_catalog()[-1],
+                         {"id": "user_photo", "description": "Фото пользователя", "tags": ["своё"]})
+        with self.assertRaisesRegex(AssetError, "повторяющийся"):
+            catalog.register("photo_01", external, "Повтор")
+        broken = self.root / "outside" / "broken.png"
+        broken.write_bytes(b"not an image")
+        with self.assertRaisesRegex(AssetError, "повреждено"):
+            catalog.register("broken_id", broken, "Битый файл")
+        self.assertEqual(len(catalog.records), 2)
+
     def test_remote_absolute_and_parent_paths_are_rejected(self):
         invalid_paths = ["https://remote.invalid/photo.png", "file:///tmp/photo.png", "../photo.png",
                          "sub/../photo.png", "..\\photo.png", str(self.image_path.resolve()),

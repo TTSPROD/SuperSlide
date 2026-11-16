@@ -1,7 +1,7 @@
 "use strict";
 
 const $ = (id) => document.getElementById(id);
-const state = { bootstrap: null, draft: null, sourceJob: null, uploads: [], busy: false };
+const state = { bootstrap: null, draft: null, sourceJob: null, uploads: [], images: [], busy: false };
 const requestHeaders = { "X-SuperSlide-Request": "1" };
 
 async function api(path, options = {}) {
@@ -21,7 +21,7 @@ function status(message, error = false) {
 function setBusy(busy) {
   state.busy = busy;
   for (const id of ["create", "demo", "import", "build", "files", "task", "slide-count"]) $(id).disabled = busy;
-  document.querySelectorAll(".slide-title, .variant-select, .remove-file").forEach((element) => { element.disabled = busy; });
+  document.querySelectorAll(".slide-title, .variant-select, .remove-file, .image-cell, .image-upload").forEach((element) => { element.disabled = busy; });
 }
 function element(tag, className, value) {
   const node = document.createElement(tag);
@@ -84,6 +84,73 @@ async function poll(id) {
   }
 }
 function layoutFor(id) { return state.bootstrap.layouts.find((layout) => layout.id === id); }
+function applyImage(slide, image, uploaded) {
+  if (image) {
+    image.asset_id = uploaded.id;
+    image.alt_text = uploaded.description.slice(0, 180);
+  } else {
+    slide.image = { asset_id: uploaded.id, fit: "cover", alt_text: uploaded.description.slice(0, 180) };
+    slide.variant_id = "photo";
+  }
+  renderSlides();
+  invalidateDownload();
+}
+function imagePicker(label, image, slide, allowNone) {
+  const box = element("div", "image-picker");
+  box.append(element("div", "image-kind", label));
+  const strip = element("div", "image-strip");
+  if (allowNone) {
+    const none = element("button", "image-cell none" + (image ? "" : " selected"), "Без фото");
+    none.type = "button";
+    none.addEventListener("click", () => {
+      slide.image = null;
+      if (slide.variant_id === "photo") slide.variant_id = "default";
+      renderSlides();
+      invalidateDownload();
+    });
+    strip.append(none);
+  }
+  for (const item of state.images) {
+    const cell = element("button", "image-cell" + (image && image.asset_id === item.id ? " selected" : ""));
+    cell.type = "button";
+    const pic = element("img");
+    pic.src = item.url;
+    pic.alt = "";
+    cell.append(pic);
+    cell.title = item.description;
+    cell.setAttribute("aria-label", `Выбрать фото: ${item.description}`);
+    cell.addEventListener("click", () => {
+      applyImage(slide, image, item);
+      status("Фото выбрано. Не забудьте про подпись и уместность.");
+    });
+    strip.append(cell);
+  }
+  const upload = element("button", "image-upload", "Загрузить своё…");
+  upload.type = "button";
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/png,image/jpeg";
+  input.hidden = true;
+  upload.addEventListener("click", () => input.click());
+  input.addEventListener("change", async () => {
+    const file = input.files[0];
+    input.value = "";
+    if (!file) return;
+    setBusy(true);
+    try {
+      status(`Загрузка фото: ${file.name}`);
+      const uploaded = await api(`/api/images?filename=${encodeURIComponent(file.name)}`, {
+        method: "POST", headers: { ...requestHeaders, "Content-Type": "application/octet-stream" }, body: file
+      });
+      state.images.push(uploaded);
+      applyImage(slide, image, uploaded);
+      status("Фото загружено и выбрано. Проверьте подпись и уместность.");
+    } catch (error) { status(error.message, true); }
+    finally { setBusy(false); }
+  });
+  box.append(strip, upload, input);
+  return box;
+}
 function showPreview(slide) {
   const layout = layoutFor(slide.layout_id);
   const variant = layout?.variants.find((item) => item.id === (slide.variant_id || "default"));
@@ -123,9 +190,26 @@ function renderSlides() {
         select.append(option);
       }
       select.value = slide.variant_id || "default";
-      select.addEventListener("change", () => { slide.variant_id = select.value; showPreview(slide); invalidateDownload(); });
+      select.addEventListener("change", () => {
+        slide.variant_id = select.value;
+        // The contract allows a cover photo only in the photo variant.
+        if (slide.layout_id === "title_slide" && slide.variant_id !== "photo" && slide.image) {
+          slide.image = null;
+          renderSlides();
+        } else {
+          showPreview(slide);
+        }
+        invalidateDownload();
+      });
       select.addEventListener("focus", () => showPreview(slide));
       wrap.append(label, select); content.append(wrap);
+    }
+    if (slide.layout_id === "title_slide") {
+      content.append(imagePicker("Фото обложки (вариант «Фотообложка»)", slide.image, slide, true));
+    } else if (slide.layout_id === "photo_text" || slide.layout_id === "image_spotlight") {
+      content.append(imagePicker("Фотография слайда", slide.image, slide, false));
+    } else if (slide.layout_id === "gallery") {
+      slide.images.forEach((item, index) => content.append(imagePicker(`Фото ${index + 1}`, item, slide, false)));
     }
     row.append(content); list.append(row);
   });
@@ -219,7 +303,12 @@ async function init() {
   for (let count = 3; count <= 20; count++) {
     const option = element("option", "", String(count)); option.value = String(count); option.selected = count === 8; $("slide-count").append(option);
   }
-  try { state.bootstrap = await api("/api/bootstrap"); updateConnection(); }
+  try {
+    const [bootstrap, images] = await Promise.all([api("/api/bootstrap"), api("/api/images")]);
+    state.bootstrap = bootstrap;
+    state.images = images.images;
+    updateConnection();
+  }
   catch (error) { status(error.message, true); $("create").disabled = true; $("demo").disabled = true; }
 }
 init();

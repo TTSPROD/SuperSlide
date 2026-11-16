@@ -16,7 +16,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from pydantic import ValidationError
 
-from .assets import load_asset_catalog
+from .assets import AssetError, MAX_IMAGE_BYTES, load_asset_catalog
 from .config import ConfigurationError, load_llm_settings
 from .documents import DocumentBundle, DocumentError, load_documents
 from .llm import LLMError, generate_draft
@@ -31,6 +31,9 @@ MAX_JSON = 2 * 1024 * 1024
 MAX_UPLOAD = 25 * 1024 * 1024
 MAX_TOTAL_UPLOAD = 50 * 1024 * 1024
 ALLOWED_EXTENSIONS = {".txt", ".md", ".docx", ".pdf"}
+IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+MAX_SESSION_IMAGES = 10
+MAX_SESSION_IMAGE_BYTES = 100 * 1024 * 1024
 DOWNLOADS = {"presentation.pptx", "draft.json", "report.json"}
 LAYOUT_NAMES = {
     "title_slide": "Обложка", "bullet_list": "Тезисы", "two_columns": "Две колонки",
@@ -68,7 +71,7 @@ def _identifier(value: str) -> str:
     return value
 
 
-def _filename(value: str) -> str:
+def _filename(value: str, allowed_extensions, type_message: str) -> str:
     if (not value or len(value) > 180 or value != value.strip() or value.endswith((".", " "))
             or any(ord(c) < 32 or c in '<>:"/\\|?*' for c in value)
             or Path(value).name != value or PureWindowsPath(value).name != value
@@ -77,8 +80,8 @@ def _filename(value: str) -> str:
     stem = value.split(".", 1)[0].upper()
     if stem in {"CON", "PRN", "AUX", "NUL", *[f"{p}{n}" for p in ("COM", "LPT") for n in range(1, 10)]}:
         raise APIError(400, "filename", "Это имя файла зарезервировано системой.")
-    if Path(value).suffix.lower() not in ALLOWED_EXTENSIONS:
-        raise APIError(415, "file_type", "Поддерживаются TXT, MD, DOCX и PDF.")
+    if Path(value).suffix.lower() not in allowed_extensions:
+        raise APIError(415, "file_type", type_message)
     return value
 
 
@@ -111,6 +114,8 @@ class WebState:
         _, self.manifest, _ = load_template(self.template, self.manifest_path)
         self.catalog = load_asset_catalog(ROOT / "assets" / "images" / "catalog.json")
         self.directory = ROOT / "output" / "web"
+        self.image_directory = self.directory / "images"
+        self.image_sizes: dict[str, int] = {}
         self.lock = threading.RLock()
         self.uploads: dict[str, dict] = {}
         self.jobs: dict[str, dict] = {}
@@ -126,6 +131,38 @@ class WebState:
 
     def settings(self):
         return load_llm_settings(self.config_path)
+
+    def image_list(self):
+        return [{"id": record["id"], "description": record.get("description", ""),
+                 "tags": list(record.get("tags", [])), "url": f"/api/images/{record['id']}/file"}
+                for record in self.catalog.records]
+
+    def add_image(self, filename: str, content: bytes) -> dict:
+        if not content:
+            raise APIError(400, "empty_file", "Файл пуст.")
+        if len(content) > MAX_IMAGE_BYTES:
+            raise APIError(413, "too_large", "Изображение должно быть не больше 15 МиБ.")
+        with self.lock:
+            if len(self.image_sizes) >= MAX_SESSION_IMAGES:
+                raise APIError(429, "image_limit", "Допустимо до 10 загруженных фотографий за сеанс.")
+            if sum(self.image_sizes.values()) + len(content) > MAX_SESSION_IMAGE_BYTES:
+                raise APIError(413, "image_limit", "Общий размер загруженных фотографий превышает 100 МиБ.")
+            asset_id = "upload_" + uuid.uuid4().hex[:12]
+            destination = self.image_directory / asset_id / filename
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(content)
+            description = f"Загруженное изображение: {filename}"
+            try:
+                self.catalog.register(asset_id, destination, description)
+            except AssetError as exc:
+                destination.unlink(missing_ok=True)
+                try:
+                    destination.parent.rmdir()
+                except OSError:
+                    pass
+                raise APIError(400, "image", str(exc)) from None
+            self.image_sizes[asset_id] = len(content)
+            return {"id": asset_id, "description": description, "url": f"/api/images/{asset_id}/file"}
 
     def bootstrap(self):
         try:
@@ -401,6 +438,14 @@ class Handler(BaseHTTPRequestHandler):
                 image = self.state.previews.get(match.groups())
                 if image:
                     return self._file(image)
+            if path == "/api/images":
+                return self._json({"images": self.state.image_list()})
+            if match := re.fullmatch(r"/api/images/([A-Za-z0-9][A-Za-z0-9_.-]{0,119})/file", path):
+                try:
+                    image_path = self.state.catalog.resolve(match[1])
+                except AssetError:
+                    raise APIError(404, "not_found", "Изображение не найдено.") from None
+                return self._file(image_path)
             if match := re.fullmatch(r"/api/jobs/([a-f0-9-]+)", path):
                 return self._json(self.state.public_job(match[1]))
             if match := re.fullmatch(r"/api/downloads/([a-f0-9-]+)/([^/]+)", path):
@@ -427,7 +472,7 @@ class Handler(BaseHTTPRequestHandler):
                 query = parse_qs(url.query, keep_blank_values=True)
                 if set(query) != {"filename"} or len(query["filename"]) != 1:
                     raise APIError(400, "filename", "Укажите одно имя файла.")
-                filename = _filename(query["filename"][0])
+                filename = _filename(query["filename"][0], ALLOWED_EXTENSIONS, "Поддерживаются TXT, MD, DOCX и PDF.")
                 if self.headers.get_content_type() != "application/octet-stream":
                     raise APIError(415, "content_type", "Ожидается бинарное содержимое файла.")
                 content = self._body(MAX_UPLOAD)
@@ -443,6 +488,15 @@ class Handler(BaseHTTPRequestHandler):
                     record = {"id": upload_id, "name": filename, "size": len(content)}
                     self.state.uploads[upload_id] = {**record, "_path": destination, "_readers": 0}
                 return self._json(record, 201)
+            if path == "/api/images":
+                query = parse_qs(url.query, keep_blank_values=True)
+                if set(query) != {"filename"} or len(query["filename"]) != 1:
+                    raise APIError(400, "filename", "Укажите одно имя файла.")
+                filename = _filename(query["filename"][0], IMAGE_EXTENSIONS, "Поддерживаются PNG и JPEG.")
+                if self.headers.get_content_type() != "application/octet-stream":
+                    raise APIError(415, "content_type", "Ожидается бинарное содержимое файла.")
+                content = self._body(MAX_IMAGE_BYTES + 1)
+                return self._json(self.state.add_image(filename, content), 201)
             if path == "/api/drafts":
                 return self._json(self.state.draft(self._payload()), 202)
             if path == "/api/build":
