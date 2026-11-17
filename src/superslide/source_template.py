@@ -25,7 +25,7 @@ from pydantic import Field, model_validator
 from .models import StrictModel, SourceId, Notes, _xml_text
 from .paths import PROJECT_ROOT, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG
 from .source_charts import replace_chart
-from .source_slots import source_slot_metadata, verify_reviewed_slots
+from .source_slots import drawn_table_metadata, source_slot_metadata, verify_reviewed_slots
 from .source_text import paragraph_roles as _paragraph_roles, source_heading_fields, source_title_metadata
 
 ROOT = PROJECT_ROOT
@@ -209,6 +209,33 @@ def validate_source_icon_styles(spec, icon_catalog, manifest=None):
     return spec
 
 
+def _validate_drawn_table_headers(slide, fields, slide_index):
+    updates = {update.field_id: update for update in slide.updates}
+
+    def text_key(field_id):
+        update = updates.get(field_id)
+        text = (update.text if update is not None else None)
+        if text is None and update is not None and update.paragraphs is not None:
+            text = " ".join(update.paragraphs)
+        if text is None:
+            text = fields[field_id].get("sample_text", "")
+        return " ".join(text.split()).casefold()
+
+    for table in drawn_table_metadata(fields):
+        headers = {header["column_index"]: header["field_id"] for header in table["headers"]}
+        cells = [cell for cell in table["cells"] if cell["row_index"] == 1
+                 and cell["kind"] == "text" and cell["column_index"] in headers]
+        if (cells and any(cell["field_id"] in updates for cell in cells)
+                and all(text_key(cell["field_id"]) and text_key(cell["field_id"]) == text_key(headers[cell["column_index"]])
+                        for cell in cells)):
+            errors = [SourceFieldError(slide_index, cell["field_id"], "table_header_in_body",
+                                       "названия столбцов находятся над строками составной таблицы; "
+                                       "заполните первую строку данными") for cell in cells]
+            first = errors[0]
+            first.validation_issues = [error.validation_details for error in errors]
+            raise first
+
+
 def validate_source_presentation(payload, manifest, known_source_ids=None):
     spec = payload if isinstance(payload, SourcePresentationSpec) else SourcePresentationSpec.model_validate(payload)
     text_errors = []
@@ -217,6 +244,7 @@ def validate_source_presentation(payload, manifest, known_source_ids=None):
         if slide.variant_id not in variants:
             raise SourceFieldError(index, None, "unknown_variant", f"нет исходного варианта {slide.layout_id}/{slide.variant_id}")
         fields = variants[slide.variant_id]["fields"]
+        updates_by_id = {update.field_id: update for update in slide.updates}
         if known_source_ids is not None and set(slide.source_refs) - known_source_ids:
             raise SourceFieldError(index, None, "unknown_source", "неизвестные source_refs")
         for u in slide.updates:
@@ -238,6 +266,29 @@ def validate_source_presentation(payload, manifest, known_source_ids=None):
             elif field["kind"] == "table":
                 if u.rows is None or len(u.rows) != field["row_count"] or any(len(r) != field["column_count"] for r in u.rows):
                     raise SourceFieldError(index, u.field_id, "table_dimensions", f"сохраните исходную сетку {field['row_count']} × {field['column_count']}", limit={"rows": field["row_count"], "columns": field["column_count"]})
+                structure = field.get("table_structure", {})
+                for row_index, column_index in structure.get("merged_continuation_cells", []):
+                    if u.rows[row_index][column_index].strip():
+                        raise SourceFieldError(index, u.field_id, "table_merged_cell_content",
+                                               "запишите значение объединённой ячейки в её начальную ячейку; "
+                                               "продолжения объединения должны быть пустыми",
+                                               row_index=row_index + 1, column_index=column_index + 1)
+                if structure.get("header_placement") == "external":
+                    headers = []
+                    for header_id in structure.get("column_header_field_ids", []):
+                        update = updates_by_id.get(header_id)
+                        if update is not None and update.text is not None:
+                            text = update.text
+                        elif update is not None and update.paragraphs is not None:
+                            text = " ".join(update.paragraphs)
+                        else:
+                            text = fields.get(header_id, {}).get("sample_text", "")
+                        headers.append(" ".join(text.split()).casefold())
+                    first_row = [" ".join(cell.split()).casefold() for cell in u.rows[0]]
+                    if len(headers) == field["column_count"] and any(headers) and first_row == headers:
+                        raise SourceFieldError(index, u.field_id, "table_header_in_body",
+                                               "названия столбцов находятся над таблицей в отдельных текстовых полях; "
+                                               "заполните rows только строками данных")
                 for row_index, (values, original) in enumerate(zip(u.rows, field.get("rows", [])), 1):
                     for column_index, (text, sample) in enumerate(zip(values, original), 1):
                         limit = len(sample.split("\n"))
@@ -253,6 +304,7 @@ def validate_source_presentation(payload, manifest, known_source_ids=None):
                     raise SourceFieldError(index, u.field_id, "chart_unsupported", "эта диаграмма редактируется в PowerPoint; выберите другой исходный вариант для заполнения через JSON")
                 if u.chart_data is None or len(u.chart_data.categories) != meta["category_count"] or len(u.chart_data.series) != meta["series_count"] or any(len(s.values) != meta["category_count"] for s in u.chart_data.series):
                     raise SourceFieldError(index, u.field_id, "chart_dimensions", f"сохраните {meta['series_count']} рядов × {meta['category_count']} категорий", limit={"series": meta["series_count"], "categories": meta["category_count"]})
+        _validate_drawn_table_headers(slide, fields, index)
     if text_errors:
         first = text_errors[0]
         first.validation_issues = [dict(error.validation_details) for error in text_errors]
@@ -292,6 +344,10 @@ def _text_budget(field, paragraphs):
 
 def _compact_source_field(field):
     result = {"kind": field["kind"]}
+    for key in ("table_structure", "table_column_header", "drawn_table_column_header", "drawn_table_cell",
+                "drawn_table_section_header", "drawn_table_column_chart"):
+        if key in field:
+            result[key] = deepcopy(field[key])
     name = re.sub(r"\s+\d+$", "", field.get("name", "")).strip()
     if name and name.casefold() not in {"текст", "textbox", "graphic", "рисунок", "rectangle", "прямоугольник", "text placeholder"}:
         result["name"] = _prompt_sample(name, 50)
@@ -351,6 +407,9 @@ def source_prompt_catalog(manifest):
                     continue
                 fields[fid] = _compact_source_field(field)
             variants[vid] = {"name": _prompt_sample(variant["name"], 120), "fields": fields}
+            drawn = drawn_table_metadata(fields)
+            if drawn:
+                variants[vid]["drawn_tables"] = drawn
             slots = source_slot_metadata(variant)
             if slots:
                 variants[vid]["item_slots"] = slots
@@ -505,18 +564,25 @@ def _normalize_text_weight(root, design, scope, title, heading_fields=(), field_
             table = shape.find(f".//{{{A}}}tbl")
             props = table.find(f"{{{A}}}tblPr")
             first_row = props is not None and props.get("firstRow") in {"1", "true"}
+            header_rows = field.get("table_structure", {}).get("header_row_count")
+            if type(header_rows) is not int:
+                header_rows = int(first_row)
             first_col = props is not None and props.get("firstCol") in {"1", "true"}
             for row_index, row in enumerate(table.findall(f"{{{A}}}tr")):
+                row_roles = field.get("table_structure", {}).get("row_roles", [])
+                header = (row_roles[row_index] in {"column_header", "section_header"}
+                          if row_index < len(row_roles) else row_index < header_rows)
                 for col_index, cell in enumerate(row.findall(f"{{{A}}}tc")):
                     for paragraph in cell.findall(f"{{{A}}}txBody/{{{A}}}p"):
-                        _set_paragraph_bold(paragraph, first_row and row_index == 0 or first_col and col_index == 0)
+                        _set_paragraph_bold(paragraph, header or first_col and col_index == 0)
             changed = True
             continue
         original_text = field.get("paragraphs", sample.split("\n"))
         roles = _paragraph_roles(field, original_text)
         # A separate label needs source semantics or a smaller body beneath it;
         # complete bold paragraphs can also be ordinary descriptions.
-        standalone_heading = scope == "slide" and field_id in heading_fields
+        standalone_heading = scope == "slide" and (field_id in heading_fields or any(
+            field.get(role) for role in ("table_column_header", "drawn_table_column_header", "drawn_table_section_header")))
         main_title = scope == "slide" and field_id == title["title_field_id"]
         native_title = bool(shape.xpath("./p:nvSpPr/p:nvPr/p:ph[@type='title' or @type='ctrTitle']", namespaces=NS))
         for index, paragraph in enumerate(shape.findall(f"{{{P}}}txBody/{{{A}}}p")):

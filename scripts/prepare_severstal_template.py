@@ -21,6 +21,7 @@ from superslide.source_template import (
 from superslide.source_charts import inspect_chart
 from superslide.source_icons import describe_icon_slot
 from superslide.source_photos import describe_photo_frame
+from superslide.source_tables import annotate_table_structures
 
 
 def _shape_placeholder(shape):
@@ -258,6 +259,7 @@ def _fields_and_objects(prs, source_package, part, scope, prefix):
                 "placement": _icon_placement(source_package, part, shape)}
             fields[f"{scope}_icon_{sid}"].update(_icon_background_metadata(source_package, part, shape))
             icon_ancestors.add(shape)
+    annotate_table_structures(xml, fields, scope)
     return fields, objects
 
 

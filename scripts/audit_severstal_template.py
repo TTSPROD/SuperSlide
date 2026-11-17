@@ -14,6 +14,7 @@ from lxml import etree as E
 
 
 P = "http://schemas.openxmlformats.org/presentationml/2006/main"
+A = "http://schemas.openxmlformats.org/drawingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 NS = {"p": P, "r": R}
 EXPECTED = {
@@ -61,6 +62,56 @@ def master_design(data):
     return E.tostring(root, method="c14n")
 
 
+def audit_table_bindings(owner, fields, scope):
+    """Check actual source grids independently of manifest-driven discovery."""
+    errors, records = [], []
+    native = owner.findall(f".//{{{A}}}tbl")
+    bindings = {field["shape_id"]: (fid, field) for fid, field in fields.items()
+                if field.get("kind") == "table" and field.get("scope") == scope}
+    if len(bindings) != len(native):
+        errors.append(f"{scope}: число таблиц в XML и привязок различается")
+    for table in native:
+        frame = next(table.iterancestors(f"{{{P}}}graphicFrame"))
+        sid = int(frame.find(f"{{{P}}}nvGraphicFramePr/{{{P}}}cNvPr").get("id"))
+        if sid not in bindings:
+            errors.append(f"{scope}: таблица {sid} не описана в manifest")
+            continue
+        fid, field = bindings[sid]
+        rows = table.findall(f"{{{A}}}tr")
+        columns = len(table.findall(f"{{{A}}}tblGrid/{{{A}}}gridCol"))
+        structure = field.get("table_structure", {})
+        placement = structure.get("header_placement")
+        roles = structure.get("row_roles", [])
+        if placement not in {"external", "inside", "none"}:
+            errors.append(f"{fid}: не определено расположение заголовков")
+        if (field.get("row_count") != len(rows) or field.get("column_count") != columns
+                or len(roles) != len(rows)
+                or any(role not in {"column_header", "section_header", "data", "total"} for role in roles)
+                or structure.get("data_row_count") != roles.count("data")
+                or structure.get("header_row_count") != roles.count("column_header")):
+            errors.append(f"{fid}: роли строк не соответствуют исходной сетке")
+        actual_continuations = {(r, c) for r, row in enumerate(rows)
+                                for c, cell in enumerate(row.findall(f"{{{A}}}tc"))
+                                if any(cell.get(attr) in {"1", "true"} for attr in ("hMerge", "vMerge"))}
+        recorded_continuations = {tuple(cell) for cell in structure.get("merged_continuation_cells", [])}
+        if actual_continuations != recorded_continuations:
+            errors.append(f"{fid}: потеряны продолжения объединённых ячеек")
+        if placement == "external":
+            header_ids = structure.get("column_header_field_ids", [])
+            if len(header_ids) != columns or len(set(header_ids)) != columns:
+                errors.append(f"{fid}: названия связаны не со всеми столбцами")
+            for column, header_id in enumerate(header_ids, 1):
+                header = fields.get(header_id, {})
+                expected = {"table_field_id": fid, "column_index": column}
+                if header.get("kind") != "text" or header.get("table_column_header") != expected:
+                    errors.append(f"{fid}: неверная роль внешнего заголовка {header_id}")
+        records.append({"field_id": fid, "scope": scope, "header_placement": placement,
+                        "grid_rows": len(rows), "columns": columns, "data_rows": roles.count("data"),
+                        "section_rows": roles.count("section_header"), "total_rows": roles.count("total"),
+                        "merged_continuation_cells": len(actual_continuations)})
+    return records, errors
+
+
 def audit(root):
     errors = []
     checks = Counter()
@@ -84,6 +135,9 @@ def audit(root):
     require(sum(len(item["variants"]) for item in manifest["layouts"].values()) == 211, "Manifest должен содержать ровно 211 вариантов")
     originals = {}
     layout_reports = {}
+    table_reports, drawn_reports = [], []
+    reviewed_drawn = {("tables", "slide_007"): 4, ("diagram", "slide_009"): 3,
+                      ("diagram", "slide_032"): 4}
     for layout_id, (stem, expected_count) in EXPECTED.items():
         source_path = source_dir / f"Severstal_{stem}.pptx"
         with ZipFile(source_path) as archive:
@@ -106,6 +160,20 @@ def audit(root):
             require(package[variant["source_layout_part"]] == source[source_layout], f"{layout_id}/{variant_id}: XML исходного макета изменена", "layout_xml_byte_equal")
             require(master_design(package[variant["source_master_part"]]) == master_design(source[source_master]),
                     f"{layout_id}/{variant_id}: оформление master изменено за пределами sldLayoutId metadata", "master_design_equal")
+            for scope, owner in (("slide", source_slide), ("layout", source_layout), ("master", source_master)):
+                records, problems = audit_table_bindings(xml(source[owner]), variant["fields"], scope)
+                table_reports.extend({"layout_id": layout_id, "variant_id": variant_id, **record} for record in records)
+                for problem in problems:
+                    errors.append(f"{layout_id}/{variant_id}: {problem}")
+                checks["native_table_structures_valid"] += len(records) if not problems else 0
+            headers = [fid for fid, field in variant["fields"].items() if field.get("drawn_table_column_header")]
+            headers.sort(key=lambda fid: variant["fields"][fid]["drawn_table_column_header"]["column_index"])
+            expected = reviewed_drawn.get((layout_id, variant_id), 0)
+            require(len(headers) == expected, f"{layout_id}/{variant_id}: неверное число заголовков составной таблицы")
+            if headers:
+                drawn_reports.append({"layout_id": layout_id, "variant_id": variant_id,
+                                      "header_placement": "external", "column_header_fields": headers})
+                checks["drawn_table_structures_valid"] += 1
         layout_reports[layout_id] = {"source_file": source_path.name, "variants": len(slides), "passed": len(errors) == before}
 
     # Validate every relationship in the serialized OPC package, including
@@ -191,7 +259,8 @@ def audit(root):
             "layout_count": len(manifest["layouts"]), "variant_count": sum(len(v["variants"]) for v in manifest["layouts"].values()),
             "package_parts": len(package), "photo_count": len(photos["images"]), "icon_groups": len(icons["groups"]),
             "icon_count": len(icons["icons"]), "selectable_icons": sum(item.get("selectable", True) for item in icons["icons"]),
-            "checks": dict(checks), "layouts": layout_reports, "errors": errors}
+            "checks": dict(checks), "layouts": layout_reports,
+            "table_structures": {"native": table_reports, "drawn": drawn_reports}, "errors": errors}
 
 
 def main():

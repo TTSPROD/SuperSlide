@@ -146,6 +146,10 @@ def _safe_error(exc: Exception) -> str:
     details = getattr(exc, "validation_details", None)
     if isinstance(details, dict) and details.get("reason") == "mixed_icon_background":
         return "На одном слайде используйте один тип иконок: все с фоном или все без фона, включая оставшиеся исходные иконки."
+    if isinstance(details, dict) and details.get("reason") == "table_header_in_body":
+        return "В этом макете названия столбцов находятся над таблицей. Внутри таблицы оставьте только строки данных."
+    if isinstance(details, dict) and details.get("reason") == "table_merged_cell_content":
+        return "Заполните начальную ячейку объединённой области; остальные ячейки этого объединения должны быть пустыми."
     if isinstance(exc, LLMError):
         return {
             "authentication": "API отклонил ключ. Проверьте ключ доступа в настройках.",
@@ -256,6 +260,8 @@ def _failure_message(exc, details):
             message += f" Слайд {details['slide_start']}."
     reasons = {"paragraph_count": "слишком много абзацев", "text_length": "текст длиннее лимита",
                "mixed_icon_background": "смешаны иконки с фоном и без фона; выберите один тип для всего слайда",
+               "table_header_in_body": "названия столбцов продублированы внутри таблицы; перенесите их в поля над таблицей",
+               "table_merged_cell_content": "значение указано в продолжении объединённой ячейки",
                "table_dimensions": "размер таблицы не совпадает с макетом", "unknown_field": "поле отсутствует в макете",
                "chart_dimensions": "размер данных диаграммы не совпадает с макетом",
                "cell_paragraph_count": "слишком много абзацев в ячейке", "chart_unsupported": "выбрана диаграмма для ручного заполнения в PowerPoint",

@@ -91,6 +91,31 @@ def _icon_page_counts():
     return dict(counts)
 
 
+def drawn_table_metadata(fields):
+    """Describe reviewed grids made from separate text, shapes and charts."""
+    groups = {}
+    roles = {"drawn_table_column_header": "headers", "drawn_table_cell": "cells",
+             "drawn_table_section_header": "sections", "drawn_table_column_chart": "column_charts"}
+    for field_id, field in fields.items():
+        for key, destination in roles.items():
+            role = field.get(key)
+            if not isinstance(role, dict) or not role.get("table_id"):
+                continue
+            group = groups.setdefault(role["table_id"], {"table_id": role["table_id"],
+                "header_placement": "external", "headers": [], "cells": [], "sections": [], "column_charts": []})
+            group[destination].append({"field_id": field_id, "kind": field["kind"],
+                                       **{name: value for name, value in role.items() if name != "table_id"}})
+    for group in groups.values():
+        group["headers"].sort(key=lambda item: item["column_index"])
+        group["cells"].sort(key=lambda item: (item["row_index"], item["column_index"]))
+        group["column_header_field_ids"] = [item["field_id"] for item in group["headers"]]
+        group["column_count"] = len(group["headers"])
+        group["data_row_count"] = max(
+            [item["row_index"] + item.get("row_span", 1) - 1 for item in group["cells"]]
+            + [item.get("row_span", 1) for item in group["column_charts"]], default=0)
+    return list(groups.values())
+
+
 def source_slot_metadata(variant):
     """Return only supported counts, with the source fields that justify them.
 
@@ -115,12 +140,17 @@ def source_slot_metadata(variant):
         kinds[field["kind"]].append((field_id, field))
     inventory = {kind + "_fields": len(records) for kind, records in kinds.items()}
     inventory["text_paragraphs"] = sum(len(field.get("paragraphs", [])) for _, field in kinds["text"])
-    inventory["tables"] = [{"field_id": fid, "rows": field.get("row_count"), "columns": field.get("column_count")}
+    inventory["tables"] = [{"field_id": fid, "rows": field.get("row_count"), "columns": field.get("column_count"),
+                            **{key: field["table_structure"][key] for key in ("header_placement", "header_row_count", "body_row_count", "data_row_count", "section_header_row_indexes", "total_row_indexes")
+                               if key in field.get("table_structure", {})}}
                            for fid, field in kinds["table"]]
     inventory["charts"] = [{"field_id": fid, "categories": field.get("chart", {}).get("category_count"),
                             "series": field.get("chart", {}).get("series_count")}
                            for fid, field in kinds["chart"]]
     result["block_inventory"] = inventory
+    inventory["drawn_tables"] = [{"table_id": table["table_id"], "columns": table["column_count"],
+                                   "data_rows": table["data_row_count"], "header_placement": "external"}
+                                  for table in drawn_table_metadata(fields)]
     part = variant.get("package_part", "")
     source_type = part.split("/")[1] if part.startswith("sources/") and len(part.split("/")) > 2 else ""
     if source_type == "title" and variant.get("source_slide") == 1:
