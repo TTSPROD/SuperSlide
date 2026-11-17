@@ -28,25 +28,15 @@
         <label for="slide-count">Количество слайдов</label>
         <select id="slide-count" name="slide-count"></select>
         <button class="primary" id="create" type="submit">Создать структуру</button>
-        <button class="secondary" id="demo" type="button">Открыть демопример</button>
-        <button class="secondary" id="import" type="button">Открыть JSON-файл</button>
-        <input id="import-file" type="file" accept=".json,application/json" hidden>
       </form>
       <div id="status" class="status" role="status" aria-live="polite"></div>
     </section>
-    <section class="result-column" aria-labelledby="preview-heading">
-      <h2 id="preview-heading">Корпоративное оформление</h2>
-      <div class="preview-frame"><img id="preview" src="/api/previews/title/slide_002.png" alt="Пример корпоративного оформления слайда"></div>
-      <p id="preview-caption" class="preview-caption">15 исходных типов · 211 вариантов</p>
-      <div class="result-divider"></div>
-      <div id="empty-state"><h2>Здесь появятся ваши слайды</h2><p class="lead">Создайте структуру или откройте демопример</p></div>
-      <section id="slides-section" hidden aria-labelledby="slides-heading">
-        <div class="slides-header"><div><h2 id="slides-heading">Структура презентации</h2><p id="slides-subtitle" class="muted"></p></div><button id="build" class="primary build-button" type="button">Создать PowerPoint</button></div>
-        <p class="muted helper">Измените заголовки и выберите варианты оформления. Изображение выше — пример композиции, не готовый слайд.</p>
+    <section id="slides-section" class="result-column" hidden aria-labelledby="slides-heading">
+        <div class="slides-header"><div><h2 id="slides-heading">Структура презентации</h2><p id="slides-subtitle" class="muted"></p></div></div>
+        <p class="muted helper">Измените заголовки, выберите макеты и изображения. Остальное содержание сохранится в презентации.</p>
         <div id="warnings" class="warnings" role="status"></div>
         <ol id="slide-list" class="slide-list"></ol>
-        <div id="downloads" class="downloads" hidden><a id="download-pptx" class="primary download" href="#">Скачать PowerPoint</a><a id="download-json" href="#">Скачать структуру JSON</a></div>
-      </section>
+        <div class="download-actions"><button id="download-pptx" class="primary download-button" type="button">Скачать PPTX</button><p id="download-status" class="download-status" role="status" aria-live="polite"></p></div>
     </section>
   </main>
   <footer><div>SuperSlide · Локальный генератор презентаций</div></footer>
@@ -63,6 +53,19 @@
         <button class="secondary" id="connection-check" type="button">Проверить подключение</button>
       </div>
     </form>
+  </dialog>
+  <dialog id="image-dialog" class="image-dialog" aria-labelledby="image-dialog-heading">
+    <div class="dialog-header"><h2 id="image-dialog-heading">Выбор изображения</h2><button type="button" id="image-dialog-close" class="close" aria-label="Закрыть выбор изображения">×</button></div>
+    <p id="image-dialog-context" class="muted small"></p>
+    <div class="image-dialog-tools">
+      <div class="image-search-wrap"><label for="image-search">Поиск по каталогу</label><input id="image-search" class="image-search" type="search" placeholder="Например: производство, команда, офис"></div>
+      <button id="image-dialog-upload" class="secondary image-upload" type="button">Загрузить с ПК</button>
+      <input id="image-dialog-file" type="file" accept="image/png,image/jpeg" hidden>
+    </div>
+    <p id="image-count" class="muted small" role="status"></p>
+    <p id="image-dialog-status" class="image-dialog-status" role="status" aria-live="polite"></p>
+    <div id="image-catalog" class="image-catalog" aria-label="Готовые изображения"></div>
+    <p class="muted small image-format-hint">Свои изображения: PNG или JPEG, до 15 МБ. Фото заполнит рамку с сохранением пропорций и кадрированием краёв.</p>
   </dialog>
 </body>
 </html>

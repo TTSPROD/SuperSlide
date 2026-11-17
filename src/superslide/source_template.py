@@ -78,7 +78,9 @@ class SourceUpdate(StrictModel):
             raise ValueError("Укажите ровно одно изменение: text, paragraphs, rows, photo_id, icon_id или chart_data")
         for value in [self.text, *(self.paragraphs or []), *[c for row in self.rows or [] for c in row]]:
             if value is not None:
-                _xml_text(value)
+                # Native DrawingML soft breaks are represented as vertical tabs
+                # in the source contract, then written as a:br, never XML text.
+                _xml_text(value.replace("\v", ""))
         return self
 
 
@@ -360,6 +362,8 @@ def _paragraph_text(paragraph):
 
 def _write_paragraph(paragraph, text):
     """Keep every run property; distribute new text across the original runs."""
+    if _paragraph_text(paragraph) == text:
+        return
     runs = paragraph.findall(f"{{{A}}}r")
     if not runs:
         run = E.Element(f"{{{A}}}r")
@@ -376,14 +380,29 @@ def _write_paragraph(paragraph, text):
     for fld in list(paragraph.findall(f"{{{A}}}fld")):
         paragraph.remove(fld)
     lengths = [len(r.findtext(f"{{{A}}}t", "")) for r in runs]
-    total = sum(lengths) or len(runs)
+    weights = lengths if any(lengths) else [1] * len(runs)
+    total = sum(weights)
     offset = 0
     for i, run in enumerate(runs):
-        stop = len(text) if i == len(runs) - 1 else offset + round(len(text) * (lengths[i] or 1) / total)
+        stop = len(text) if i == len(runs) - 1 else offset + round(len(text) * weights[i] / total)
         node = run.find(f"{{{A}}}t")
         if node is None:
             node = E.SubElement(run, f"{{{A}}}t")
-        node.text = text[offset:stop]
+        parts = text[offset:stop].split("\v")
+        node.text = parts[0]
+        previous = run
+        for part in parts[1:]:
+            # A line break inherits the surrounding run's font properties.
+            # Insert both nodes before the next source run/endParaRPr.
+            br = E.Element(f"{{{A}}}br")
+            properties = run.find(f"{{{A}}}rPr")
+            if properties is not None:
+                br.append(deepcopy(properties))
+            paragraph.insert(list(paragraph).index(previous) + 1, br)
+            continuation = deepcopy(run)
+            continuation.find(f"{{{A}}}t").text = part
+            paragraph.insert(list(paragraph).index(br) + 1, continuation)
+            previous = continuation
         offset = stop
 
 

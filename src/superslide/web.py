@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PureWindowsPath
 from urllib.parse import parse_qs, urlsplit
+from zipfile import ZipFile
 
 from pydantic import ValidationError
 
@@ -67,6 +68,86 @@ class APIError(Exception):
 def _write_json(path: Path, value) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _source_editor_metadata(manifest, template, photos):
+    """Identify the visible title and photo slots without exposing source XML.
+
+    Native title placeholders win. Covers and quote compositions often use
+    ordinary text boxes, so fall back to the largest actual text run, then the
+    uppermost box. Sample level styles and numeric KPI values are not headings.
+    """
+    from .source_template import NS, _paragraph_roles, _xml, source_prompt_catalog
+
+    prompt = source_prompt_catalog(manifest)
+    brand_hashes = {field["media_sha256"] for layout in manifest["layouts"].values()
+                    for variant in layout["variants"].values() for field in variant["fields"].values()
+                    if field.get("scope") == "master" and field.get("media_sha256")}
+    photo_ids = {photo["sha256"]: photo["id"] for photo in photos if photo.get("sha256")}
+    result = {}
+    with ZipFile(template) as archive:
+        for layout_id, layout in manifest["layouts"].items():
+            for variant_id, variant in layout["variants"].items():
+                root = _xml(archive.read(variant["package_part"]))
+                eligible = prompt[layout_id]["variants"][variant_id]["fields"]
+                text_shapes = {}
+                native_titles = set()
+                for shape in root.xpath(".//p:sp[p:txBody]", namespaces=NS):
+                    ids = shape.xpath("./p:nvSpPr/p:cNvPr/@id", namespaces=NS)
+                    if not ids:
+                        continue
+                    field_id = "slide_text_" + ids[0]
+                    if field_id not in eligible:
+                        continue
+                    text_shapes[field_id] = shape
+                    if shape.xpath("./p:nvSpPr/p:nvPr/p:ph[@type='title' or @type='ctrTitle']", namespaces=NS):
+                        native_titles.add(field_id)
+
+                def heading_score(field_id):
+                    shape = text_shapes[field_id]
+                    # Restrict to displayed paragraphs: lstStyle can contain
+                    # unused large example fonts that are unrelated to this box.
+                    sizes = shape.xpath("./p:txBody/a:p/a:r[a:t[string-length(.) > 0]]/a:rPr/@sz | "
+                                        "./p:txBody/a:p/a:fld[a:t[string-length(.) > 0]]/a:rPr/@sz", namespaces=NS)
+                    if not sizes:
+                        sizes = shape.xpath("./p:txBody/a:p/a:pPr/a:defRPr/@sz | "
+                                            "./p:txBody/a:p/a:endParaRPr/@sz", namespaces=NS)
+                    font_size = max((int(size) for size in sizes if size.isdigit()), default=0)
+                    positions = shape.xpath("./p:spPr/a:xfrm/a:off/@y", namespaces=NS)
+                    top = int(positions[0]) if positions else 0
+                    return (field_id in native_titles, font_size, -top)
+
+                candidates = [field_id for field_id in text_shapes
+                              if field_id in native_titles or any(c.isalpha() for c in variant["fields"][field_id].get("sample_text", ""))]
+                title_id = max(candidates, key=heading_score) if candidates else None
+                title_field = variant["fields"].get(title_id, {})
+                paragraphs = title_field.get("paragraphs", [])
+                roles = _paragraph_roles(title_field, paragraphs) if paragraphs else None
+                title_index = roles.index("heading") if roles and "heading" in roles else None
+
+                photo_fields = []
+                slide_indices = {placeholder.get("idx", "0")
+                                 for placeholder in root.xpath(".//p:ph", namespaces=NS)}
+                for field_id, field in variant["fields"].items():
+                    if (field.get("kind") != "picture" or field.get("scope") == "master"
+                            or field.get("media_sha256") in brand_hashes
+                            or field.get("media_sha256") not in photo_ids):
+                        continue
+                    if field.get("scope") == "layout":
+                        source = _xml(field["crop_and_transform_xml"].encode("utf-8"))
+                        placeholder = source.xpath("./*/p:nvPr/p:ph", namespaces=NS)
+                        if placeholder and placeholder[0].get("idx", "0") in slide_indices:
+                            continue
+                    photo_fields.append({"field_id": field_id, "name": field.get("name", "Фотография"),
+                                         "photo_id": photo_ids.get(field.get("media_sha256"))})
+                editable = list(eligible)
+                editable.extend(item["field_id"] for item in photo_fields if item["field_id"] not in eligible)
+                result[(layout_id, variant_id)] = {
+                    "title_field_id": title_id, "title_paragraph_only": title_index is not None,
+                    "title_paragraph_index": title_index, "photo_fields": photo_fields,
+                    "editable_field_ids": editable,
+                }
+    return result
 
 
 def _identifier(value: str) -> str:
@@ -239,6 +320,8 @@ class WebState:
         self.photo_catalog_path = SOURCE_PHOTO_CATALOG if self.source_mode else DEFAULT_ASSET_CATALOG
         self.icon_catalog_path = SOURCE_ICON_CATALOG
         self.catalog = load_asset_catalog(self.photo_catalog_path)
+        self.source_editor = (_source_editor_metadata(self.manifest, self.template, self.catalog.records)
+                              if self.source_mode else {})
         self.icons = (json.loads(self.icon_catalog_path.read_text(encoding="utf-8-sig"))["icons"]
                       if self.source_mode else [])
         self.icons = [icon for icon in self.icons if icon.get("selectable", True)]
@@ -270,7 +353,8 @@ class WebState:
         return load_llm_settings(self.config_path)
 
     def image_list(self):
-        return [{"id": record["id"], "description": record.get("description", ""),
+        return [{"id": record["id"], "name": record.get("name") or record.get("file", record["id"]),
+                 "description": record.get("description", ""),
                  "tags": list(record.get("tags", [])), "url": f"/api/images/{record['id']}/file"}
                 for record in self.catalog.records]
 
@@ -298,8 +382,9 @@ class WebState:
                 except OSError:
                     pass
                 raise APIError(400, "image", str(exc)) from None
+            self.catalog.records[-1]["name"] = filename
             self.image_sizes[asset_id] = len(content)
-            return {"id": asset_id, "description": description, "url": f"/api/images/{asset_id}/file"}
+            return {"id": asset_id, "name": filename, "description": description, "url": f"/api/images/{asset_id}/file"}
 
     def bootstrap(self):
         try:
@@ -318,8 +403,12 @@ class WebState:
                                  "preview_url": f"/api/previews/{layout_id}/{variant_id}.png"
                                  if (layout_id, variant_id) in self.previews else None}
                 if self.source_mode:
-                    entry["fields"] = {key: {k: value[k] for k in ("kind", "name", "sample_text", "max_characters")
+                    entry["fields"] = {key: {k: value[k] for k in ("kind", "name", "scope", "sample_text", "max_characters", "paragraphs")
                                                if k in value} for key, value in variant.get("fields", {}).items()}
+                    for field_id, field in variant.get("fields", {}).items():
+                        if field["kind"] == "text":
+                            entry["fields"][field_id]["paragraph_count"] = len(field.get("paragraphs", field.get("sample_text", "").split("\n")))
+                    entry.update(copy.deepcopy(self.source_editor[(layout_id, variant_id)]))
                 variants.append(entry)
             layouts.append({"id": layout_id, "name": info.get("name", LAYOUT_NAMES.get(layout_id, layout_id)), "variants": variants})
         return {"model": model, "llm_configured": configured, "key_configured": key,
