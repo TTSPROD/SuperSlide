@@ -9,6 +9,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from lxml import etree as E
+from PIL import Image
 from pptx import Presentation
 
 from superslide.source_template import (
@@ -89,6 +90,92 @@ def _photo_placement(package, part, shape):
     return describe_photo_frame(shape, inherited_shape=inherited)
 
 
+def _path_fill_fraction(path):
+    """Measure filled contours, retaining opposite winding for transparent holes."""
+    contours, points = [], []
+    for command in path:
+        kind = E.QName(command).localname
+        values = [(float(p.get("x")), float(p.get("y"))) for p in command]
+        if kind == "moveTo":
+            if points:
+                contours.append(points)
+            points = values
+        elif kind == "lnTo":
+            points.extend(values)
+        elif kind == "cubicBezTo" and points:
+            p0, p1, p2, p3 = points[-1], *values
+            for step in range(1, 17):
+                t = step / 16
+                points.append(tuple((1-t)**3*p0[d] + 3*(1-t)**2*t*p1[d]
+                                    + 3*(1-t)*t*t*p2[d] + t**3*p3[d] for d in (0, 1)))
+        elif kind == "close":
+            if points:
+                contours.append(points)
+            points = []
+        else:
+            raise ValueError(f"Unsupported native icon contour: {kind}")
+    if points:
+        contours.append(points)
+    signed_area = sum(sum(a[0]*b[1] - b[0]*a[1]
+                          for a, b in zip(points, points[1:] + points[:1])) / 2
+                      for points in contours)
+    return abs(signed_area) / (float(path.get("w")) * float(path.get("h")))
+
+
+def _native_icon_has_background(shape):
+    """Find an opaque plate covering the icon's canvas, including grouped paths.
+
+    Icon paths are already closed filled contours in these supplied sources.
+    A large bounding box alone is insufficient: outline art has transparent
+    holes and must remain in the group without a backing plate.
+    """
+    def inspect(node, canvas_fraction):
+        if node.tag == f"{{{P}}}grpSp":
+            transform = node.find(f"{{{P}}}grpSpPr/{{{A}}}xfrm")
+            extent = transform.find(f"{{{A}}}chExt")
+            area = int(extent.get("cx")) * int(extent.get("cy"))
+            for child in node:
+                if child.tag not in (f"{{{P}}}sp", f"{{{P}}}grpSp"):
+                    continue
+                transform = child.find(f"{{{P}}}spPr/{{{A}}}xfrm")
+                if transform is None:
+                    transform = child.find(f"{{{P}}}grpSpPr/{{{A}}}xfrm")
+                extent = transform.find(f"{{{A}}}ext")
+                fraction = canvas_fraction * int(extent.get("cx")) * int(extent.get("cy")) / area
+                if inspect(child, fraction):
+                    return True
+            return False
+        props = node.find(f"{{{P}}}spPr")
+        if props.find(f"{{{A}}}solidFill") is None:
+            return False
+        preset = props.find(f"{{{A}}}prstGeom")
+        if preset is not None and preset.get("prst") == "rect":
+            return canvas_fraction >= .90
+        paths = props.findall(f"{{{A}}}custGeom/{{{A}}}pathLst/{{{A}}}path")
+        return any(path.get("fill") != "none" and canvas_fraction * _path_fill_fraction(path) >= .90
+                   for path in paths)
+    return inspect(shape, 1.0)
+
+
+def _icon_background_metadata(package, part, shape):
+    """Describe the retained original icon, without changing any source XML."""
+    blips = shape.xpath(".//a:blip", namespaces=NS)
+    if blips:
+        rid = blips[0].get(f"{{{R}}}embed")
+        relations = _xml(package[_relpath(part)])
+        relation = next(r for r in relations if r.get("Id") == rid)
+        data = package[_target(part, relation.get("Target"))]
+        # SVG shapes carry an existing raster fallback in their a:blip. It has
+        # exactly the same backing as the SVG; no additional renderer is needed.
+        with Image.open(io.BytesIO(data)) as picture:
+            histogram = picture.convert("RGBA").getchannel("A").histogram()
+            backed = sum(histogram[241:]) / sum(histogram) >= .90
+    else:
+        backed = _native_icon_has_background(shape)
+    return {"background_style": "with_background" if backed else "without_background",
+            "has_background": backed}
+
+
 def _fields_and_objects(prs, source_package, part, scope, prefix):
     """Record original object XML and bindings, including inherited artwork."""
     xml = _xml(source_package[part])
@@ -151,13 +238,17 @@ def _fields_and_objects(prs, source_package, part, scope, prefix):
                         "crop_and_transform_xml": E.tostring(shape, encoding="unicode")}
                     if kind == "icon":
                         fields[f"{scope}_{kind}_{sid}"]["placement"] = _icon_placement(source_package, part, shape)
+                        fields[f"{scope}_{kind}_{sid}"].update(_icon_background_metadata(source_package, part, shape))
                     else:
                         fields[f"{scope}_{kind}_{sid}"]["placement"] = _photo_placement(source_package, part, shape)
         # Many source icons are native freeforms, rather than image objects.
         # Expose the original small Graphic slot, retaining its exact position.
         ext = transform.find(f"{{{A}}}ext") if transform is not None else None
         if (scope == "slide" and shape.tag in (f"{{{P}}}sp", f"{{{P}}}grpSp")
-            and obj["name"].startswith("Graphic") and ext is not None
+            and (obj["name"].startswith("Graphic")
+                 or (obj["name"].startswith(("Рисунок", "Picture"))
+                     and shape.find(f"{{{P}}}spPr/{{{A}}}custGeom") is not None))
+            and ext is not None
             and 100000 <= int(ext.get("cx", 0)) <= 1400000
             and 100000 <= int(ext.get("cy", 0)) <= 1400000
             and not shape.xpath(".//a:t[text()] | .//a:blip", namespaces=NS)
@@ -165,6 +256,7 @@ def _fields_and_objects(prs, source_package, part, scope, prefix):
             fields[f"{scope}_icon_{sid}"] = {"kind": "icon", "scope": scope, "shape_id": sid,
                 "name": obj["name"], "native_shape": True, "transform_emu": obj["transform_emu"],
                 "placement": _icon_placement(source_package, part, shape)}
+            fields[f"{scope}_icon_{sid}"].update(_icon_background_metadata(source_package, part, shape))
             icon_ancestors.add(shape)
     return fields, objects
 
@@ -193,7 +285,7 @@ def prepare(root=ROOT):
     presentation.insert(list(presentation).index(slides), notes_masters)
     manifest = {"template_version": "2.0", "render_mode": "source_native", "name": "Северсталь — исходные 15 типов",
         "slide_size_emu": [12192000, 6858000], "source_directory": "resources/severstal/templates",
-        "policy": {"allowed_types": "Only the 15 supplied source files", "design": "Original native OOXML, no re-drawn layouts or font substitutions", "variants": "Every supplied source slide is a variant inside its original type", "text": "Keep original paragraph/run styling and object bounds; shorten content when necessary"},
+        "policy": {"allowed_types": "Only the 15 supplied source files", "design": "Original native OOXML, no re-drawn layouts or font substitutions", "variants": "Every supplied source slide is a variant inside its original type", "text": "Uniform representative source style per replaced paragraph; preserve paragraph layout and object bounds; shorten content when necessary"},
         "photo_catalog": "assets/photos/severstal/catalog.json", "icon_catalog": "assets/icons/severstal/catalog.json",
         "icon_placement_policy": {"fit": "contain", "preserve_aspect_ratio": True, "alignment": "center", "slot_shape": "square", "square_side_policy": "min_original_extent", "coordinate_space": "parent"},
         "photo_placement_policy": {"fit": "cover", "preserve_aspect_ratio": True, "alignment": "center", "frame": "source", "preserve_source_mask": True, "coordinate_space": "parent"},

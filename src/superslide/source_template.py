@@ -165,6 +165,50 @@ class SourceFieldError(ValueError):
         super().__init__(location + ": " + message)
 
 
+def validate_source_icon_styles(spec, icon_catalog, manifest=None):
+    """Enforce one background treatment for the icons selected on each slide.
+
+    The reference icon-library pages are preserved when copied unchanged. This
+    policy includes retained source icons when a slide replaces any icon, and
+    icons placed in picture fields. Fixed master branding is not a content icon.
+    Older custom catalogues without style metadata still work.
+    """
+    records = {item.get("id", item.get("asset_id")): item for item in icon_catalog}
+    slides = spec.get("slides", []) if isinstance(spec, dict) else spec.slides
+    for index, slide in enumerate(slides, 1):
+        updates = slide.get("updates", []) if isinstance(slide, dict) else slide.updates
+        styles = set()
+        has_replacements = False
+        for update in updates:
+            icon_id = update.get("icon_id") if isinstance(update, dict) else update.icon_id
+            if icon_id is None:
+                continue
+            has_replacements = True
+            record = records.get(icon_id)
+            if record is None or not record.get("selectable", True):
+                raise SourceFieldError(index, None, "unknown_icon", "выберите доступную иконку из каталога")
+            style = record.get("background_style")
+            if style is None and type(record.get("has_background")) is bool:
+                style = "with_background" if record["has_background"] else "without_background"
+            if style in {"with_background", "without_background"}:
+                styles.add(style)
+        if has_replacements and manifest is not None:
+            layout_id = slide.get("layout_id") if isinstance(slide, dict) else slide.layout_id
+            variant_id = slide.get("variant_id") if isinstance(slide, dict) else slide.variant_id
+            fields = manifest.get("layouts", {}).get(layout_id, {}).get("variants", {}).get(variant_id, {}).get("fields", {})
+            updated = {update.get("field_id") if isinstance(update, dict) else update.field_id for update in updates}
+            for field_id, field in fields.items():
+                if (field_id not in updated and field.get("kind") == "icon"
+                        and field.get("scope", field_id.split("_", 1)[0]) == "slide"
+                        and field.get("background_style") in {"with_background", "without_background"}):
+                    styles.add(field["background_style"])
+        if len(styles) > 1:
+            raise SourceFieldError(index, None, "mixed_icon_background",
+                                   "используйте один тип иконок на всём слайде: все с фоном (with_background) "
+                                   "или все без фона (without_background)")
+    return spec
+
+
 def validate_source_presentation(payload, manifest, known_source_ids=None):
     spec = payload if isinstance(payload, SourcePresentationSpec) else SourcePresentationSpec.model_validate(payload)
     text_errors = []
@@ -270,6 +314,8 @@ def _compact_source_field(field):
         result["chart"]["categories"] = [_prompt_sample(category, 45) for category in meta.get("categories", [])]
         result["chart"]["series"] = [{"name": _prompt_sample(series["name"], 45), "values": series["values"], "number_format": series.get("number_format", "General")} for series in meta.get("series", [])]
         result["operation"] = "chart_data"
+    elif field["kind"] == "icon" and field.get("background_style"):
+        result["background_style"] = field["background_style"]
     return result
 
 
@@ -333,50 +379,70 @@ def _paragraph_text(paragraph):
     return "".join("\v" if node.tag == f"{{{A}}}br" else node.text or "" for node in paragraph.iter() if node.tag in (f"{{{A}}}t", f"{{{A}}}br"))
 
 
+def _replacement_run_properties(paragraph, text):
+    """Use the source's main text style, without its arbitrary run boundaries.
+
+    Templates mix labels with differently styled sample counters, speakers or
+    dot leaders. Character ratios do not identify those roles in replacement
+    text. Count actual letters/digits per style so an oversized sample ``XX``
+    or a long dotted leader does not become the font of a new label. Combine
+    fragments of one style, including fragments split only by spellchecking.
+    """
+    styles = {}
+    for run in paragraph.xpath("./a:r | ./a:fld", namespaces=NS):
+        original = run.find(f"{{{A}}}rPr")
+        properties = deepcopy(original) if original is not None else E.Element(f"{{{A}}}rPr")
+        # These states describe the sample words, not the generated content.
+        for name in ("err", "dirty", "smtClean", "smtId"):
+            properties.attrib.pop(name, None)
+        key_properties = deepcopy(properties)
+        for name in ("lang", "altLang", "noProof"):
+            key_properties.attrib.pop(name, None)
+        key = E.tostring(key_properties, method="c14n")
+        weight = sum(character.isalnum() for character in run.findtext(f"{{{A}}}t", ""))
+        if key not in styles:
+            styles[key] = [0, properties]
+        styles[key][0] += weight
+    if styles:
+        properties = deepcopy(max(styles.values(), key=lambda item: item[0])[1])
+    else:
+        end = paragraph.find(f"{{{A}}}endParaRPr")
+        properties = deepcopy(end) if end is not None else E.Element(f"{{{A}}}rPr")
+        properties.tag = f"{{{A}}}rPr"
+    for name in ("err", "dirty", "smtClean", "smtId"):
+        properties.attrib.pop(name, None)
+    if re.search(r"[\u0400-\u04ff]", text):
+        properties.set("lang", "ru-RU")
+    return properties
+
+
 def _write_paragraph(paragraph, text):
-    """Keep every run property; distribute new text across the original runs."""
+    """Write changed text in one source style; keep native paragraph layout."""
     if _paragraph_text(paragraph) == text:
         return
-    runs = paragraph.findall(f"{{{A}}}r")
-    if not runs:
-        run = E.Element(f"{{{A}}}r")
-        end = paragraph.find(f"{{{A}}}endParaRPr")
-        if end is not None:
-            paragraph.insert(list(paragraph).index(end), run)
-            properties = deepcopy(end); properties.tag = f"{{{A}}}rPr"; run.append(properties)
-        else:
-            paragraph.append(run)
-        E.SubElement(run, f"{{{A}}}t")
-        runs = [run]
-    for br in list(paragraph.findall(f"{{{A}}}br")):
-        paragraph.remove(br)
-    for fld in list(paragraph.findall(f"{{{A}}}fld")):
-        paragraph.remove(fld)
-    lengths = [len(r.findtext(f"{{{A}}}t", "")) for r in runs]
-    weights = lengths if any(lengths) else [1] * len(runs)
-    total = sum(weights)
-    offset = 0
-    for i, run in enumerate(runs):
-        stop = len(text) if i == len(runs) - 1 else offset + round(len(text) * weights[i] / total)
-        node = run.find(f"{{{A}}}t")
-        if node is None:
-            node = E.SubElement(run, f"{{{A}}}t")
-        parts = text[offset:stop].split("\v")
-        node.text = parts[0]
-        previous = run
-        for part in parts[1:]:
-            # A line break inherits the surrounding run's font properties.
-            # Insert both nodes before the next source run/endParaRPr.
+    properties = _replacement_run_properties(paragraph, text)
+    for node in list(paragraph):
+        if node.tag in {f"{{{A}}}r", f"{{{A}}}br", f"{{{A}}}fld"}:
+            paragraph.remove(node)
+    end = paragraph.find(f"{{{A}}}endParaRPr")
+    replacement_end = deepcopy(properties)
+    replacement_end.tag = f"{{{A}}}endParaRPr"
+    if end is not None:
+        paragraph.replace(end, replacement_end)
+    else:
+        paragraph.append(replacement_end)
+    position = list(paragraph).index(replacement_end)
+    for index, part in enumerate(text.split("\v")):
+        if index:
             br = E.Element(f"{{{A}}}br")
-            properties = run.find(f"{{{A}}}rPr")
-            if properties is not None:
-                br.append(deepcopy(properties))
-            paragraph.insert(list(paragraph).index(previous) + 1, br)
-            continuation = deepcopy(run)
-            continuation.find(f"{{{A}}}t").text = part
-            paragraph.insert(list(paragraph).index(br) + 1, continuation)
-            previous = continuation
-        offset = stop
+            br.append(deepcopy(properties))
+            paragraph.insert(position, br)
+            position += 1
+        run = E.Element(f"{{{A}}}r")
+        run.append(deepcopy(properties))
+        E.SubElement(run, f"{{{A}}}t").text = part
+        paragraph.insert(position, run)
+        position += 1
 
 
 def _write_body(body, paragraphs):
@@ -549,12 +615,16 @@ def _clone_part(package, content_types, old, new, replacements):
         _override(content_types, new, source_type)
 
 
-def _asset(catalog_path, asset_id):
-    path = Path(catalog_path)
-    catalog = json.loads(path.read_text(encoding="utf-8-sig"))
+def _asset_records(catalog):
     records = catalog if isinstance(catalog, list) else next((catalog[k] for k in ("assets", "photos", "icons", "images") if isinstance(catalog.get(k), list)), [])
     if not records and isinstance(catalog, dict):
         records = [icon for group in catalog.get("groups", []) for icon in group.get("icons", [])]
+    return records
+
+
+def _asset(catalog_path, asset_id):
+    path = Path(catalog_path)
+    records = _asset_records(json.loads(path.read_text(encoding="utf-8-sig")))
     record = next((r for r in records if r.get("id", r.get("asset_id")) == asset_id), None)
     if record is None:
         raise ValueError(f"Нет ресурса {asset_id} в {path}")
@@ -702,6 +772,9 @@ def _replace_image(package, ct, owner, shape, image_path, *, icon_mode=False, in
 def build_source_presentation(spec, template_path, manifest_path, output_path, *, asset_catalog_path=None, icon_catalog_path=None, source_lookup=None):
     manifest = load_source_manifest(manifest_path)
     spec = validate_source_presentation(spec, manifest, set(source_lookup) if source_lookup is not None else None)
+    if any(update.icon_id is not None for slide in spec.slides for update in slide.updates):
+        icon_data = json.loads(Path(icon_catalog_path or SOURCE_ICON_CATALOG).read_text(encoding="utf-8-sig"))
+        validate_source_icon_styles(spec, _asset_records(icon_data), manifest)
     with ZipFile(template_path) as archive:
         package = {n: archive.read(n) for n in archive.namelist()}
     presentation = _xml(package["ppt/presentation.xml"])
@@ -863,7 +936,7 @@ def build_source_presentation(spec, template_path, manifest_path, output_path, *
     _set_presentation_title(package, spec.title)
     _fill_package_date_prompts(package, date_text)
     _prune_and_save(package, output_path)
-    return {"template_version": "2.0", "render_mode": "source_native", "text_weight_policy": "headings_bold_body_regular", "slide_count": len(report), "footer_date": date_text, "slides": report, "output": str(Path(output_path).resolve())}
+    return {"template_version": "2.0", "render_mode": "source_native", "text_weight_policy": "headings_bold_body_regular", "text_style_policy": "uniform_source_style_per_replaced_paragraph", "icon_style_policy": "one_background_style_per_slide", "slide_count": len(report), "footer_date": date_text, "slides": report, "output": str(Path(output_path).resolve())}
 
 
 def _set_presentation_title(package, title):

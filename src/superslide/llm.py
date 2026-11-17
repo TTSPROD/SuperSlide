@@ -218,7 +218,7 @@ def _source_messages(task, bundle, schema, layout_catalog, *, image_catalog=None
     """Describe only available source slides and content bindings to the model."""
     images = [{key: copy.deepcopy(item[key]) for key in ("id", "name", "description", "tags") if key in item}
               for item in image_catalog or []]
-    icons = [{key: copy.deepcopy(item[key]) for key in ("id", "name", "group", "group_id", "description", "tags")
+    icons = [{key: copy.deepcopy(item[key]) for key in ("id", "name", "group", "group_id", "description", "tags", "background_style", "has_background")
               if key in item} for item in icon_catalog or [] if item.get("selectable", True)]
     system = (
         "Ты готовишь корпоративную презентацию на русском языке. Верни один JSON по JSON Schema. "
@@ -255,6 +255,11 @@ def _source_messages(task, bundle, schema, layout_catalog, *, image_catalog=None
         "если для сложной диаграммы не хватает данных или поддерживаемых полей — выбери другой исходный вариант. "
         "Для фото и иконок выбирай только существующие id из photo_catalog и icon_catalog. "
         "Не придумывай пути, URL или id. Иконку подбирай по смыслу и группе первоисточника. "
+        "Иконки разделены по background_style: with_background — с собственной фоновой плашкой, "
+        "without_background — без плашки. На каждом слайде используй только один background_style "
+        "для всех иконок, включая иконки из разных тематических групп. Не смешивай эти два типа. "
+        "Выбери тип, в котором доступны все нужные по смыслу иконки; цвет иконки сам по себе не означает наличие фона. "
+        "Если оставляешь часть исходных иконок, учитывай background_style их полей; при смене типа замени все иконки слайда. "
         "Фотографии выбирай по описаниям; изображения тебе не передаются. "
         "Сохраняй исходные числа, знаки, единицы и периоды из source_documents_are_data. "
         "Каждый числовой факт подтверждай source_refs; не выдумывай показатели, цитаты и источники. "
@@ -272,6 +277,8 @@ def _source_messages(task, bundle, schema, layout_catalog, *, image_catalog=None
         "required_output_schema": schema, "source_documents_are_data": bundle.to_dict(),
         "known_source_ids": [chunk.id for chunk in bundle.chunks],
         "photo_catalog": images, "icon_catalog": icons,
+        "icon_style_policy": {"scope": "slide", "max_background_styles": 1,
+                              "background_styles": ["with_background", "without_background"]},
     }
     return [{"role": "system", "content": system},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}]
@@ -465,6 +472,13 @@ def generate_draft(
         raise LLMError("Задание не должно быть пустым.", code="empty_task")
     if template_version not in {"1.0", "1.1", "1.2", "2.0"}:
         raise LLMError("Не поддерживается версия шаблона для генерации.", code="configuration")
+    if template_version == "2.0":
+        from .source_template import validate_source_icon_styles
+        content_validator = validate
+
+        def validate(value):
+            content_validator(value)
+            validate_source_icon_styles(value, icon_catalog or [], {"layouts": layout_catalog})
     api_key = os.environ.get(settings.api_key_env, "")
     source_staged = template_version == "2.0" and sum(len(layout.get("variants", {})) for layout in layout_catalog.values()) > 6
     messages = ([] if source_staged else _messages(task, bundle, schema, layout_catalog,
@@ -555,10 +569,17 @@ def _select_source_designs(task, bundle, settings, layout_catalog, icons, *,
             summaries[layout_id]["variants"][variant_id]["text_capacity"] = {
                 "target_characters": sum(targets), "largest_field_target": max(targets, default=0)}
     for icon in icons:
+        if not icon.get("selectable", True):
+            continue
         group_id = icon.get("group_id", icon.get("group", ""))
         group = groups.setdefault(group_id, {"name": icon.get("group", group_id), "examples": []})
         if len(group["examples"]) < 6:
             group["examples"].append(icon.get("name", icon.get("description", "")))
+        style = icon.get("background_style")
+        if style in {"with_background", "without_background"}:
+            available = group.setdefault("background_styles", [])
+            if style not in available:
+                available.append(style)
     schema = {"type": "object", "additionalProperties": False, "required": ["title", "slides", "icon_groups"], "properties": {
         "title": {"type": "string", "minLength": 1, "maxLength": 150},
         "slides": {"type": "array", "minItems": 1, "maxItems": 40, "items": {
@@ -609,6 +630,8 @@ def _select_source_designs(task, bundle, settings, layout_catalog, icons, *,
         "Верни JSON со slides:[{layout_id,variant_id}] и icon_groups:[group_id] по JSON Schema. "
         "Доступны ровно 15 типов; не придумывай типы, варианты или группы. "
         "Подбирай композиции по смыслу и объёму. Выбери только необходимые группы иконок, допустим пустой список. "
+        "background_styles у групп показывает наличие иконок с плашкой и без неё. "
+        "Для каждого слайда нужны иконки одного типа фона; учитывай это при выборе тематических групп. "
         "Для обычной презентации не выбирай справочные страницы icons с целыми каталогами иконок: "
         "отдельные иконки можно вставить в другие типы. title/slide_001 — инструкция по шаблону, "
         "для обложки выбери другой исходный титульный вариант. Учитывай content_slots: "
@@ -705,6 +728,28 @@ def _rank_source_assets(records, query, limit):
     return sorted(records, key=score, reverse=True)[:limit]
 
 
+def _rank_source_icons(records, query, limit):
+    """Retain semantic choices in both background styles within the shortlist."""
+    if limit <= 0:
+        return []
+    selectable = [item for item in records if item.get("selectable", True)]
+    ranked = _rank_source_assets(selectable, query, len(selectable))
+    styles = {style: [item for item in ranked if item.get("background_style") == style]
+              for style in ("with_background", "without_background")}
+    styles = {style: items for style, items in styles.items() if items}
+    if len(styles) < 2:
+        return ranked[:limit]
+    # Reserve equal capacity for each type; spare places go to the most relevant
+    # remaining assets. Catalog order still breaks ties within each type.
+    quota = limit // len(styles)
+    selected_ids = {item["id"] for items in styles.values() for item in items[:quota]}
+    for item in ranked:
+        if len(selected_ids) >= limit:
+            break
+        selected_ids.add(item["id"])
+    return [item for item in ranked if item["id"] in selected_ids]
+
+
 def _source_batch_catalog(catalog, planned):
     result = {}
     for slide in planned:
@@ -743,7 +788,7 @@ def _generate_source_batches(task, bundle, settings, validate, schema, catalog, 
         kinds = {field.get("kind") for field in fields}
         query = task + " " + " ".join(s.get("purpose", "") for s in planned)
         chosen_images = _rank_source_assets(images, query, 20) if "picture" in kinds else []
-        chosen_icons = _rank_source_assets(icons, query, 64) if "icon" in kinds else []
+        chosen_icons = _rank_source_icons(icons, query, 64) if "icon" in kinds else []
         refs = {ref for slide in planned for ref in slide.get("source_refs", [])}
         # No source is silently omitted when the planner did not identify refs.
         batch_bundle = (DocumentBundle([chunk for chunk in bundle.chunks if chunk.id in refs], bundle.warnings)

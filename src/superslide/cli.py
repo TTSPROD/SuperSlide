@@ -89,23 +89,26 @@ def _source_catalog(path, kind):
     raise ValueError(f"Каталог {path} должен содержать массив {kind}")
 
 
-def _validate_source_assets(spec, photo_path, icon_path):
+def _validate_source_assets(spec, photo_path, icon_path, manifest=None):
+    from .source_template import validate_source_icon_styles
     photo_ids = {item["id"] for item in _source_catalog(photo_path, "photos")}
-    icon_ids = {item["id"] for item in _source_catalog(icon_path, "icons")}
+    icons = _source_catalog(icon_path, "icons")
+    icon_ids = {item["id"] for item in icons}
     for slide in spec.slides:
         for update in slide.updates:
             values = update.model_dump() if hasattr(update, "model_dump") else update
             for key, allowed in (("photo_id", photo_ids), ("icon_id", icon_ids)):
                 if values.get(key) is not None and values[key] not in allowed:
                     raise ValueError(f"Неизвестный {key}: {values[key]}")
-    return spec
+    return validate_source_icon_styles(spec, icons, manifest)
 
 
 def _source_load(input_path, manifest_path, sources, photo_path, icon_path):
     from .source_template import load_source_manifest, validate_source_presentation
+    manifest = load_source_manifest(manifest_path)
     return _validate_source_assets(validate_source_presentation(
-        _read_json(input_path), load_source_manifest(manifest_path),
-        set(sources) if sources is not None else None), photo_path, icon_path)
+        _read_json(input_path), manifest,
+        set(sources) if sources is not None else None), photo_path, icon_path, manifest)
 
 
 def _validate_assets(spec, catalog):
@@ -319,7 +322,7 @@ def _run(args):
             def validate_with_fit(value):
                 if source_mode:
                     spec = _validate_source_assets(validate_source_presentation(value, manifest, known),
-                                                   photo_path, args.icon_catalog)
+                                                   photo_path, args.icon_catalog, manifest)
                     check_source_text_fit(spec, args.template, args.manifest)
                     return spec
                 spec = _validate_designs(_validate_assets(validate_presentation(value, known), catalog), manifest)

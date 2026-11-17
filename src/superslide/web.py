@@ -143,6 +143,9 @@ def _filename(value: str, allowed_extensions, type_message: str) -> str:
 
 def _safe_error(exc: Exception) -> str:
     # Never send exception text, model responses, API URLs, keys or document contents to the UI.
+    details = getattr(exc, "validation_details", None)
+    if isinstance(details, dict) and details.get("reason") == "mixed_icon_background":
+        return "На одном слайде используйте один тип иконок: все с фоном или все без фона, включая оставшиеся исходные иконки."
     if isinstance(exc, LLMError):
         return {
             "authentication": "API отклонил ключ. Проверьте ключ доступа в настройках.",
@@ -252,6 +255,7 @@ def _failure_message(exc, details):
         else:
             message += f" Слайд {details['slide_start']}."
     reasons = {"paragraph_count": "слишком много абзацев", "text_length": "текст длиннее лимита",
+               "mixed_icon_background": "смешаны иконки с фоном и без фона; выберите один тип для всего слайда",
                "table_dimensions": "размер таблицы не совпадает с макетом", "unknown_field": "поле отсутствует в макете",
                "chart_dimensions": "размер данных диаграммы не совпадает с макетом",
                "cell_paragraph_count": "слишком много абзацев в ячейке", "chart_unsupported": "выбрана диаграмма для ручного заполнения в PowerPoint",
@@ -390,7 +394,7 @@ class WebState:
         if not isinstance(draft, dict):
             raise APIError(400, "draft", "Презентация должна быть JSON-объектом.")
         if self.source_mode:
-            from .source_template import validate_source_presentation
+            from .source_template import validate_source_presentation, validate_source_icon_styles
             spec = validate_source_presentation(draft, self.manifest, known_sources)
             icons = {item["id"] for item in self.icons}
             for slide in spec.slides:
@@ -400,7 +404,7 @@ class WebState:
                         self.catalog.resolve(values["photo_id"])
                     if values.get("icon_id") is not None and values["icon_id"] not in icons:
                         raise ValueError("Неизвестная иконка")
-            return spec
+            return validate_source_icon_styles(spec, self.icons, self.manifest)
         spec = validate_presentation(draft, known_sources)
         for slide in spec.slides:
             select_layout(self.manifest, slide.layout_id, slide.variant_id)

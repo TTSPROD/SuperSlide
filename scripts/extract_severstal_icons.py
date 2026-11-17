@@ -40,6 +40,59 @@ GROUP_IDS = ["metallurgy", "mining", "steel_service_centres", "construction",
              "law_order", "navigation", "navigation", "sport", "corporate_social_responsibility",
              "miscellaneous", "holidays", "emotions"]
 
+# These three original JPEGs include an opaque white square in their pixels.
+# Their verified names describe the blue foreground, so the suffix alone does
+# not describe their background. Keep that source artwork intact and classify
+# its actual backing explicitly (source slide, source icon index).
+OPAQUE_WHITE_BACKGROUNDS = {(3, 7), (7, 33), (23, 16)}
+BACKGROUND_STYLES = [
+    {"id": "without_background", "name": "Без фона",
+     "description": "Пиктограмма на прозрачном фоне, без встроенной плашки."},
+    {"id": "with_background", "name": "С фоном",
+     "description": "Пиктограмма со встроенной непрозрачной плашкой; цвет указан в background_color."},
+]
+
+
+def icon_background_metadata(record):
+    """Classify verified source artwork, independently of the slide background.
+
+    Blue and white foreground variants can both be transparent. Three original
+    rasters have a baked white square despite being labelled as blue icons.
+    This metadata never changes or redraws the SVG/PNG artwork.
+    """
+    source = record["source"]
+    key = source["slide"], source["index"]
+    color = ("#FFFFFF" if key in OPAQUE_WHITE_BACKGROUNDS else
+             "#002F6C" if record["name"].endswith(" — белая на синем фоне") else None)
+    return {"background_style": "with_background" if color else "without_background",
+            "has_background": color is not None, "background_color": color}
+
+
+def annotate_icon_backgrounds(catalog):
+    """Add the explicit two-style partition used by selection and validation."""
+    for record in catalog["icons"]:
+        record.update(icon_background_metadata(record))
+    for group in catalog["groups"]:
+        group["icon_ids_by_background_style"] = {
+            style["id"]: [record["id"] for record in catalog["icons"]
+                          if record["group_id"] == group["id"]
+                          and record.get("selectable", True)
+                          and record["background_style"] == style["id"]]
+            for style in BACKGROUND_STYLES}
+    catalog["background_styles"] = deepcopy(BACKGROUND_STYLES)
+    catalog["stats"]["by_background_style"] = dict(Counter(
+        record["background_style"] for record in catalog["icons"] if record.get("selectable", True)))
+    catalog["selection_instructions"] = (
+        "Выбирайте только записи с selectable:true. Для каждого слайда сначала выберите один "
+        "background_style: without_background (без плашки) или with_background (с плашкой). "
+        "Все иконки одного слайда должны иметь один и тот же background_style, даже если "
+        "они из разных тематических групп. Затем выберите группу и asset_id по name, description "
+        "и tags. Используйте icon_ids_by_background_style для раздельного выбора. "
+        "Цвет встроенной плашки указан в background_color; цвет самой пиктограммы — в названии. "
+        "Сохраняйте пропорции. is_vector:false означает исходный растр внутри SVG; "
+        "используйте png_file для вставки PNG.")
+    return catalog
+
 
 def jwrite(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -351,6 +404,7 @@ def build(previews=None, allow_unnamed=False, render=False, diagnostics=None):
                       "vector_icons":sum(x["is_vector"] for x in records),
                       "with_embedded_raster":sum(not x["is_vector"] for x in records),
                       "extraction":dict(Counter(x["extraction"] for x in records))}}
+    annotate_icon_backgrounds(catalog)
     jwrite(OUT/"catalog.json",catalog)
     jwrite(diagnostics/"source_inventory.json",inventory)
     # Only remove files explicitly owned by the previous generated catalog.

@@ -1,4 +1,4 @@
-"""Source text edits retain untouched soft breaks and write new native breaks."""
+"""Source text edits retain untouched soft breaks and write consistent new text."""
 import unittest
 from copy import deepcopy
 from pathlib import Path
@@ -90,9 +90,9 @@ class SourceSoftBreakTests(unittest.TestCase):
         self.assertEqual(_paragraph_text(_xml(serialized)), text)
         breaks = node.findall(f"{{{A}}}br")
         self.assertEqual(len(breaks), 2)
-        self.assertEqual(breaks[0].find(f"{{{A}}}rPr").get("b"), "1")
-        self.assertEqual(breaks[1].find(f"{{{A}}}rPr").get("sz"), "1800")
-        self.assertEqual(breaks[1].find(f"{{{A}}}rPr/{{{A}}}solidFill/{{{A}}}srgbClr").get("val"), "003377")
+        for br in breaks:
+            self.assertEqual(br.find(f"{{{A}}}rPr").get("sz"), "1800")
+            self.assertEqual(br.find(f"{{{A}}}rPr/{{{A}}}solidFill/{{{A}}}srgbClr").get("val"), "003377")
         self.assertIs(node[-1], node.find(f"{{{A}}}endParaRPr"))
         # Reapplying the semantic text does not rebuild its styled runs/breaks.
         _write_paragraph(node, text)
@@ -108,16 +108,15 @@ class SourceSoftBreakTests(unittest.TestCase):
                             for run in node.findall(f"{{{A}}}r")))
         _xml(E.tostring(node))
 
-    def test_edit_after_soft_break_boundary_keeps_empty_runs_empty(self):
+    def test_edit_after_soft_break_boundary_keeps_one_consistent_style(self):
         node = paragraph()
         _write_paragraph(node, "AB\vCD\vEF")
-        self.assertTrue(any(not run.findtext(f"{{{A}}}t", "") for run in node.findall(f"{{{A}}}r")))
+        self.assertEqual([run.findtext(f"{{{A}}}t", "") for run in node.findall(f"{{{A}}}r")], ["AB", "CD", "EF"])
         _write_paragraph(node, "123456789")
         self.assertEqual(_paragraph_text(node), "123456789")
         runs = node.findall(f"{{{A}}}r")
-        bold_text = "".join(run.findtext(f"{{{A}}}t", "") for run in runs
-                            if run.find(f"{{{A}}}rPr").get("b") == "1")
-        self.assertEqual(bold_text, "123")
+        self.assertEqual(len(runs), 1)
+        self.assertEqual(runs[0].find(f"{{{A}}}rPr").get("sz"), "1800")
         self.assertFalse(node.findall(f"{{{A}}}br"))
 
     def test_replacing_existing_soft_breaks_removes_old_breaks_and_styles_new_ones(self):
@@ -130,19 +129,18 @@ class SourceSoftBreakTests(unittest.TestCase):
         self.assertEqual(_paragraph_text(node), "AB\vCD\vEF")
         self.assertNotIn(old_break, node)
         breaks = node.findall(f"{{{A}}}br")
-        self.assertEqual([br.find(f"{{{A}}}rPr").get("sz") for br in breaks], ["2400", "1800"])
+        self.assertEqual([br.find(f"{{{A}}}rPr").get("sz") for br in breaks], ["1800", "1800"])
         _write_paragraph(node, "")
         self.assertEqual(_paragraph_text(node), "")
         self.assertFalse(node.findall(f"{{{A}}}br"))
         self.assertIs(node[-1], node.find(f"{{{A}}}endParaRPr"))
 
-    def test_normal_changed_text_keeps_original_run_styling_distribution(self):
+    def test_normal_changed_text_does_not_reuse_original_run_boundaries(self):
         node = paragraph()
         _write_paragraph(node, "1234567890")
         runs = node.findall(f"{{{A}}}r")
-        self.assertEqual([run.findtext(f"{{{A}}}t") for run in runs], ["1234", "567890"])
-        self.assertEqual(runs[0].find(f"{{{A}}}rPr").get("b"), "1")
-        self.assertEqual(runs[1].find(f"{{{A}}}rPr").get("sz"), "1800")
+        self.assertEqual([run.findtext(f"{{{A}}}t") for run in runs], ["1234567890"])
+        self.assertEqual(runs[0].find(f"{{{A}}}rPr").get("sz"), "1800")
         self.assertFalse(node.findall(f"{{{A}}}br"))
         self.assertIs(node[-1], node.find(f"{{{A}}}endParaRPr"))
 
