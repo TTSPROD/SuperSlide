@@ -1,0 +1,81 @@
+{
+  "template_version": "2.0",
+  "title": "Северсталь — 15 типов",
+  "slides": [
+    {
+      "layout_id": "title",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "big_text",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_001",
+      "updates": []
+    }
+  ]
+}

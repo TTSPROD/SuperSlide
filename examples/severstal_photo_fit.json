@@ -1,0 +1,93 @@
+{
+  "template_version": "2.0",
+  "title": "Пропорциональная вставка фотографий",
+  "slides": [
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_001",
+      "updates": [
+        {
+          "field_id": "slide_picture_16",
+          "photo_id": "colleagues_round_table_panorama"
+        },
+        {
+          "field_id": "slide_picture_18",
+          "photo_id": "glass_roof_atrium_tall"
+        },
+        {
+          "field_id": "slide_picture_20",
+          "photo_id": "portrait_man_fair_hair_glasses_160"
+        },
+        {
+          "field_id": "slide_text_13",
+          "text": "Фотографии без искажения пропорций"
+        },
+        {
+          "field_id": "slide_text_35",
+          "paragraphs": [
+            "Широкое фото",
+            "Заполняет рамку по высоте. Лишние края слева и справа кадрируются."
+          ]
+        },
+        {
+          "field_id": "slide_text_66",
+          "paragraphs": [
+            "Вертикальное фото",
+            "Заполняет рамку по ширине. Верх и низ кадрируются без растягивания изображения."
+          ]
+        },
+        {
+          "field_id": "slide_text_73",
+          "paragraphs": [
+            "Квадратное фото",
+            "Пропорции сохраняются. Размер и положение рамки остаются как в макете."
+          ]
+        }
+      ],
+      "notes": "Проверка пропорций фото: широкий, высокий и квадратный кадры. Рамки исходного макета сохранены."
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_005",
+      "updates": [
+        {
+          "field_id": "slide_picture_15",
+          "photo_id": "colleagues_round_table_panorama"
+        },
+        {
+          "field_id": "slide_picture_16",
+          "photo_id": "glass_roof_atrium_tall"
+        },
+        {
+          "field_id": "slide_picture_17",
+          "photo_id": "portrait_man_fair_hair_glasses_160"
+        },
+        {
+          "field_id": "slide_picture_19",
+          "photo_id": "worker_portrait_orange_helmet"
+        },
+        {
+          "field_id": "slide_text_3",
+          "text": "Рамки фотографий"
+        },
+        {
+          "field_id": "slide_text_34",
+          "text": "Иван Петров"
+        },
+        {
+          "field_id": "slide_text_50",
+          "text": "Анна Соколова"
+        },
+        {
+          "field_id": "slide_text_63",
+          "text": "Алексей Орлов"
+        },
+        {
+          "field_id": "slide_text_76",
+          "text": "Сергей Волков"
+        }
+      ],
+      "notes": "Проверка пропорций фото: широкий, высокий и квадратный кадры. Рамки исходного макета сохранены."
+    }
+  ]
+}

@@ -77,9 +77,17 @@ async function uploadFiles(files) {
 async function poll(id) {
   for (;;) {
     const job = await api(`/api/jobs/${id}`);
-    status(job.message);
+    const elapsed = Number(job.elapsed_seconds || 0);
+    status(job.message + (job.status === "running" && elapsed >= 1 ? ` · ${Math.floor(elapsed)} с` : ""));
     if (job.status === "succeeded") return job;
-    if (job.status === "failed") throw new Error(job.error || "Не удалось выполнить задание.");
+    if (job.status === "failed") {
+      if (job.partial_download) {
+        const recovery = element("p");
+        const link = element("a", "", "Скачать готовые слайды (JSON)");
+        link.href = job.partial_download; recovery.append(link); $("warnings").append(recovery);
+      }
+      throw new Error(job.error || "Не удалось выполнить задание.");
+    }
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
@@ -161,6 +169,7 @@ function showPreview(slide) {
   }
 }
 function renderSlides() {
+  if (state.draft.template_version === "2.0") { renderSourceSlides(); return; }
   const list = $("slide-list");
   list.replaceChildren();
   state.draft.slides.forEach((slide, index) => {
@@ -219,6 +228,61 @@ function renderSlides() {
   invalidateDownload();
   if (state.draft.slides.length) showPreview(state.draft.slides[0]);
 }
+function renderSourceSlides() {
+  const list = $("slide-list");
+  list.replaceChildren();
+  state.draft.slides.forEach((slide, index) => {
+    const layout = layoutFor(slide.layout_id);
+    const variant = layout?.variants.find((item) => item.id === slide.variant_id);
+    const row = element("li", "slide-row");
+    const content = element("div");
+    content.append(element("div", "slide-kind", `${index + 1}. ${layout?.name || slide.layout_id}`));
+    if (layout) {
+      const label = element("label", "", "Исходный вариант");
+      const select = element("select", "variant-select");
+      select.id = `variant-${index}`; label.htmlFor = select.id;
+      for (const choice of layout.variants) {
+        const option = element("option", "", choice.name);
+        option.value = choice.id; select.append(option);
+      }
+      select.value = slide.variant_id;
+      select.addEventListener("change", () => {
+        slide.variant_id = select.value;
+        slide.updates = [];
+        renderSlides(); invalidateDownload();
+        status("Выбран исходный вариант. Заполните его текстовые поля.");
+      });
+      content.append(label, select);
+    }
+    if (variant?.description) content.append(element("p", "", variant.description));
+    for (const [fieldId, field] of Object.entries(variant?.fields || {})) {
+      if (field.kind !== "text") continue;
+      const update = slide.updates.find((item) => item.field_id === fieldId);
+      const label = element("label", "", field.name || fieldId);
+      const input = document.createElement("textarea");
+      input.className = "slide-title";
+      input.id = `field-${index}-${fieldId}`; label.htmlFor = input.id;
+      input.value = update?.paragraphs ? update.paragraphs.join("\n") : update?.text ?? field.sample_text ?? "";
+      if (field.max_characters) input.maxLength = field.max_characters;
+      input.rows = Math.min(6, Math.max(2, input.value.split("\n").length));
+      input.addEventListener("input", () => {
+        let record = slide.updates.find((item) => item.field_id === fieldId);
+        if (!record) { record = { field_id: fieldId }; slide.updates.push(record); }
+        delete record.paragraphs;
+        record.text = input.value;
+        invalidateDownload();
+      });
+      input.addEventListener("focus", () => showPreview(slide));
+      content.append(label, input);
+    }
+    row.append(content); list.append(row);
+  });
+  $("slides-subtitle").textContent = `${state.draft.slides.length} слайдов · исходные варианты и текстовые поля`;
+  $("empty-state").hidden = true;
+  $("slides-section").hidden = false;
+  invalidateDownload();
+  if (state.draft.slides.length) showPreview(state.draft.slides[0]);
+}
 function setDraft(draft, sourceJob, warnings, demo = false) {
   state.draft = draft; state.sourceJob = sourceJob;
   renderSlides(); showWarnings(warnings);
@@ -262,7 +326,7 @@ $("import-file").addEventListener("change", async (event) => {
 });
 $("build").addEventListener("click", async () => {
   if (!state.draft) return;
-  if (state.draft.slides.some((slide) => !(slide.layout_id === "quote" ? slide.quote : slide.title)?.trim())) {
+  if (state.draft.template_version !== "2.0" && state.draft.slides.some((slide) => !(slide.layout_id === "quote" ? slide.quote : slide.title)?.trim())) {
     status("Заполните все заголовки и цитаты.", true); return;
   }
   setBusy(true); invalidateDownload();
@@ -293,6 +357,30 @@ $("settings-form").addEventListener("submit", async (event) => {
     $("api-key").value = ""; area.classList.remove("error"); area.textContent = "Ключ сохранён на время работы приложения.";
     if (state.bootstrap) { state.bootstrap.key_configured = true; updateConnection(); }
   } catch (error) { area.classList.add("error"); area.textContent = error.message; }
+});
+$("connection-check").addEventListener("click", async () => {
+  const area = $("settings-status");
+  const button = $("connection-check");
+  button.disabled = true; area.classList.remove("error");
+  try {
+    if ($("api-key").value.trim()) {
+      await api("/api/settings", jsonOptions({ api_key: $("api-key").value }));
+      $("api-key").value = "";
+      state.bootstrap.key_configured = true; updateConnection();
+    }
+    const started = await api("/api/connection-check", jsonOptions({}));
+    for (;;) {
+      const job = await api(`/api/jobs/${started.job_id}`);
+      area.textContent = job.status === "queued" ? "Проверка в очереди…" : `Ожидание ответа модели · ${Math.floor(job.elapsed_seconds || 0)} с`;
+      if (job.status === "failed") throw new Error(job.error);
+      if (job.status === "succeeded") {
+        area.textContent = `Модель ${job.model} ответила. Проверка заняла ${job.elapsed_seconds} с.`;
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  } catch (error) { area.classList.add("error"); area.textContent = error.message; }
+  finally { button.disabled = false; }
 });
 function updateConnection() {
   const info = state.bootstrap;

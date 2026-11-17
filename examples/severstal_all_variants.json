@@ -1,0 +1,1061 @@
+{
+  "template_version": "2.0",
+  "title": "Северсталь — все исходные варианты",
+  "slides": [
+    {
+      "layout_id": "title",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "title",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "separators",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "big_text",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "big_text",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "big_text",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "big_text",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "bullets",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "cards",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_018",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_019",
+      "updates": []
+    },
+    {
+      "layout_id": "tables",
+      "variant_id": "slide_020",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_018",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_019",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_020",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_021",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_022",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_023",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_024",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_025",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_026",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_027",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_028",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_029",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_030",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_031",
+      "updates": []
+    },
+    {
+      "layout_id": "diagram",
+      "variant_id": "slide_032",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "circle_schemes",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "team",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "photo",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_018",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_019",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_020",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_021",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_022",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_023",
+      "updates": []
+    },
+    {
+      "layout_id": "quotes",
+      "variant_id": "slide_024",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_007",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_008",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_009",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_010",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_011",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_012",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_013",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_014",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_015",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_016",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_017",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_018",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_019",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_020",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_021",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_022",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_023",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_024",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_025",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_026",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_027",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_028",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_029",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_030",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_031",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_032",
+      "updates": []
+    },
+    {
+      "layout_id": "icons",
+      "variant_id": "slide_033",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_001",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_002",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_003",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_004",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_005",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_006",
+      "updates": []
+    },
+    {
+      "layout_id": "last_slide",
+      "variant_id": "slide_007",
+      "updates": []
+    }
+  ]
+}

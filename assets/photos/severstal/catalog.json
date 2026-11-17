@@ -1,0 +1,4480 @@
+{
+  "schema_version": "1.0",
+  "brand": "Северсталь",
+  "source_directory": "SeverstalBrand/Template",
+  "description": "Все фотографии из 15 исходных PPTX. Дедупликация только по SHA-256 исходных байтов; разные кадры и размеры сохранены отдельно.",
+  "summary": {
+    "source_decks": 15,
+    "unique_media": 1358,
+    "photos": 99,
+    "embedded_originals": 2,
+    "excluded_non_photographic_media": 1257,
+    "photo_occurrences": 156,
+    "all_photos_byte_identical": true,
+    "unclassified_media": 0
+  },
+  "source_decks": [
+    {
+      "file": "Severstal_BigText.pptx",
+      "sha256": "24d7fde461dbc0f43897a62de053e9df59212bcda399d4452f6575120833dfcc",
+      "slides": 4
+    },
+    {
+      "file": "Severstal_Bullits.pptx",
+      "sha256": "667efe510cb77221932efc7e9a8273126a3998b189cb4b579a5d2899c60dc84a",
+      "slides": 17
+    },
+    {
+      "file": "Severstal_Cards.pptx",
+      "sha256": "afa6bf28299b79d807826c83888c787cb31c903619381d270f1e2039eba7b518",
+      "slides": 17
+    },
+    {
+      "file": "Severstal_CircleSchemes.pptx",
+      "sha256": "b07c544b8e176e8fa9c121eac43daffcc32112e7fa806388b4b084b510dff42c",
+      "slides": 6
+    },
+    {
+      "file": "Severstal_Contents.pptx",
+      "sha256": "c5278b1bf150d8f2f42b79ed4bdebcc649a8041c7f1fdc3020605c22d11f65f1",
+      "slides": 5
+    },
+    {
+      "file": "Severstal_Diagram.pptx",
+      "sha256": "cba3a0e080f6a38ac5953b2c0fde4a58d62c49c3292373085bd935ca399f6b02",
+      "slides": 32
+    },
+    {
+      "file": "Severstal_Icons.pptx",
+      "sha256": "07eb022efd7629c00c72be3732c42ca510e1b6aaedc2b56519b1171232bdbda4",
+      "slides": 33
+    },
+    {
+      "file": "Severstal_LastSlide.pptx",
+      "sha256": "3367864c544bae92e840d46b490268c3ee47cf218eade813484ae6f9709db57e",
+      "slides": 7
+    },
+    {
+      "file": "Severstal_Photo.pptx",
+      "sha256": "4288dfd749a12759a0a19270d8c4fab6c8b8f21d87dd19f694094c1f8374a8fc",
+      "slides": 9
+    },
+    {
+      "file": "Severstal_Quotes.pptx",
+      "sha256": "7d47788ca502cdda0893602cf41f723a941c0c696652e1767993e7fcf43e56c7",
+      "slides": 24
+    },
+    {
+      "file": "Severstal_Schemes.pptx",
+      "sha256": "5777e342e6f5d1788106bf1486fc9838c0050d84775fff33f27b8b57fe6b4b06",
+      "slides": 16
+    },
+    {
+      "file": "Severstal_Separators.pptx",
+      "sha256": "89217cdbbc1d158559d1cade257c8751fb878f589ce3bed0580f2c009cbc9bb3",
+      "slides": 6
+    },
+    {
+      "file": "Severstal_Tables.pptx",
+      "sha256": "c1d621c65e8da61bdc7d5af4c9e79907318353d68be24dbcf2b30f58f4a9d665",
+      "slides": 20
+    },
+    {
+      "file": "Severstal_Team.pptx",
+      "sha256": "13ba1c7a6eb795e4c3ab7fe1e23ecc82059678de497a578f765cac69003b9b7f",
+      "slides": 5
+    },
+    {
+      "file": "Severstal_Title.pptx",
+      "sha256": "56a98222c4627fe77311b80ff69291ac91d28489ca6902a952e7c4f9dacf96d6",
+      "slides": 10
+    }
+  ],
+  "images": [
+    {
+      "sha256": "84b61c4e2ad7ae4d9ac46b5fecec7b35100ac8a850c0613c161dbf4d7c31adcf",
+      "id": "worker_portrait_orange_helmet",
+      "name": "Портрет работника в оранжевой каске",
+      "description": "Работник в защитных очках и синей спецодежде на фоне металлических заготовок.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "портрет",
+        "каска",
+        "производство"
+      ],
+      "file": "worker_portrait_orange_helmet.jpeg",
+      "width": 1108,
+      "height": 1256,
+      "format": "JPEG",
+      "bytes": 413150,
+      "aspect_ratio": 0.882166,
+      "sources": [
+        {
+          "file": "Severstal_BigText.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_BigText.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "8",
+          "shape_name": "Рисунок 7",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "b5ff8b5cfbcfc87025f30115b2b0f541b8732878219256a300750208830aae1d",
+      "id": "industrial_pipes_and_turbine",
+      "name": "Трубопроводы и оборудование цеха",
+      "description": "Блестящие теплоизолированные трубопроводы и оборудование в промышленном цехе.",
+      "tags": [
+        "цех",
+        "оборудование",
+        "трубопроводы",
+        "производство"
+      ],
+      "file": "industrial_pipes_and_turbine.jpeg",
+      "width": 1584,
+      "height": 1256,
+      "format": "JPEG",
+      "bytes": 911569,
+      "aspect_ratio": 1.261146,
+      "sources": [
+        {
+          "file": "Severstal_BigText.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_BigText.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 1,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "11",
+          "shape_name": "Рисунок 10",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8047955d7abfe16492fc1689a9418c117f128a94947c150ff8858a50b5777556",
+      "id": "worker_inspecting_pipe_valve",
+      "name": "Проверка арматуры трубопровода",
+      "description": "Работник в белой каске проверяет запорную арматуру среди трубопроводов.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "ремонт",
+        "трубопроводы",
+        "безопасность"
+      ],
+      "file": "worker_inspecting_pipe_valve.jpeg",
+      "width": 1514,
+      "height": 1714,
+      "format": "JPEG",
+      "bytes": 319564,
+      "aspect_ratio": 0.883314,
+      "sources": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "371edd33c4053b0a223c84d1de56ccfda4a1a754ba1456de93c28368b361497a",
+      "id": "worker_at_plant_balcony",
+      "name": "Работник на площадке предприятия",
+      "description": "Работник в белой каске на открытой площадке рядом с производственными зданиями.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "предприятие",
+        "каска"
+      ],
+      "file": "worker_at_plant_balcony.jpeg",
+      "width": 1513,
+      "height": 1713,
+      "format": "JPEG",
+      "bytes": 335463,
+      "aspect_ratio": 0.883246,
+      "sources": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 3,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "5",
+          "shape_name": "Рисунок 4",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "82c1f42dd9afdb2c08ac550819bdc5e743c4a96e574378977b1a6052aed592f2",
+      "id": "city_building_at_night",
+      "name": "Городское здание вечером",
+      "description": "Освещенное здание с часовой башней и световые следы автомобилей на перекрестке.",
+      "tags": [
+        "город",
+        "архитектура",
+        "вечер",
+        "инфраструктура"
+      ],
+      "file": "city_building_at_night.jpeg",
+      "width": 955,
+      "height": 635,
+      "format": "JPEG",
+      "bytes": 189177,
+      "aspect_ratio": 1.503937,
+      "sources": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/media/image16.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image16.jpeg",
+          "slide": 12,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "33",
+          "shape_name": "Рисунок 32",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "d924d58722f37c24010321a16323c29f732a50999eb42c61bc4b48795eb33af4",
+      "id": "steelworks_coils_and_overhead_crane",
+      "name": "Цех с рулонами и мостовым краном",
+      "description": "Рулоны листовой стали в большом цехе, мостовой кран перемещает стальной рулон.",
+      "tags": [
+        "цех",
+        "сталь",
+        "рулоны",
+        "кран",
+        "производство"
+      ],
+      "file": "steelworks_coils_and_overhead_crane.png",
+      "width": 1883,
+      "height": 1256,
+      "format": "PNG",
+      "bytes": 6472472,
+      "aspect_ratio": 1.499204,
+      "sources": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/media/image15.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Bullits.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image15.png",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "29",
+          "shape_name": "Рисунок 28",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a76c42a4f0133724c858d5d306caa9b77f341a39c2534ae6c4690510ce88f842",
+      "id": "portrait_man_fair_hair_glasses_160",
+      "name": "Портрет светловолосого мужчины в очках, 160 px",
+      "description": "Поясной фрагмент портрета светловолосого мужчины в очках и деловом костюме.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "очки",
+        "команда"
+      ],
+      "file": "portrait_man_fair_hair_glasses_160.png",
+      "width": 160,
+      "height": 160,
+      "format": "PNG",
+      "bytes": 40280,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image15.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image15.png",
+          "slide": 1,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "211",
+          "shape_name": "Рисунок 210",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image15.png",
+          "slide": 1,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "221",
+          "shape_name": "Рисунок 220",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image15.png",
+          "slide": 2,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "277",
+          "shape_name": "Рисунок 276",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image15.png",
+          "slide": 2,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "280",
+          "shape_name": "Рисунок 279",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a82b4f710d3aac37928b0d9db3b8f8eb26120ec768cf36d23b0bcebb933d1ad5",
+      "id": "portrait_man_brown_hair_160",
+      "name": "Портрет шатена в костюме, 160 px",
+      "description": "Портрет улыбающегося мужчины с каштановыми волосами в костюме и галстуке.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "команда"
+      ],
+      "file": "portrait_man_brown_hair_160.png",
+      "width": 160,
+      "height": 160,
+      "format": "PNG",
+      "bytes": 42820,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image14.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 1,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "130",
+          "shape_name": "Рисунок 129",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 1,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "215",
+          "shape_name": "Рисунок 214",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 2,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "276",
+          "shape_name": "Рисунок 275",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 2,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "279",
+          "shape_name": "Рисунок 278",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "bbdc794267d38f769cbe9af6fa4b520c538c05907570a6e619b234920e9052fe",
+      "id": "office_man_gray_jacket_wide",
+      "name": "Сотрудник в сером пиджаке, широкий кадр",
+      "description": "Мужчина в очках и сером пиджаке работает за столом с ноутбуком в светлом офисе.",
+      "tags": [
+        "люди",
+        "офис",
+        "сотрудник",
+        "ноутбук"
+      ],
+      "file": "office_man_gray_jacket_wide.jpeg",
+      "width": 866,
+      "height": 468,
+      "format": "JPEG",
+      "bytes": 96049,
+      "aspect_ratio": 1.850427,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image38.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide14.xml",
+          "media_part": "ppt/media/image38.jpeg",
+          "slide": 14,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "25",
+          "shape_name": "Рисунок 24",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "fc5a9fb7edf5122985d8d501141f7713b56a8bc0e59be731fc0d2eb8d7b37118",
+      "id": "office_man_gray_jacket_tall",
+      "name": "Сотрудник в сером пиджаке, высокий кадр",
+      "description": "Мужчина в очках и сером пиджаке работает за столом с ноутбуком в светлом офисе.",
+      "tags": [
+        "люди",
+        "офис",
+        "сотрудник",
+        "ноутбук"
+      ],
+      "file": "office_man_gray_jacket_tall.jpeg",
+      "width": 866,
+      "height": 702,
+      "format": "JPEG",
+      "bytes": 134954,
+      "aspect_ratio": 1.233618,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image28.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide11.xml",
+          "media_part": "ppt/media/image28.jpeg",
+          "slide": 11,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "17",
+          "shape_name": "Рисунок 16",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "62ef033a916c70653bf93de71608cc21e7e81b3ab676629ecc2849382bc6130e",
+      "id": "office_woman_writing_notebook",
+      "name": "Сотрудница с блокнотом за столом",
+      "description": "Женщина в очках и синей блузке пишет в блокноте за рабочим столом.",
+      "tags": [
+        "люди",
+        "офис",
+        "сотрудница",
+        "обучение"
+      ],
+      "file": "office_woman_writing_notebook.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 297438,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image29.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide11.xml",
+          "media_part": "ppt/media/image29.jpeg",
+          "slide": 11,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "19",
+          "shape_name": "Рисунок 18",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image29.jpeg",
+          "slide": 12,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "23",
+          "shape_name": "Рисунок 22",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "40e12761d32a3d6d1cc51cef6953013524904125386c5f5168d5a29554c2e639",
+      "id": "office_man_suit_at_laptop",
+      "name": "Сотрудник в костюме за ноутбуком",
+      "description": "Мужчина в темном костюме работает за ноутбуком в переговорной зоне офиса.",
+      "tags": [
+        "люди",
+        "офис",
+        "ноутбук",
+        "работа"
+      ],
+      "file": "office_man_suit_at_laptop.jpeg",
+      "width": 1052,
+      "height": 702,
+      "format": "JPEG",
+      "bytes": 160373,
+      "aspect_ratio": 1.498575,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image30.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide11.xml",
+          "media_part": "ppt/media/image30.jpeg",
+          "slide": 11,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "22",
+          "shape_name": "Рисунок 21",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "2d0a05b2f39d1c61823862eaaee49720d78fd437b067331e2ca341f252d6d582",
+      "id": "team_discussion_in_lounge",
+      "name": "Обсуждение команды в офисной зоне",
+      "description": "Сотрудники обсуждают рабочие вопросы стоя и сидя в открытой офисной зоне.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "обсуждение"
+      ],
+      "file": "team_discussion_in_lounge.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 163682,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image31.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image31.jpeg",
+          "slide": 12,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "25",
+          "shape_name": "Рисунок 24",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "44358a30a2250dffb1ce1023870bb341012c8d1943e6e0334034dfbdd3da269b",
+      "id": "colleagues_at_round_table_compact",
+      "name": "Коллеги за круглым столом, компактный кадр",
+      "description": "Мужчина в полосатом свитере и женщина с ноутбуками обсуждают задачу за круглым столом.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "сотрудничество"
+      ],
+      "file": "colleagues_at_round_table_compact.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 123962,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image32.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image32.jpeg",
+          "slide": 12,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "0e26042489dfdf6707899cca88ca32cca867ccee3026cf6eaa84b2536709b9d1",
+      "id": "worker_at_control_terminal",
+      "name": "Работник у производственного терминала",
+      "description": "Работник в оранжевой каске управляет оборудованием через компьютерный терминал в цехе.",
+      "tags": [
+        "люди",
+        "производство",
+        "терминал",
+        "цифровизация"
+      ],
+      "file": "worker_at_control_terminal.jpeg",
+      "width": 457,
+      "height": 319,
+      "format": "JPEG",
+      "bytes": 37954,
+      "aspect_ratio": 1.432602,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image33.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image33.jpeg",
+          "slide": 13,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "5",
+          "shape_name": "Рисунок 4",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide15.xml",
+          "media_part": "ppt/media/image33.jpeg",
+          "slide": 15,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a02c299a214dab9294cbeebd8d23c8aca7dffda647d803f7c0af5cfd54ef8bbf",
+      "id": "worker_measuring_metal_coil",
+      "name": "Измерение металлического рулона",
+      "description": "Работник в белой каске измеряет металлический рулон ручным прибором.",
+      "tags": [
+        "люди",
+        "сталь",
+        "контроль качества",
+        "измерение"
+      ],
+      "file": "worker_measuring_metal_coil.jpeg",
+      "width": 669,
+      "height": 468,
+      "format": "JPEG",
+      "bytes": 110160,
+      "aspect_ratio": 1.429487,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image34.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image34.jpeg",
+          "slide": 13,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "23",
+          "shape_name": "Рисунок 22",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide15.xml",
+          "media_part": "ppt/media/image34.jpeg",
+          "slide": 15,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "23",
+          "shape_name": "Рисунок 22",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "c90ecbe92b109310732258cefd23c1badc0555c5ded969c9802772fb52c1f43d",
+      "id": "worker_portrait_white_helmet",
+      "name": "Работник в белой каске у оборудования",
+      "description": "Улыбающийся работник в белой каске и защитных очках стоит в производственном цехе.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "портрет",
+        "каска",
+        "производство"
+      ],
+      "file": "worker_portrait_white_helmet.jpeg",
+      "width": 669,
+      "height": 468,
+      "format": "JPEG",
+      "bytes": 126269,
+      "aspect_ratio": 1.429487,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image35.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image35.jpeg",
+          "slide": 13,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide15.xml",
+          "media_part": "ppt/media/image35.jpeg",
+          "slide": 15,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8074f7af72eb657fcf8911a6b8e8112463335faf823be5a33f648d55a849d92c",
+      "id": "worker_touchscreen_control",
+      "name": "Работник у сенсорного экрана",
+      "description": "Работник в белой каске и защитной маске выбирает параметры на сенсорной панели оборудования.",
+      "tags": [
+        "люди",
+        "терминал",
+        "цифровизация",
+        "производство"
+      ],
+      "file": "worker_touchscreen_control.jpeg",
+      "width": 669,
+      "height": 468,
+      "format": "JPEG",
+      "bytes": 134114,
+      "aspect_ratio": 1.429487,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image36.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image36.jpeg",
+          "slide": 13,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide15.xml",
+          "media_part": "ppt/media/image36.jpeg",
+          "slide": 15,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "ebf2dff314afc75776f036b7902e46048e3a5b9da227b210c2e16d8d7a4d08bc",
+      "id": "office_two_women_at_laptop",
+      "name": "Две сотрудницы у ноутбука",
+      "description": "Две женщины в офисе совместно рассматривают материалы на ноутбуке.",
+      "tags": [
+        "люди",
+        "офис",
+        "команда",
+        "сотрудничество"
+      ],
+      "file": "office_two_women_at_laptop.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 122795,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image37.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide14.xml",
+          "media_part": "ppt/media/image37.jpeg",
+          "slide": 14,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "19",
+          "shape_name": "Рисунок 18",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "00882f20acd9072f8a26ef3605d027b239c84b527f85ec9a7d5a243440ae3383",
+      "id": "office_three_colleagues_at_monitors",
+      "name": "Коллеги у компьютерных мониторов",
+      "description": "Трое коллег обсуждают работу у нескольких компьютерных мониторов.",
+      "tags": [
+        "люди",
+        "офис",
+        "команда",
+        "сотрудничество"
+      ],
+      "file": "office_three_colleagues_at_monitors.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 135822,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image39.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide14.xml",
+          "media_part": "ppt/media/image39.jpeg",
+          "slide": 14,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "36",
+          "shape_name": "Рисунок 35",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "3193a9e6bc8e598f4f13069be42cb12f9ef9d28b765b0593d7e3d8033479e9c0",
+      "id": "steel_processing_line_blue_yellow",
+      "name": "Линия обработки стали",
+      "description": "Производственная линия с желтыми ограждениями и синим оборудованием в цехе.",
+      "tags": [
+        "цех",
+        "сталь",
+        "оборудование",
+        "производство"
+      ],
+      "file": "steel_processing_line_blue_yellow.png",
+      "width": 1342,
+      "height": 894,
+      "format": "PNG",
+      "bytes": 3239677,
+      "aspect_ratio": 1.501119,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image40.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide16.xml",
+          "media_part": "ppt/media/image40.png",
+          "slide": 16,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide17.xml",
+          "media_part": "ppt/media/image40.png",
+          "slide": 17,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "31",
+          "shape_name": "Рисунок 30",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "da79d7b9e43b67eb91d11ceb046f7125b7f615bf3d6abef9cd0ab924fb186cd9",
+      "id": "sheet_steel_lifting_equipment",
+      "name": "Оборудование перемещения листовой стали",
+      "description": "Желтая траверса и вакуумные захваты над стальными листами на производственной линии.",
+      "tags": [
+        "сталь",
+        "оборудование",
+        "листовой прокат",
+        "производство"
+      ],
+      "file": "sheet_steel_lifting_equipment.png",
+      "width": 1342,
+      "height": 1006,
+      "format": "PNG",
+      "bytes": 3251984,
+      "aspect_ratio": 1.333996,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image41.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide16.xml",
+          "media_part": "ppt/media/image41.png",
+          "slide": 16,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "26",
+          "shape_name": "Рисунок 25",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide17.xml",
+          "media_part": "ppt/media/image41.png",
+          "slide": 17,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "33",
+          "shape_name": "Рисунок 32",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8cb9d403b0b20b39dd4ce77f9efb3aad4488556c7222aa0dfd9682c1b90613d2",
+      "id": "portrait_man_dark_hair_glasses_160",
+      "name": "Портрет темноволосого мужчины в очках, 160 px",
+      "description": "Портрет мужчины с темными волосами в очках, деловом костюме и галстуке.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "очки",
+        "команда"
+      ],
+      "file": "portrait_man_dark_hair_glasses_160.png",
+      "width": 160,
+      "height": 160,
+      "format": "PNG",
+      "bytes": 49414,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image13.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image13.png",
+          "slide": 1,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "129",
+          "shape_name": "Рисунок 128",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image13.png",
+          "slide": 1,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "213",
+          "shape_name": "Рисунок 212",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image13.png",
+          "slide": 2,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "275",
+          "shape_name": "Рисунок 274",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image13.png",
+          "slide": 2,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "278",
+          "shape_name": "Рисунок 277",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "6f521fefa6749f2b879a5b78728d8215a06eb035c042d3a707bfd7f2487411d7",
+      "id": "portrait_man_smiling_dark_hair_137",
+      "name": "Портрет улыбающегося темноволосого мужчины, 137 px",
+      "description": "Портрет улыбающегося темноволосого мужчины в деловом костюме.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "команда"
+      ],
+      "file": "portrait_man_smiling_dark_hair_137.png",
+      "width": 137,
+      "height": 137,
+      "format": "PNG",
+      "bytes": 37173,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image20.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 3,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "117",
+          "shape_name": "Рисунок 116",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 3,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "129",
+          "shape_name": "Рисунок 128",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 3,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "137",
+          "shape_name": "Рисунок 136",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "96",
+          "shape_name": "Рисунок 95",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "158",
+          "shape_name": "Рисунок 157",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "164",
+          "shape_name": "Рисунок 163",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "80f012f4b6bda7b1bab4fdc4ac036c9c5cb429ce64c97769b51a547ed4196b31",
+      "id": "portrait_man_fair_hair_glasses_137",
+      "name": "Портрет светловолосого мужчины в очках, 137 px",
+      "description": "Портрет светловолосого мужчины в очках и деловом костюме.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "очки",
+        "команда"
+      ],
+      "file": "portrait_man_fair_hair_glasses_137.png",
+      "width": 137,
+      "height": 137,
+      "format": "PNG",
+      "bytes": 30695,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image19.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 3,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "115",
+          "shape_name": "Рисунок 114",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 3,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "125",
+          "shape_name": "Рисунок 124",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 3,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "133",
+          "shape_name": "Рисунок 132",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 4,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "150",
+          "shape_name": "Рисунок 149",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 4,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "156",
+          "shape_name": "Рисунок 155",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 4,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "162",
+          "shape_name": "Рисунок 161",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "7277db0eb1172d78e1ed6b55021fdc5c38366c46db4baef35b6b15ec1257771b",
+      "id": "portrait_man_brown_hair_137",
+      "name": "Портрет шатена в костюме, 137 px",
+      "description": "Портрет улыбающегося мужчины с каштановыми волосами в костюме и галстуке.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "команда"
+      ],
+      "file": "portrait_man_brown_hair_137.png",
+      "width": 137,
+      "height": 137,
+      "format": "PNG",
+      "bytes": 32338,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image18.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 3,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "113",
+          "shape_name": "Рисунок 112",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 3,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "123",
+          "shape_name": "Рисунок 122",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 4,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "148",
+          "shape_name": "Рисунок 147",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 4,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "154",
+          "shape_name": "Рисунок 153",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "abf9a4cb61c97a05c8c1389420343a56ca129ceee62c80b2978da002bae4c342",
+      "id": "portrait_man_dark_hair_glasses_137",
+      "name": "Портрет темноволосого мужчины в очках, 137 px",
+      "description": "Портрет мужчины с темными волосами в очках, деловом костюме и галстуке.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "очки",
+        "команда"
+      ],
+      "file": "portrait_man_dark_hair_glasses_137.png",
+      "width": 137,
+      "height": 137,
+      "format": "PNG",
+      "bytes": 37421,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image17.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 3,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "109",
+          "shape_name": "Рисунок 108",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 3,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "121",
+          "shape_name": "Рисунок 120",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 3,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "131",
+          "shape_name": "Рисунок 130",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "146",
+          "shape_name": "Рисунок 145",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "152",
+          "shape_name": "Рисунок 151",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image17.png",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "160",
+          "shape_name": "Рисунок 159",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "20f254df1bee6db0e5d94b9ddc29d99bbad2a3ab013d77615f2e10076098d3b7",
+      "id": "portrait_man_smiling_dark_hair_160",
+      "name": "Портрет улыбающегося темноволосого мужчины, 160 px",
+      "description": "Портрет улыбающегося темноволосого мужчины в деловом костюме.",
+      "tags": [
+        "люди",
+        "портрет",
+        "мужчина",
+        "команда"
+      ],
+      "file": "portrait_man_smiling_dark_hair_160.png",
+      "width": 160,
+      "height": 160,
+      "format": "PNG",
+      "bytes": 49410,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/media/image16.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image16.png",
+          "slide": 1,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "212",
+          "shape_name": "Рисунок 211",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image16.png",
+          "slide": 1,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "222",
+          "shape_name": "Рисунок 221",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image16.png",
+          "slide": 2,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "155",
+          "shape_name": "Рисунок 154",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Cards.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image16.png",
+          "slide": 2,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "281",
+          "shape_name": "Рисунок 280",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "e2d0754ede9068720b32f682f05362ef818909dcac3df10558f48e5faba3bf4a",
+      "id": "worker_grinding_sparks_compact",
+      "name": "Работник в круге искр, компактный кадр",
+      "description": "Силуэт работника обрабатывает внутреннюю поверхность большой трубы, вокруг разлетаются искры.",
+      "tags": [
+        "люди",
+        "труба",
+        "металлообработка",
+        "искры",
+        "производство"
+      ],
+      "file": "worker_grinding_sparks_compact.jpeg",
+      "width": 1315,
+      "height": 876,
+      "format": "JPEG",
+      "bytes": 289287,
+      "aspect_ratio": 1.501142,
+      "sources": [
+        {
+          "file": "Severstal_CircleSchemes.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_CircleSchemes.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 1,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "df5bf333d0056d072bbc549fff50ff9a3b6afed0abdc00eb9d682941c474a433",
+      "id": "industrial_plant_waterfront_compact",
+      "name": "Промышленная площадка у воды, компактный кадр",
+      "description": "Производственные здания и дымовая труба на промышленной площадке у воды.",
+      "tags": [
+        "предприятие",
+        "производство",
+        "ландшафт",
+        "промышленность"
+      ],
+      "file": "industrial_plant_waterfront_compact.jpeg",
+      "width": 1558,
+      "height": 876,
+      "format": "JPEG",
+      "bytes": 475844,
+      "aspect_ratio": 1.778539,
+      "sources": [
+        {
+          "file": "Severstal_CircleSchemes.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_CircleSchemes.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 2,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "27",
+          "shape_name": "Рисунок 26",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "59868bc7ea95a593567d709c7b7f5da8d132c7fe9e479259b9f02631ecda5aa3",
+      "id": "glass_roof_atrium_tall",
+      "name": "Атриум со стеклянной крышей, вертикальный кадр",
+      "description": "Многоэтажный внутренний атриум с металлическими конструкциями и стеклянной крышей.",
+      "tags": [
+        "архитектура",
+        "строительство",
+        "инфраструктура"
+      ],
+      "file": "glass_roof_atrium_tall.jpeg",
+      "width": 1178,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 1010118,
+      "aspect_ratio": 0.713939,
+      "sources": [
+        {
+          "file": "Severstal_Contents.pptx",
+          "part": "ppt/media/image30.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Contents.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image30.jpeg",
+          "slide": 5,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "61",
+          "shape_name": "Рисунок 60",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "38b94c0adc106fb91c95d961c7984df4c6157ba5493ac11d079ffd4c506be839",
+      "id": "steelmaking_furnace_sparks_tall",
+      "name": "Металлургический агрегат с искрами",
+      "description": "Крупный круглый проем металлургического агрегата с ярким свечением и искрами.",
+      "tags": [
+        "металлургия",
+        "сталь",
+        "печь",
+        "искры",
+        "производство"
+      ],
+      "file": "steelmaking_furnace_sparks_tall.jpeg",
+      "width": 1178,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 935490,
+      "aspect_ratio": 0.713939,
+      "sources": [
+        {
+          "file": "Severstal_Contents.pptx",
+          "part": "ppt/media/image13.jpeg"
+        },
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image18.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Contents.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 4,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image18.jpeg",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "17",
+          "shape_name": "Рисунок 16",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "58fb935b2b6b4b9342ce8209beffd8279044c592b4823f9330551eda7155288e",
+      "id": "workers_in_steel_stockyard",
+      "name": "Работники среди стальных заготовок",
+      "description": "Работники в оранжевых жилетах и касках на проходе между штабелями стальных заготовок.",
+      "tags": [
+        "люди",
+        "сталь",
+        "склад",
+        "безопасность",
+        "производство"
+      ],
+      "file": "workers_in_steel_stockyard.jpeg",
+      "width": 2933,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 1315957,
+      "aspect_ratio": 1.777576,
+      "sources": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 5,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "19",
+          "shape_name": "Рисунок 18",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "9dec2c0e895d1a0a7f90fc65c63125ba3d327187f4d2e0e9702753076cfaa80a",
+      "id": "industrial_plant_waterfront_wide",
+      "name": "Промышленная площадка у воды, широкий кадр",
+      "description": "Панорамный вид производственных зданий и высокой трубы на промышленной площадке у воды.",
+      "tags": [
+        "предприятие",
+        "ландшафт",
+        "промышленность"
+      ],
+      "file": "industrial_plant_waterfront_wide.jpeg",
+      "width": 2933,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 1417149,
+      "aspect_ratio": 1.777576,
+      "sources": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 6,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "259de90cc976ad9f597ab8edc8cc598430a97eacc5d23c1fb6edbe37bac5f83e",
+      "id": "worker_laptop_factory_wide",
+      "name": "Работник с ноутбуком в цехе, широкий кадр",
+      "description": "Работник в белой каске держит ноутбук на фоне трубопроводов и промышленного оборудования.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "ноутбук",
+        "цифровизация",
+        "цех"
+      ],
+      "file": "worker_laptop_factory_wide.jpeg",
+      "width": 1920,
+      "height": 1080,
+      "format": "JPEG",
+      "bytes": 285386,
+      "aspect_ratio": 1.777778,
+      "sources": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_LastSlide.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 7,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "20ed48562dd27807249f71f3b48441efdd3fe78a4ad033844c8df193d25588cb",
+      "id": "colleagues_round_table_front",
+      "name": "Коллеги за круглым столом, вид спереди",
+      "description": "Мужчина в полосатом свитере показывает направление ручкой, рядом женщина; на столе ноутбуки.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "обсуждение"
+      ],
+      "file": "colleagues_round_table_front.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 261029,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image29.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image29.jpeg",
+          "slide": 7,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "44",
+          "shape_name": "Рисунок 43",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "00388d39eafb9d74c8a614c114804f36fba8d77f91efacfef45a234616bf4c70",
+      "id": "colleagues_round_table_side",
+      "name": "Коллеги за круглым столом, вид сбоку",
+      "description": "Мужчина в полосатом свитере обсуждает задачу с женщиной за круглым столом с ноутбуками.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "обсуждение"
+      ],
+      "file": "colleagues_round_table_side.jpeg",
+      "width": 838,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 116822,
+      "aspect_ratio": 1.45234,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image30.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image30.jpeg",
+          "slide": 7,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "42",
+          "shape_name": "Рисунок 41",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "b47fdce191a2f9fd6a4c0d2773e78c07933cdbe1d7ab7db60cc56ccd6902ada9",
+      "id": "office_man_striped_sweater_portrait",
+      "name": "Сотрудник в полосатом свитере за ноутбуком",
+      "description": "Мужчина в полосатом свитере сидит за ноутбуком на фоне доски с записями.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "ноутбук"
+      ],
+      "file": "office_man_striped_sweater_portrait.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 118769,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image31.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image31.jpeg",
+          "slide": 7,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "59",
+          "shape_name": "Рисунок 58",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "762264c02d0cbdad7f502265cdc66d022c13119bf17f46db35294129b7e140e0",
+      "id": "office_meeting_three_colleagues",
+      "name": "Обсуждение трех коллег за столом",
+      "description": "Мужчина в очках объясняет вопрос коллегам за столом на рабочей встрече.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "совещание"
+      ],
+      "file": "office_meeting_three_colleagues.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 111952,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image32.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image32.jpeg",
+          "slide": 7,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "41",
+          "shape_name": "Рисунок 40",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "e393a0ac6f893f49dc282a22fbafad8c10943883ac3be1af7951dd240fd54ace",
+      "id": "office_presentation_digital_board",
+      "name": "Презентация у цифровой доски",
+      "description": "Женщина представляет материалы коллегам у экрана с записями о цифровой трансформации.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "презентация",
+        "цифровизация"
+      ],
+      "file": "office_presentation_digital_board.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 137366,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image33.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image33.jpeg",
+          "slide": 7,
+          "relationship_id": "rId8",
+          "relationship_type": "image",
+          "shape_id": "51",
+          "shape_name": "Рисунок 50",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "cb9917d84ab87bb64bebd7954702d6c79b2a0067f0d1a4163dfe2adcac2add79",
+      "id": "office_three_colleagues_at_computer",
+      "name": "Трое коллег обсуждают работу за компьютером",
+      "description": "Трое сотрудников совместно рассматривают материалы за столом с мониторами.",
+      "tags": [
+        "люди",
+        "офис",
+        "команда",
+        "компьютер"
+      ],
+      "file": "office_three_colleagues_at_computer.jpeg",
+      "width": 866,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 273668,
+      "aspect_ratio": 1.500867,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image24.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image24.jpeg",
+          "slide": 6,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "31",
+          "shape_name": "Рисунок 30",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image24.jpeg",
+          "slide": 7,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "40",
+          "shape_name": "Рисунок 39",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image24.jpeg",
+          "slide": 8,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "21",
+          "shape_name": "Рисунок 20",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "4efa98874f9ca08d185aa097319b3127049295fe18e6722da86b974c40b0030e",
+      "id": "office_phone_call_by_glass_wall",
+      "name": "Телефонный разговор у стеклянной стены",
+      "description": "Мужчина в сером пиджаке разговаривает по телефону у стеклянной стены, на заднем плане коллеги.",
+      "tags": [
+        "люди",
+        "офис",
+        "телефон",
+        "коммуникация"
+      ],
+      "file": "office_phone_call_by_glass_wall.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 125284,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image34.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image34.jpeg",
+          "slide": 8,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "22",
+          "shape_name": "Рисунок 21",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "4a2e5567a84a263e5f26d790f6f08ffa931368a6bc85fde2f21d52e10265716a",
+      "id": "office_man_gray_jacket_at_desk",
+      "name": "Сотрудник в сером пиджаке за столом",
+      "description": "Улыбающийся мужчина в очках и сером пиджаке работает за ноутбуком в офисе.",
+      "tags": [
+        "люди",
+        "офис",
+        "сотрудник",
+        "ноутбук"
+      ],
+      "file": "office_man_gray_jacket_at_desk.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 129995,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image35.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image35.jpeg",
+          "slide": 8,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "29",
+          "shape_name": "Рисунок 28",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "9ac56c1632d51b1c58c39182e90670d4954913c85c623bf84c9ee2f4be676991",
+      "id": "worker_measuring_metal_parts",
+      "name": "Контроль размеров металлических деталей",
+      "description": "Работник в красной каске проверяет измерительным инструментом ряд металлических деталей.",
+      "tags": [
+        "люди",
+        "металл",
+        "контроль качества",
+        "измерение"
+      ],
+      "file": "worker_measuring_metal_parts.jpeg",
+      "width": 458,
+      "height": 375,
+      "format": "JPEG",
+      "bytes": 42290,
+      "aspect_ratio": 1.221333,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image38.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image38.jpeg",
+          "slide": 9,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "d0646c993642737816bda104d934d042adbfa4de1ea01ff50c79983c15fef7bf",
+      "id": "production_control_room_operator",
+      "name": "Оператор производственной диспетчерской",
+      "description": "Работник в спецодежде управляет процессом за пультом с несколькими мониторами.",
+      "tags": [
+        "люди",
+        "диспетчерская",
+        "терминал",
+        "цифровизация",
+        "производство"
+      ],
+      "file": "production_control_room_operator.png",
+      "width": 1020,
+      "height": 680,
+      "format": "PNG",
+      "bytes": 1534306,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image39.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image39.png",
+          "slide": 9,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "41",
+          "shape_name": "Рисунок 40",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a14ff1e280ff56acfe24ffc463731714391659bf863c0bf208280d97c2f984d4",
+      "id": "office_woman_notebook_portrait",
+      "name": "Сотрудница с блокнотом, взгляд в камеру",
+      "description": "Женщина в очках и синей блузке с блокнотом за офисным столом смотрит в камеру.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудница"
+      ],
+      "file": "office_woman_notebook_portrait.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 334823,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image40.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image40.jpeg",
+          "slide": 9,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "35",
+          "shape_name": "Рисунок 34",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "5519f3e25aa420a9ea372c3967a6ef7778d64c4eadee9f0bcdbdeb642f1eb391",
+      "id": "office_phone_call_wide",
+      "name": "Телефонный разговор в офисе, широкий кадр",
+      "description": "Мужчина в сером пиджаке разговаривает по телефону у стеклянной стены, сзади две коллеги с ноутбуком.",
+      "tags": [
+        "люди",
+        "офис",
+        "телефон",
+        "коммуникация"
+      ],
+      "file": "office_phone_call_wide.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 125313,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image41.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image41.jpeg",
+          "slide": 9,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "34",
+          "shape_name": "Рисунок 33",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "ed7e091dd65e5c4476519bd00bda20ea8a4c234fd3851d53115cc55c29e629fc",
+      "id": "office_woman_writing_side",
+      "name": "Сотрудница пишет в блокноте, вид сбоку",
+      "description": "Женщина в очках и синей блузке пишет в блокноте за столом в офисе.",
+      "tags": [
+        "люди",
+        "офис",
+        "сотрудница",
+        "работа"
+      ],
+      "file": "office_woman_writing_side.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 332560,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image36.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image36.jpeg",
+          "slide": 8,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "19",
+          "shape_name": "Рисунок 18",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "0e2d5f3637b76e49974a8cd794350c9485df0bc26686b6f356840483b852161d",
+      "id": "colleagues_walking_office_corridor",
+      "name": "Коллеги в офисном коридоре",
+      "description": "Мужчина и женщина обсуждают рабочие вопросы на ходу в светлом офисном коридоре.",
+      "tags": [
+        "люди",
+        "офис",
+        "команда",
+        "общение"
+      ],
+      "file": "colleagues_walking_office_corridor.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 137167,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image25.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image25.jpeg",
+          "slide": 6,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "35",
+          "shape_name": "Рисунок 34",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "bdb6351b29813a237a093afc86842ec57ef74571353d0b297d4d12f66023c186",
+      "id": "worker_radio_white_helmet_crop",
+      "name": "Работник с рацией, компактный кадр",
+      "description": "Работник в белой каске, защитных очках и маске держит рацию у производственного здания.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "связь",
+        "безопасность"
+      ],
+      "file": "worker_radio_white_helmet_crop.jpeg",
+      "width": 921,
+      "height": 841,
+      "format": "JPEG",
+      "bytes": 87080,
+      "aspect_ratio": 1.095125,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image37.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image37.jpeg",
+          "slide": 9,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "58f2fb274ae1863ee146e28ab0137850726911804637263110be761548122a6b",
+      "id": "man_severstal_wall_side",
+      "name": "Сотрудник у фирменной стены, боковой ракурс",
+      "description": "Мужчина в синем пиджаке стоит у стены с логотипом Северстали.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудник"
+      ],
+      "file": "man_severstal_wall_side.jpeg",
+      "width": 1351,
+      "height": 900,
+      "format": "JPEG",
+      "bytes": 155863,
+      "aspect_ratio": 1.501111,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image21.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image21.jpeg",
+          "slide": 5,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "21",
+          "shape_name": "Рисунок 20",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "650c539b83af203760c93d1a5d9ae5bd479234252624f858d9eb76782b163305",
+      "id": "colleagues_round_table_panorama",
+      "name": "Коллеги за круглым столом, панорама",
+      "description": "Панорамный кадр мужчины в полосатом свитере и женщины с ноутбуками за круглым столом.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "обсуждение"
+      ],
+      "file": "colleagues_round_table_panorama.jpeg",
+      "width": 923,
+      "height": 422,
+      "format": "JPEG",
+      "bytes": 162084,
+      "aspect_ratio": 2.187204,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image20.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image20.jpeg",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "26",
+          "shape_name": "Рисунок 25",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "3fca2aaa468e2093e9443f29b25aa3d2e3a91f532a43bce2d245c6cac7483355",
+      "id": "team_meeting_long_table",
+      "name": "Рабочая встреча за длинным столом",
+      "description": "Группа сотрудников с ноутбуками обсуждает задачи за столом в небольшой переговорной.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "совещание"
+      ],
+      "file": "team_meeting_long_table.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 156682,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image26.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image26.jpeg",
+          "slide": 6,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "37",
+          "shape_name": "Рисунок 36",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image26.jpeg",
+          "slide": 7,
+          "relationship_id": "rId10",
+          "relationship_type": "image",
+          "shape_id": "55",
+          "shape_name": "Рисунок 54",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8217038d01b284320c18c9fe2e91cea29065725ec1fb5cc021137a148388c2dc",
+      "id": "steel_coils_workers_factory",
+      "name": "Стальные рулоны и работники в цехе",
+      "description": "Работники в касках рядом с крупными рулонами листовой стали в производственном цехе.",
+      "tags": [
+        "сталь",
+        "рулоны",
+        "продукция",
+        "люди",
+        "производство"
+      ],
+      "file": "steel_coils_workers_factory.jpeg",
+      "width": 2499,
+      "height": 1666,
+      "format": "JPEG",
+      "bytes": 602058,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image19.jpeg"
+        },
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image19.jpeg",
+          "slide": 3,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "33",
+          "shape_name": "Рисунок 32",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image19.jpeg",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "22",
+          "shape_name": "Рисунок 21",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/slides/slide18.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 18,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "8",
+          "shape_name": "Рисунок 7",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "08cfe17ae6cf38e996ca18f9614bed6bc44ed45b137587187af6e485f5b540cf",
+      "id": "colleagues_round_table_compact_side",
+      "name": "Коллеги за круглым столом, тесный кадр сбоку",
+      "description": "Мужчина в полосатом свитере и женщина обсуждают задачу за круглым столом с ноутбуками.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "обсуждение"
+      ],
+      "file": "colleagues_round_table_compact_side.jpeg",
+      "width": 838,
+      "height": 577,
+      "format": "JPEG",
+      "bytes": 116822,
+      "aspect_ratio": 1.45234,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image18.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image18.jpeg",
+          "slide": 2,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "15",
+          "shape_name": "Рисунок 14",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a97b8e79ccc8d01017ded35a7ed0afa69260faf654aca95d363fcc9531217946",
+      "id": "team_lounge_laptops_high_resolution",
+      "name": "Команда с ноутбуками на диване, крупный исходник",
+      "description": "Молодые сотрудники с ноутбуками обсуждают задачу в мягкой офисной зоне.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "ноутбук",
+        "сотрудничество"
+      ],
+      "file": "team_lounge_laptops_high_resolution.jpeg",
+      "width": 1351,
+      "height": 901,
+      "format": "JPEG",
+      "bytes": 299812,
+      "aspect_ratio": 1.499445,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image22.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image22.jpeg",
+          "slide": 5,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "29",
+          "shape_name": "Рисунок 28",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "807160a89ee51645743ea0adfa717f6510783a139bf5628bf5d63f8c3bdb73f6",
+      "id": "office_woman_laptop_standing",
+      "name": "Сотрудница с ноутбуком у деревянной стены",
+      "description": "Улыбающаяся женщина стоит с закрытым ноутбуком у стены с деревянными рейками.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "ноутбук",
+        "сотрудница"
+      ],
+      "file": "office_woman_laptop_standing.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 116826,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image17.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image17.jpeg",
+          "slide": 2,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "f243f0554031a9a3bed7fdef9e87954200cc3c47c26c19ffae93b672aead5d27",
+      "id": "team_lounge_three_colleagues_922",
+      "name": "Команда на диване, версия 922 px",
+      "description": "Трое сотрудников с ноутбуками на диване и коллега в кресле обсуждают задачу.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "ноутбук"
+      ],
+      "file": "team_lounge_three_colleagues_922.jpeg",
+      "width": 922,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 164052,
+      "aspect_ratio": 1.499187,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image16.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image16.jpeg",
+          "slide": 2,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image16.jpeg",
+          "slide": 6,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "49",
+          "shape_name": "Рисунок 48",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "c81a76e19a65cbab5a3113e8c1115044142176e1dccde5874f3cda64db20d029",
+      "id": "team_lounge_three_colleagues_923",
+      "name": "Команда на диване, версия 923 px",
+      "description": "Трое сотрудников с ноутбуками на диване и коллега в кресле обсуждают задачу.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "ноутбук"
+      ],
+      "file": "team_lounge_three_colleagues_923.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 163053,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 1,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 7,
+          "relationship_id": "rId9",
+          "relationship_type": "image",
+          "shape_id": "53",
+          "shape_name": "Рисунок 52",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "7efd709a0074b1b8680faf352ad9aefac01caabd7381a913ea3f36002128e580",
+      "id": "man_severstal_wall_front",
+      "name": "Сотрудник у фирменной стены, фронтальный ракурс",
+      "description": "Мужчина в синем пиджаке стоит у стены с надписью Северсталь.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудник"
+      ],
+      "file": "man_severstal_wall_front.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 101009,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 1,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "18",
+          "shape_name": "Рисунок 17",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8031536f3fb740e46b35a046cf530047734241f2a5e2a0c1dfc3fd1a3e1f89d7",
+      "id": "office_man_presenting_digital_board",
+      "name": "Сотрудник у цифровой доски",
+      "description": "Мужчина представляет материалы коллеге у экрана с записями о цифровой трансформации.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "презентация",
+        "цифровизация"
+      ],
+      "file": "office_man_presenting_digital_board.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 125450,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 1,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "3d3dbe620b2b41da17a0014f4e6c18addab32cc9d67d33c92730b839570f9439",
+      "id": "office_woman_at_laptop",
+      "name": "Сотрудница за ноутбуком",
+      "description": "Улыбающаяся женщина работает за ноутбуком в светлом офисе.",
+      "tags": [
+        "люди",
+        "офис",
+        "ноутбук",
+        "сотрудница"
+      ],
+      "file": "office_woman_at_laptop.jpeg",
+      "width": 922,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 120189,
+      "aspect_ratio": 1.499187,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image27.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image27.jpeg",
+          "slide": 6,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "51",
+          "shape_name": "Рисунок 50",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "3c7a169e19f1671ecc2b0968f67a22bc8d03e3a131fdffd4e6f8acb812d93ec4",
+      "id": "team_lounge_laptops_compact",
+      "name": "Команда с ноутбуками на диване, компактный кадр",
+      "description": "Молодые сотрудники с ноутбуками обсуждают задачу в мягкой офисной зоне.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "ноутбук"
+      ],
+      "file": "team_lounge_laptops_compact.jpeg",
+      "width": 923,
+      "height": 615,
+      "format": "JPEG",
+      "bytes": 161580,
+      "aspect_ratio": 1.500813,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image28.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image28.jpeg",
+          "slide": 6,
+          "relationship_id": "rId8",
+          "relationship_type": "image",
+          "shape_id": "41",
+          "shape_name": "Рисунок 40",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "9d0e0cd4d4adf21bf8645187fd0800be721ddcc5880402f13778f075fa8093ab",
+      "id": "team_lounge_three_colleagues_high_resolution",
+      "name": "Команда на диване, крупный исходник",
+      "description": "Трое сотрудников с ноутбуками на диване и коллега в кресле обсуждают задачу.",
+      "tags": [
+        "люди",
+        "команда",
+        "офис",
+        "ноутбук"
+      ],
+      "file": "team_lounge_three_colleagues_high_resolution.jpeg",
+      "width": 1351,
+      "height": 901,
+      "format": "JPEG",
+      "bytes": 313397,
+      "aspect_ratio": 1.499445,
+      "sources": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/media/image23.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Photo.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image23.jpeg",
+          "slide": 5,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "27",
+          "shape_name": "Рисунок 26",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "0147db686bc1c55bc4802d2c30b7edbcefb463a686e6109be4c760cb71888519",
+      "id": "handheld_3d_scanner_metal_part",
+      "name": "Ручное 3D-сканирование металлической детали",
+      "description": "Ручной 3D-сканер над металлической деталью, рядом ноутбук с трехмерной моделью.",
+      "tags": [
+        "технологии",
+        "сканирование",
+        "цифровизация",
+        "металл"
+      ],
+      "file": "handheld_3d_scanner_metal_part.jpeg",
+      "width": 1920,
+      "height": 1280,
+      "format": "JPEG",
+      "bytes": 137545,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image30.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide17.xml",
+          "media_part": "ppt/media/image30.jpeg",
+          "slide": 17,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "26",
+          "shape_name": "Рисунок 25",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "287fea23b2d9f674248dca6e792fbe371a71ef95359785fda4c0c087dcdb7143",
+      "id": "worker_grinding_sparks_large",
+      "name": "Работник в круге искр, крупный исходник",
+      "description": "Силуэт работника обрабатывает внутреннюю поверхность большой трубы, вокруг разлетаются искры.",
+      "tags": [
+        "люди",
+        "труба",
+        "металлообработка",
+        "искры"
+      ],
+      "file": "worker_grinding_sparks_large.png",
+      "width": 3710,
+      "height": 2474,
+      "format": "PNG",
+      "bytes": 7940935,
+      "aspect_ratio": 1.499596,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image23.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image23.png",
+          "slide": 8,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "613fcb1ffa99e3005670c42de67ca81760190a67f2340f97111cf00d9ab96f76",
+      "id": "open_pit_mine_trucks",
+      "name": "Карьер с самосвалами",
+      "description": "Карьерные самосвалы на террасированных уступах открытого горного карьера.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "сырье",
+        "самосвал"
+      ],
+      "file": "open_pit_mine_trucks.jpeg",
+      "width": 2933,
+      "height": 2153,
+      "format": "JPEG",
+      "bytes": 1809980,
+      "aspect_ratio": 1.362285,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image28.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide15.xml",
+          "media_part": "ppt/media/image28.jpeg",
+          "slide": 15,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "47",
+          "shape_name": "Рисунок 46",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "f7f3dfc5f6ccdf9698f634a289040caa7263df881653293d29716ee4e3ebefbb",
+      "id": "digital_products_demonstration",
+      "name": "Демонстрация цифрового продукта",
+      "description": "Мужчина работает с ноутбуком и небольшим устройством у большого экрана с фирменной презентацией.",
+      "tags": [
+        "люди",
+        "технологии",
+        "цифровизация",
+        "ноутбук"
+      ],
+      "file": "digital_products_demonstration.png",
+      "width": 2499,
+      "height": 1666,
+      "format": "PNG",
+      "bytes": 6893450,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image29.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide16.xml",
+          "media_part": "ppt/media/image29.png",
+          "slide": 16,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "23",
+          "shape_name": "Рисунок 22",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "f65a5f2102333043f9ecd6c8482fa95b4db738e0e1db6b20e2b1c18b049e3806",
+      "id": "archival_black_white_man_portrait",
+      "name": "Архивный черно-белый портрет мужчины",
+      "description": "Черно-белый портрет пожилого мужчины с усами на темном фоне.",
+      "tags": [
+        "люди",
+        "портрет",
+        "история",
+        "черно-белое"
+      ],
+      "file": "archival_black_white_man_portrait.jpeg",
+      "width": 1920,
+      "height": 1080,
+      "format": "JPEG",
+      "bytes": 953841,
+      "aspect_ratio": 1.777778,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image25.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image25.jpeg",
+          "slide": 9,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "14",
+          "shape_name": "Рисунок 13",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "c789f44875514aa39182e1656a1c2fd659749f3aa082dcd475e1222be3c6c9b4",
+      "id": "workers_at_industrial_stairs",
+      "name": "Работники у промышленной лестницы",
+      "description": "Двое работников в защитной спецодежде и касках у металлических конструкций производственного здания.",
+      "tags": [
+        "люди",
+        "предприятие",
+        "безопасность",
+        "производство"
+      ],
+      "file": "workers_at_industrial_stairs.jpeg",
+      "width": 4000,
+      "height": 2250,
+      "format": "JPEG",
+      "bytes": 907373,
+      "aspect_ratio": 1.777778,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image31.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide18.xml",
+          "media_part": "ppt/media/image31.jpeg",
+          "slide": 18,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "5",
+          "shape_name": "Рисунок 4",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "4f4ce9d25e685f81469033100cb6a998722ab67cdfcb5d5c9eca7d70765594f6",
+      "id": "workers_discussing_in_factory",
+      "name": "Работники обсуждают оборудование в цехе",
+      "description": "Двое работников в касках, очках и защитных масках осматривают оборудование в цехе.",
+      "tags": [
+        "люди",
+        "цех",
+        "команда",
+        "безопасность"
+      ],
+      "file": "workers_discussing_in_factory.png",
+      "width": 2500,
+      "height": 1875,
+      "format": "PNG",
+      "bytes": 7404943,
+      "aspect_ratio": 1.333333,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image32.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide19.xml",
+          "media_part": "ppt/media/image32.png",
+          "slide": 19,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "28",
+          "shape_name": "Рисунок 27",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "2459fe5319e04d0c63d3cdc8d32752ee8a6a301b243f46299c6b44a4b6384601",
+      "id": "cable_stayed_bridge_sunset_compact",
+      "name": "Вантовый мост на закате, компактный кадр",
+      "description": "Вантовый мост через широкую реку на закате.",
+      "tags": [
+        "мост",
+        "река",
+        "инфраструктура",
+        "закат"
+      ],
+      "file": "cable_stayed_bridge_sunset_compact.jpeg",
+      "width": 3679,
+      "height": 1689,
+      "format": "JPEG",
+      "bytes": 1662639,
+      "aspect_ratio": 2.178212,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image33.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide20.xml",
+          "media_part": "ppt/media/image33.jpeg",
+          "slide": 20,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "42",
+          "shape_name": "Рисунок 41",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "0dbbf1f3baf2618c47a04029c4775d7753390439730ed98a1bf119cb95049964",
+      "id": "steel_coils_black_white",
+      "name": "Стальные рулоны, черно-белое фото",
+      "description": "Ряды рулонов листовой стали на производственной площадке, черно-белое изображение.",
+      "tags": [
+        "сталь",
+        "рулоны",
+        "продукция",
+        "черно-белое"
+      ],
+      "file": "steel_coils_black_white.jpeg",
+      "width": 1603,
+      "height": 942,
+      "format": "JPEG",
+      "bytes": 660718,
+      "aspect_ratio": 1.701699,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image34.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide21.xml",
+          "media_part": "ppt/media/image34.jpeg",
+          "slide": 21,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "36",
+          "shape_name": "Рисунок 35",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "ba6f60ff43133ca73a35e28961a3b7ec2f42f7979081fdaa94b7a77d23b62e91",
+      "id": "industrial_road_and_gantries",
+      "name": "Дорога и эстакады предприятия",
+      "description": "Грузовой автомобиль на внутренней дороге предприятия под промышленными эстакадами.",
+      "tags": [
+        "предприятие",
+        "транспорт",
+        "инфраструктура",
+        "логистика"
+      ],
+      "file": "industrial_road_and_gantries.jpeg",
+      "width": 2079,
+      "height": 1438,
+      "format": "JPEG",
+      "bytes": 969502,
+      "aspect_ratio": 1.445758,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image36.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide22.xml",
+          "media_part": "ppt/media/image36.jpeg",
+          "slide": 22,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "30",
+          "shape_name": "Рисунок 29",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "162fd8dd1e4363b2576c2d924f4303500ea0067568d4122a09c405d868d9d06f",
+      "id": "airplane_contrail_blue_sky",
+      "name": "Самолет и инверсионный след в синем небе",
+      "description": "Небольшой самолет оставляет два белых следа в глубоком синем небе.",
+      "tags": [
+        "авиация",
+        "самолет",
+        "небо",
+        "транспорт"
+      ],
+      "file": "airplane_contrail_blue_sky.png",
+      "width": 3238,
+      "height": 2158,
+      "format": "PNG",
+      "bytes": 4476391,
+      "aspect_ratio": 1.500463,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image20.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/image20.png",
+          "slide": 7,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "9",
+          "shape_name": "Рисунок 8",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "9a36f0d5f6f78172bb3e3797ff2b6bcb6a4583ee7ce930c465f2e0d996ec396c",
+      "id": "steel_slab_stack_black_white",
+      "name": "Штабель стальных слябов, черно-белое фото",
+      "description": "Крупный штабель металлических слябов в темном производственном цехе, черно-белое изображение.",
+      "tags": [
+        "сталь",
+        "слябы",
+        "продукция",
+        "черно-белое"
+      ],
+      "file": "steel_slab_stack_black_white.jpeg",
+      "width": 2499,
+      "height": 1666,
+      "format": "JPEG",
+      "bytes": 2154978,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image27.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image27.jpeg",
+          "slide": 12,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "52",
+          "shape_name": "Рисунок 51",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image27.jpeg",
+          "slide": 13,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "31",
+          "shape_name": "Рисунок 30",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide14.xml",
+          "media_part": "ppt/media/image27.jpeg",
+          "slide": 14,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "44",
+          "shape_name": "Рисунок 43",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "970a701658edbb03cdeadef430efa30479c2e80516c1864fa7a27b8c2b92133c",
+      "id": "welder_blue_factory",
+      "name": "Сварщик в синем цехе",
+      "description": "Работник в сварочной маске выполняет сварку металлической конструкции в синем освещении цеха.",
+      "tags": [
+        "люди",
+        "сварка",
+        "металлообработка",
+        "производство"
+      ],
+      "file": "welder_blue_factory.png",
+      "width": 2499,
+      "height": 1669,
+      "format": "PNG",
+      "bytes": 6782810,
+      "aspect_ratio": 1.497304,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image26.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide11.xml",
+          "media_part": "ppt/media/image26.png",
+          "slide": 11,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "32",
+          "shape_name": "Рисунок 31",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "1f32822e150245859c07a7f4baa18a360103449613a13c8b2c8ffa459c0ce1ca",
+      "id": "aircraft_engine_and_fuselage",
+      "name": "Двигатель и фюзеляж самолета",
+      "description": "Крупный план двигателя и борта пассажирского самолета на фоне голубого неба.",
+      "tags": [
+        "авиация",
+        "самолет",
+        "транспорт",
+        "двигатель"
+      ],
+      "file": "aircraft_engine_and_fuselage.png",
+      "width": 2498,
+      "height": 1395,
+      "format": "PNG",
+      "bytes": 5326853,
+      "aspect_ratio": 1.790681,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image19.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image19.png",
+          "slide": 6,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "689489d1f485a8e9a963ea8d59c54e7581d8fb955dd18f03e17565775d2cea7f",
+      "id": "waterfront_tower_twilight",
+      "name": "Башня на берегу в сумерках",
+      "description": "Высотная башня на берегу водоема в синих сумерках.",
+      "tags": [
+        "город",
+        "архитектура",
+        "вода",
+        "вечер"
+      ],
+      "file": "waterfront_tower_twilight.png",
+      "width": 2499,
+      "height": 1666,
+      "format": "PNG",
+      "bytes": 5272188,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image18.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide10.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 10,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "21",
+          "shape_name": "Рисунок 20",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image18.png",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "195123c6f5b36a206a2048365b127deadc986fa596ee5557058cd041cbedf3c2",
+      "id": "worker_large_diameter_pipe",
+      "name": "Работник у трубы большого диаметра",
+      "description": "Работник в оранжевой каске и защитной маске проверяет большую металлическую трубу.",
+      "tags": [
+        "люди",
+        "трубы",
+        "металл",
+        "контроль качества"
+      ],
+      "file": "worker_large_diameter_pipe.png",
+      "width": 2500,
+      "height": 1875,
+      "format": "PNG",
+      "bytes": 6238600,
+      "aspect_ratio": 1.333333,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image16.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image16.png",
+          "slide": 3,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "33",
+          "shape_name": "Рисунок 32",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "7f70b3f5cac900c3f5e51537f3fd0fff66bad01f7c22d58166fef45c9e3d4424",
+      "id": "steel_pipes_closeup",
+      "name": "Стальные трубы крупным планом",
+      "description": "Торцы и блестящие поверхности нескольких стальных труб крупным планом.",
+      "tags": [
+        "сталь",
+        "трубы",
+        "продукция",
+        "металл"
+      ],
+      "file": "steel_pipes_closeup.jpeg",
+      "width": 2499,
+      "height": 1666,
+      "format": "JPEG",
+      "bytes": 257167,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 2,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "11",
+          "shape_name": "Рисунок 10",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "eec5cb9fb1f3bdc313ba7d940384cdd7a94a82a2868cc711639a3afdd7cf1bd2",
+      "id": "steel_wire_rod_coil_front",
+      "name": "Бухта стальной катанки, вид с торца",
+      "description": "Крупная бухта стальной катанки с упаковочными лентами, вид спереди.",
+      "tags": [
+        "сталь",
+        "катанка",
+        "бухта",
+        "продукция"
+      ],
+      "file": "steel_wire_rod_coil_front.png",
+      "width": 2499,
+      "height": 1667,
+      "format": "PNG",
+      "bytes": 9222403,
+      "aspect_ratio": 1.4991,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/image13.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide1.xml",
+          "media_part": "ppt/media/image13.png",
+          "slide": 1,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "13",
+          "shape_name": "Рисунок 12",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "536d709fadbba7aebeed516a15ed8adcf32a49f9ec8390a2accc09dbf8873e45",
+      "id": "mine_excavator_and_truck",
+      "name": "Карьерный экскаватор и самосвал",
+      "description": "Большой карьерный экскаватор загружает горную массу в самосвал.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "сырье",
+        "экскаватор",
+        "самосвал"
+      ],
+      "file": "mine_excavator_and_truck.jpeg",
+      "width": 796,
+      "height": 295,
+      "format": "JPEG",
+      "bytes": 150638,
+      "aspect_ratio": 2.698305,
+      "sources": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/media/image17.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image17.jpeg",
+          "slide": 12,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image17.jpeg",
+          "slide": 13,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "c7d8ca1046301e5423cd871a31dcd6261802b8dc89e1fd907d37fe32abe8d373",
+      "id": "mine_loader_and_dump_truck",
+      "name": "Погрузчик и карьерный самосвал",
+      "description": "Погрузчик рядом с самосвалом на фоне уступов карьера.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "погрузчик",
+        "самосвал"
+      ],
+      "file": "mine_loader_and_dump_truck.jpeg",
+      "width": 656,
+      "height": 275,
+      "format": "JPEG",
+      "bytes": 97902,
+      "aspect_ratio": 2.385455,
+      "sources": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/media/image18.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image18.jpeg",
+          "slide": 12,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "11",
+          "shape_name": "Рисунок 10",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image18.jpeg",
+          "slide": 13,
+          "relationship_id": "rId4",
+          "relationship_type": "image",
+          "shape_id": "11",
+          "shape_name": "Рисунок 10",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "7049108e4f97e30c0eefa268873898c50bed6cef73067cf99bd5aac897e9fbaf",
+      "id": "open_pit_mine_panorama",
+      "name": "Панорама горного карьера",
+      "description": "Общий вид террасированных уступов глубокого горного карьера.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "сырье",
+        "ландшафт"
+      ],
+      "file": "open_pit_mine_panorama.jpeg",
+      "width": 656,
+      "height": 275,
+      "format": "JPEG",
+      "bytes": 100359,
+      "aspect_ratio": 2.385455,
+      "sources": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/media/image19.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image19.jpeg",
+          "slide": 12,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image19.jpeg",
+          "slide": 13,
+          "relationship_id": "rId5",
+          "relationship_type": "image",
+          "shape_id": "20",
+          "shape_name": "Рисунок 19",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "86e31a87b5f02b3ba136fd94cc6f9c36e0f86fca993297d91808a59a5306fba3",
+      "id": "coal_face_rock_detail",
+      "name": "Порода на борту карьера, деталь",
+      "description": "Темные пласты породы и каменная поверхность борта карьера крупным планом.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "порода",
+        "сырье"
+      ],
+      "file": "coal_face_rock_detail.jpeg",
+      "width": 659,
+      "height": 275,
+      "format": "JPEG",
+      "bytes": 112375,
+      "aspect_ratio": 2.396364,
+      "sources": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/media/image20.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image20.jpeg",
+          "slide": 12,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "24",
+          "shape_name": "Рисунок 23",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image20.jpeg",
+          "slide": 13,
+          "relationship_id": "rId6",
+          "relationship_type": "image",
+          "shape_id": "24",
+          "shape_name": "Рисунок 23",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "8e6a014b44df1a117ea5376fc8e17d5ec383a651f889c7e4e887609400552f5f",
+      "id": "coal_face_rock_wide",
+      "name": "Порода на борту карьера, широкий кадр",
+      "description": "Широкий фрагмент слоистой темной породы на борту карьера.",
+      "tags": [
+        "карьер",
+        "добыча",
+        "порода",
+        "сырье"
+      ],
+      "file": "coal_face_rock_wide.jpeg",
+      "width": 657,
+      "height": 275,
+      "format": "JPEG",
+      "bytes": 116632,
+      "aspect_ratio": 2.389091,
+      "sources": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/media/image21.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide12.xml",
+          "media_part": "ppt/media/image21.jpeg",
+          "slide": 12,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "41",
+          "shape_name": "Рисунок 40",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Schemes.pptx",
+          "part": "ppt/slides/slide13.xml",
+          "media_part": "ppt/media/image21.jpeg",
+          "slide": 13,
+          "relationship_id": "rId7",
+          "relationship_type": "image",
+          "shape_id": "41",
+          "shape_name": "Рисунок 40",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "9d601161e5ec20bd2fcc964ad0d6428ad4d1e588f0006bb9ce3441bbdd51e7e9",
+      "id": "glass_roof_atrium_wide",
+      "name": "Атриум со стеклянной крышей, широкий кадр",
+      "description": "Широкий вид внутреннего атриума с металлическими конструкциями и стеклянной крышей.",
+      "tags": [
+        "архитектура",
+        "строительство",
+        "инфраструктура"
+      ],
+      "file": "glass_roof_atrium_wide.jpeg",
+      "width": 2475,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 2115701,
+      "aspect_ratio": 1.5,
+      "sources": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/media/image14.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image14.jpeg",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "10",
+          "shape_name": "Рисунок 9",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "d3498944c182c120834314f21c2c906984ff18393fb1908f52f2170068a6ad82",
+      "id": "cable_stayed_bridge_sunset_panorama",
+      "name": "Вантовый мост на закате, панорама",
+      "description": "Панорамный вид вантового моста через широкую реку на закате.",
+      "tags": [
+        "мост",
+        "река",
+        "инфраструктура",
+        "закат"
+      ],
+      "file": "cable_stayed_bridge_sunset_panorama.jpeg",
+      "width": 3754,
+      "height": 1723,
+      "format": "JPEG",
+      "bytes": 1734253,
+      "aspect_ratio": 2.178758,
+      "sources": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/media/image15.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image15.jpeg",
+          "slide": 6,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "15",
+          "shape_name": "Рисунок 14",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "5941c906f85eb47b9bae244690583f7b96beb335f1f0a2e3ab5ba7a908272023",
+      "id": "worker_radio_white_helmet_wide",
+      "name": "Работник с рацией, широкий кадр",
+      "description": "Работник в белой каске, очках и защитной маске держит рацию у производственного здания.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "связь",
+        "безопасность"
+      ],
+      "file": "worker_radio_white_helmet_wide.jpeg",
+      "width": 2001,
+      "height": 1126,
+      "format": "JPEG",
+      "bytes": 188448,
+      "aspect_ratio": 1.777087,
+      "sources": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/slides/slide3.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 3,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "3",
+          "shape_name": "Рисунок 2",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Separators.pptx",
+          "part": "ppt/slides/slide4.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 4,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "4",
+          "shape_name": "Рисунок 3",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "751fd3cf396864cb6772214fa1037539bd7d110917861bc85a921cc285a8bd3a",
+      "id": "worker_laptop_factory_tall_crop",
+      "name": "Работник с ноутбуком в цехе, вертикальный кадр",
+      "description": "Работник в белой каске с ноутбуком на фоне трубопроводов и оборудования, вертикальный фрагмент.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "ноутбук",
+        "цифровизация",
+        "цех"
+      ],
+      "file": "worker_laptop_factory_tall_crop.jpeg",
+      "width": 757,
+      "height": 857,
+      "format": "JPEG",
+      "bytes": 111748,
+      "aspect_ratio": 0.883314,
+      "sources": [
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/media/image16.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/slides/slide19.xml",
+          "media_part": "ppt/media/image16.jpeg",
+          "slide": 19,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "1b515e3870e18794c19d1d55150d7ac128962e1e4ffa26f0dc96e2e57d33f7a3",
+      "id": "worker_laptop_factory_medium_crop",
+      "name": "Работник с ноутбуком в цехе, средний кадр",
+      "description": "Работник в белой каске с ноутбуком на фоне промышленного оборудования.",
+      "tags": [
+        "люди",
+        "сотрудник",
+        "ноутбук",
+        "цифровизация",
+        "цех"
+      ],
+      "file": "worker_laptop_factory_medium_crop.jpeg",
+      "width": 1082,
+      "height": 857,
+      "format": "JPEG",
+      "bytes": 157677,
+      "aspect_ratio": 1.262544,
+      "sources": [
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/media/image17.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Tables.pptx",
+          "part": "ppt/slides/slide20.xml",
+          "media_part": "ppt/media/image17.jpeg",
+          "slide": 20,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "852f82162e340cdea3e8c991dc60d19cff7d4fef76ff2ed97cd2c6e0a42c7d0a",
+      "id": "man_business_portrait_circle",
+      "name": "Круглый портрет сотрудника в пиджаке",
+      "description": "Портрет мужчины в синем пиджаке и светлой рубашке в круглом кадре с прозрачным фоном.",
+      "tags": [
+        "люди",
+        "портрет",
+        "команда",
+        "сотрудник"
+      ],
+      "file": "man_business_portrait_circle.png",
+      "width": 174,
+      "height": 174,
+      "format": "PNG",
+      "bytes": 49333,
+      "aspect_ratio": 1.0,
+      "sources": [
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/media/image14.png"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "16",
+          "shape_name": "Рисунок 15",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "17",
+          "shape_name": "Рисунок 16",
+          "reference_element": "blip"
+        },
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image14.png",
+          "slide": 5,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "19",
+          "shape_name": "Рисунок 18",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "eda1bdd6ddcaa1b31dfc54227e894f6f68bc2f4d16367c78b22ecfb790f12a75",
+      "id": "man_severstal_wall_medium",
+      "name": "Сотрудник у фирменной стены, средний кадр",
+      "description": "Мужчина в синем пиджаке стоит у стены с логотипом Северстали.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудник"
+      ],
+      "file": "man_severstal_wall_medium.jpeg",
+      "width": 884,
+      "height": 589,
+      "format": "JPEG",
+      "bytes": 94599,
+      "aspect_ratio": 1.500849,
+      "sources": [
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Team.pptx",
+          "part": "ppt/slides/slide5.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 5,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "15",
+          "shape_name": "Рисунок 14",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "65809bdbb95b6d7fc248b75a024144169f7585c7ac39f4bd27c1f576ea2c2fa4",
+      "id": "industrial_pipe_tower_tall",
+      "name": "Трубопроводы и дымовая труба",
+      "description": "Вертикальный кадр промышленного оборудования, трубопроводов и дымовой трубы на фоне неба.",
+      "tags": [
+        "предприятие",
+        "оборудование",
+        "трубопроводы",
+        "производство"
+      ],
+      "file": "industrial_pipe_tower_tall.jpeg",
+      "width": 1178,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 684203,
+      "aspect_ratio": 0.713939,
+      "sources": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image19.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide6.xml",
+          "media_part": "ppt/media/image19.jpeg",
+          "slide": 6,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "8",
+          "shape_name": "Рисунок 7",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "c59a4517138d05c5c8a8d7faca1ac3bdba00cbeb6512dcce39dd027c57d3a9ea",
+      "id": "steelworks_hall_coil_and_cranes",
+      "name": "Цех с рулоном стали и кранами",
+      "description": "Общий вид ярко освещенного цеха с большим стальным рулоном, оборудованием и мостовыми кранами.",
+      "tags": [
+        "цех",
+        "сталь",
+        "рулоны",
+        "оборудование",
+        "производство"
+      ],
+      "file": "steelworks_hall_coil_and_cranes.jpeg",
+      "width": 2933,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 2586929,
+      "aspect_ratio": 1.777576,
+      "sources": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image20.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/image20.jpeg",
+          "slide": 8,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "42",
+          "shape_name": "Рисунок 41",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "480ce7fd82bf6527b291419f47be0c46ab88835d6312af01ef68dd327af76fb7",
+      "id": "man_severstal_wall_high_resolution",
+      "name": "Сотрудник у фирменной стены, крупный исходник",
+      "description": "Мужчина в синем пиджаке стоит у стены с надписью Северсталь.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудник"
+      ],
+      "file": "man_severstal_wall_high_resolution.jpeg",
+      "width": 2528,
+      "height": 1685,
+      "format": "JPEG",
+      "bytes": 676135,
+      "aspect_ratio": 1.500297,
+      "sources": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image21.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide9.xml",
+          "media_part": "ppt/media/image21.jpeg",
+          "slide": 9,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "5",
+          "shape_name": "Рисунок 4",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "2ec5e8d76d9ef1dfd59ad2cb85ba0798a61aae9db9d3f641acec685a25817e0e",
+      "id": "man_severstal_wall_side_high_resolution",
+      "name": "Сотрудник у фирменной стены сбоку, крупный исходник",
+      "description": "Мужчина в синем пиджаке у стены с фирменным знаком, боковой ракурс.",
+      "tags": [
+        "люди",
+        "офис",
+        "портрет",
+        "сотрудник"
+      ],
+      "file": "man_severstal_wall_side_high_resolution.jpeg",
+      "width": 1624,
+      "height": 1083,
+      "format": "JPEG",
+      "bytes": 222961,
+      "aspect_ratio": 1.499538,
+      "sources": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image22.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide10.xml",
+          "media_part": "ppt/media/image22.jpeg",
+          "slide": 10,
+          "relationship_id": "rId2",
+          "relationship_type": "image",
+          "shape_id": "6",
+          "shape_name": "Рисунок 5",
+          "reference_element": "blip"
+        }
+      ]
+    },
+    {
+      "sha256": "a8c43f2540624b1e0d568edde21b7d38078a4d3108208215f03cab8adbe2f412",
+      "id": "city_stadium_at_sunset",
+      "name": "Городской стадион на закате",
+      "description": "Большой круглый стадион и окружающая городская панорама в вечернем свете.",
+      "tags": [
+        "город",
+        "стадион",
+        "инфраструктура",
+        "архитектура",
+        "закат"
+      ],
+      "file": "city_stadium_at_sunset.jpeg",
+      "width": 2933,
+      "height": 1650,
+      "format": "JPEG",
+      "bytes": 1417722,
+      "aspect_ratio": 1.777576,
+      "sources": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/media/image13.jpeg"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Title.pptx",
+          "part": "ppt/slides/slide2.xml",
+          "media_part": "ppt/media/image13.jpeg",
+          "slide": 2,
+          "relationship_id": "rId3",
+          "relationship_type": "image",
+          "shape_id": "13",
+          "shape_name": "Рисунок 12",
+          "reference_element": "blip"
+        }
+      ]
+    }
+  ],
+  "embedded_originals": [
+    {
+      "sha256": "91b9162a89080476e144ff87fe82f7f91dda2d36b59cb8410677cf6ff15c8d28",
+      "id": "worker_grinding_sparks_original",
+      "name": "Исходник JPEG XR: работник в круге искр",
+      "photo_id": "worker_grinding_sparks_large",
+      "file": "originals/worker_grinding_sparks_original.wdp",
+      "format": "JPEG XR",
+      "bytes": 1123170,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/hdphoto2.wdp"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide8.xml",
+          "media_part": "ppt/media/hdphoto2.wdp",
+          "slide": 8,
+          "relationship_id": "rId3",
+          "relationship_type": "hdphoto",
+          "shape_id": "7",
+          "shape_name": "Рисунок 6",
+          "reference_element": "imgLayer"
+        }
+      ],
+      "use": "Original Office image-effect source; use associated PNG photo for insertion."
+    },
+    {
+      "sha256": "f4c84ae5e1787b5811a7e1d6d1cd158c010bf3f09d25e9f5daed1440a8c7df16",
+      "id": "airplane_contrail_original",
+      "name": "Исходник JPEG XR: самолет в синем небе",
+      "photo_id": "airplane_contrail_blue_sky",
+      "file": "originals/airplane_contrail_original.wdp",
+      "format": "JPEG XR",
+      "bytes": 399540,
+      "sources": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/media/hdphoto1.wdp"
+        }
+      ],
+      "usages": [
+        {
+          "file": "Severstal_Quotes.pptx",
+          "part": "ppt/slides/slide7.xml",
+          "media_part": "ppt/media/hdphoto1.wdp",
+          "slide": 7,
+          "relationship_id": "rId3",
+          "relationship_type": "hdphoto",
+          "shape_id": "9",
+          "shape_name": "Рисунок 8",
+          "reference_element": "imgLayer"
+        }
+      ],
+      "use": "Original Office image-effect source; use associated PNG photo for insertion."
+    }
+  ],
+  "contact_sheets": [
+    "contact_sheet_01.jpg",
+    "contact_sheet_02.jpg",
+    "contact_sheet_03.jpg",
+    "contact_sheet_04.jpg",
+    "contact_sheet_05.jpg"
+  ]
+}

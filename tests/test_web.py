@@ -29,7 +29,9 @@ class WebTests(unittest.TestCase):
         cls.config = Path(cls.directory.name) / "llm.json"
         cls.config.write_text(json.dumps({"base_url": "https://internal.invalid/v1", "model": "test-model",
                                           "api_key_env": "SUPERSLIDE_WEB_TEST_KEY"}), encoding="utf-8")
-        cls.server = create_server(port=0, config_path=cls.config)
+        cls.server = create_server(port=0, config_path=cls.config,
+                                   template_path=ROOT / "templates/corporate_base.pptx",
+                                   manifest_path=ROOT / "templates/template_manifest.json")
         cls.server.state.directory = Path(cls.directory.name) / "web"
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()

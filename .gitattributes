@@ -1,1 +1,2 @@
 SeverstalBrand/*.pptx filter=lfs diff=lfs merge=lfs -text
+templates/severstal_source.pptx filter=lfs diff=lfs merge=lfs -text

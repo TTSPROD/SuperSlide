@@ -7,8 +7,11 @@ import json
 import mimetypes
 import os
 import re
+import shutil
 import threading
+import time
 import uuid
+from dataclasses import replace
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PureWindowsPath
@@ -34,7 +37,7 @@ ALLOWED_EXTENSIONS = {".txt", ".md", ".docx", ".pdf"}
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 MAX_SESSION_IMAGES = 10
 MAX_SESSION_IMAGE_BYTES = 100 * 1024 * 1024
-DOWNLOADS = {"presentation.pptx", "draft.json", "report.json"}
+DOWNLOADS = {"presentation.pptx", "draft.json", "report.json", "diagnostics.json", "partial-draft.json"}
 LAYOUT_NAMES = {
     "title_slide": "Обложка", "bullet_list": "Тезисы", "two_columns": "Две колонки",
     "quote": "Цитата", "table": "Таблица", "bar_chart": "Диаграмма",
@@ -91,8 +94,13 @@ def _safe_error(exc: Exception) -> str:
         return {
             "authentication": "API отклонил ключ. Проверьте ключ доступа в настройках.",
             "http_401": "API отклонил ключ. Проверьте ключ доступа в настройках.",
-            "timeout": "LLM не ответила вовремя. Повторите запрос позже.",
-            "validation": "Ответ LLM не прошёл проверку структуры. Уточните задание и повторите.",
+            "http_403": "Сервис или сетевой прокси отклонил доступ к модели (HTTP 403).",
+            "http_400": "Сервис отклонил параметры запроса к модели (HTTP 400).",
+            "connection": "Не удалось установить соединение с сервером модели.",
+            "output_limit": "Ответ модели достиг лимита длины до завершения JSON.",
+            "prompt_limit": "Данные выбранных слайдов превышают допустимый размер запроса.",
+            "timeout": "Модель не завершила ответ за отведённое время.",
+            "validation": "Ответ модели не прошёл проверку полей слайда после попыток исправления.",
         }.get(exc.code, "Не удалось получить ответ корпоративной LLM. Проверьте подключение и настройки.")
     if isinstance(exc, ConfigurationError):
         return "Корпоративная LLM не настроена. Проверьте локальный файл конфигурации."
@@ -106,13 +114,131 @@ def _safe_error(exc: Exception) -> str:
     return "Не удалось выполнить операцию. Проверьте содержание и выбранные макеты."
 
 
+_STAGES = {"planning": "Выбор исходных макетов", "slides": "Заполнение слайдов",
+           "repair": "Исправление полей", "validating": "Проверка структуры",
+           "connection": "Проверка ответа модели"}
+
+
+def _safe_progress(event):
+    """Publish only bounded counters and stage identifiers, never model text."""
+    if not isinstance(event, dict) or event.get("stage") not in _STAGES:
+        return {}
+    result = {"stage": event["stage"]}
+    for key in ("slide_start", "slide_end", "total_slides", "attempt", "timeout_seconds", "completed_slides"):
+        value = event.get(key)
+        if type(value) in (int, float) and 0 <= value <= 3600:
+            result[key] = value
+    return result
+
+
+def _safe_failure(exc, progress):
+    """Retain structural evidence; discard response excerpts and input values."""
+    details = {"code": exc.code if isinstance(exc, LLMError) else "internal"}
+    details.update(_safe_progress(progress))
+    context = getattr(exc, "context", {})
+    if isinstance(context, dict):
+        details.update(_safe_progress(context))
+    issues = []
+    # Earlier attempts may have already fixed a field. Show the last failure,
+    # rather than mixing obsolete errors with the current one.
+    for entry in getattr(exc, "diagnostics", [])[-1:]:
+        if not isinstance(entry, dict):
+            continue
+        candidates = entry.get("validation_issues") or entry.get("validation_details", [])
+        if isinstance(candidates, dict):
+            fields = candidates.get("fields")
+            candidates = ([{"loc": item.get("location"), "type": item.get("type")}
+                           for item in fields if isinstance(item, dict)] if isinstance(fields, list) else [candidates])
+        # Pydantic feedback excludes input, but publish only location/type.
+        if not candidates:
+            try:
+                parsed = json.loads(entry.get("validation_error", ""))
+                candidates = parsed if isinstance(parsed, list) else []
+            except (TypeError, json.JSONDecodeError):
+                candidates = []
+        for issue in candidates[:8]:
+            if not isinstance(issue, dict):
+                continue
+            clean = {}
+            for key in ("slide_index", "limit", "actual", "target", "row_index", "column_index"):
+                value = issue.get(key)
+                if type(value) in (int, float) and 0 <= value <= 1_000_000:
+                    clean[key] = value
+            if isinstance(issue.get("limit"), dict):
+                dimensions = {key: value for key, value in issue["limit"].items()
+                              if key in {"rows", "columns", "series", "categories"} and type(value) is int and 0 < value <= 1000}
+                if dimensions:
+                    clean["limit"] = dimensions
+            for key in ("field_id", "reason", "type"):
+                value = issue.get(key)
+                if isinstance(value, str) and re.fullmatch(r"[a-z][a-z0-9_]{0,100}", value):
+                    clean[key] = value
+            location = issue.get("loc")
+            if isinstance(location, (list, tuple)):
+                path = [str(p) for p in location if type(p) is int or isinstance(p, str) and re.fullmatch(r"[a-z][a-z0-9_]{0,63}", p)]
+                if path:
+                    clean["path"] = ".".join(path)[:200]
+                if len(location) > 1 and location[0] == "slides" and type(location[1]) is int and 0 <= location[1] < 250:
+                    clean["slide_index"] = location[1] + 1
+            if clean:
+                issues.append(clean)
+    if issues:
+        details["issues"] = issues[:8]
+    return details
+
+
+def _failure_message(exc, details):
+    message = _safe_error(exc)
+    if details.get("code") == "timeout" and details.get("timeout_seconds"):
+        message = f"Модель не завершила ответ за {details['timeout_seconds']:g} с."
+    if details.get("stage") in _STAGES:
+        message += " Этап: " + _STAGES[details["stage"]].lower() + "."
+    if details.get("slide_start"):
+        if details.get("slide_end", details["slide_start"]) != details["slide_start"]:
+            message += f" Слайды {details['slide_start']}–{details['slide_end']}."
+        else:
+            message += f" Слайд {details['slide_start']}."
+    reasons = {"paragraph_count": "слишком много абзацев", "text_length": "текст длиннее лимита",
+               "table_dimensions": "размер таблицы не совпадает с макетом", "unknown_field": "поле отсутствует в макете",
+               "chart_dimensions": "размер данных диаграммы не совпадает с макетом",
+               "cell_paragraph_count": "слишком много абзацев в ячейке", "chart_unsupported": "выбрана диаграмма для ручного заполнения в PowerPoint",
+               "slide_count": "неверное число слайдов", "unknown_asset": "ресурс отсутствует в каталоге",
+               "missing": "не заполнено обязательное поле", "extra_forbidden": "лишнее поле",
+               "string_too_long": "текст длиннее лимита", "literal_error": "недопустимое значение"}
+    for issue in details.get("issues", [])[:2]:
+        prefix = (f"Слайд {issue['slide_index']}, " if issue.get("slide_index") else "")
+        field = issue.get("field_id", issue.get("path", ""))
+        reason = reasons.get(issue.get("reason", issue.get("type")))
+        if field and reason:
+            message += f" {prefix}{field}: {reason}."
+            if type(issue.get("limit")) is int:
+                message += f" Допустимо: {issue['limit']}; получено: {issue.get('actual', '—')}."
+            if issue.get("reason") == "text_length" and type(issue.get("target")) is int:
+                message += f" Рекомендуемый объём: {issue['target']}."
+    if len(details.get("issues", [])) > 2:
+        message += f" Других ошибок полей: {len(details['issues']) - 2}. Подробности сохранены в диагностике."
+    return message
+
+
 class WebState:
-    def __init__(self, config_path: Path | None):
+    def __init__(self, config_path: Path | None, template_path=None, manifest_path=None):
         self.config_path = config_path
-        self.template = ROOT / "templates" / "corporate_base.pptx"
-        self.manifest_path = ROOT / "templates" / "template_manifest.json"
-        _, self.manifest, _ = load_template(self.template, self.manifest_path)
-        self.catalog = load_asset_catalog(ROOT / "assets" / "images" / "catalog.json")
+        self.template = Path(template_path or ROOT / "templates" / "severstal_source.pptx")
+        self.manifest_path = Path(manifest_path or ROOT / "templates" / "severstal_template.json")
+        self.manifest = json.loads(self.manifest_path.read_text(encoding="utf-8-sig"))
+        self.source_mode = self.manifest.get("template_version") == "2.0"
+        if self.source_mode:
+            from .source_template import inspect_source_template
+            inspect_source_template(self.template, self.manifest_path)
+        else:
+            _, self.manifest, _ = load_template(self.template, self.manifest_path)
+        self.photo_catalog_path = (ROOT / "assets" / "photos" / "severstal" / "catalog.json"
+                                   if self.source_mode else ROOT / "assets" / "images" / "catalog.json")
+        self.icon_catalog_path = ROOT / "assets" / "icons" / "severstal" / "catalog.json"
+        self.catalog = load_asset_catalog(self.photo_catalog_path)
+        self.icons = (json.loads(self.icon_catalog_path.read_text(encoding="utf-8-sig"))["icons"]
+                      if self.source_mode else [])
+        self.icons = [icon for icon in self.icons if icon.get("selectable", True)]
         self.directory = ROOT / "output" / "web"
         self.image_directory = self.directory / "images"
         self.image_sizes: dict[str, int] = {}
@@ -120,7 +246,15 @@ class WebState:
         self.uploads: dict[str, dict] = {}
         self.jobs: dict[str, dict] = {}
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="superslide-web")
+        self.probe_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="superslide-probe")
         self.previews: dict[tuple[str, str], Path] = {}
+        if self.source_mode:
+            for layout_id, layout in self.manifest["layouts"].items():
+                for variant_id, variant in layout["variants"].items():
+                    if variant.get("preview"):
+                        preview = ROOT / variant["preview"]
+                        if preview.is_file():
+                            self.previews[(layout_id, variant_id)] = preview
         variants = ROOT / "examples" / "variants.json"
         if variants.exists():
             records = json.loads(variants.read_text(encoding="utf-8-sig"))["slides"]
@@ -173,12 +307,18 @@ class WebState:
         layouts = []
         for layout_id, info in self.manifest["layouts"].items():
             variants = []
-            for variant_id, variant in [("default", info), *info.get("variants", {}).items()]:
-                variants.append({"id": variant_id, "name": VARIANT_NAMES.get(variant_id, variant_id),
+            choices = (list(info["variants"].items()) if self.source_mode
+                       else [("default", info), *info.get("variants", {}).items()])
+            for variant_id, variant in choices:
+                entry = {"id": variant_id, "name": variant.get("name", VARIANT_NAMES.get(variant_id, variant_id)),
                                  "description": variant.get("description", "Фирменная композиция"),
                                  "preview_url": f"/api/previews/{layout_id}/{variant_id}.png"
-                                 if (layout_id, variant_id) in self.previews else None})
-            layouts.append({"id": layout_id, "name": LAYOUT_NAMES.get(layout_id, layout_id), "variants": variants})
+                                 if (layout_id, variant_id) in self.previews else None}
+                if self.source_mode:
+                    entry["fields"] = {key: {k: value[k] for k in ("kind", "name", "sample_text", "max_characters")
+                                               if k in value} for key, value in variant.get("fields", {}).items()}
+                variants.append(entry)
+            layouts.append({"id": layout_id, "name": info.get("name", LAYOUT_NAMES.get(layout_id, layout_id)), "variants": variants})
         return {"model": model, "llm_configured": configured, "key_configured": key,
                 "template_version": self.manifest["template_version"], "layouts": layouts,
                 "design_count": sum(len(item["variants"]) for item in layouts)}
@@ -186,6 +326,18 @@ class WebState:
     def validate(self, draft, known_sources=None):
         if not isinstance(draft, dict):
             raise APIError(400, "draft", "Презентация должна быть JSON-объектом.")
+        if self.source_mode:
+            from .source_template import validate_source_presentation
+            spec = validate_source_presentation(draft, self.manifest, known_sources)
+            icons = {item["id"] for item in self.icons}
+            for slide in spec.slides:
+                for update in slide.updates:
+                    values = update.model_dump() if hasattr(update, "model_dump") else update
+                    if values.get("photo_id") is not None:
+                        self.catalog.resolve(values["photo_id"])
+                    if values.get("icon_id") is not None and values["icon_id"] not in icons:
+                        raise ValueError("Неизвестная иконка")
+            return spec
         spec = validate_presentation(draft, known_sources)
         for slide in spec.slides:
             select_layout(self.manifest, slide.layout_id, slide.variant_id)
@@ -198,28 +350,77 @@ class WebState:
             job = self.jobs.get(_identifier(job_id))
             if not job:
                 raise APIError(404, "not_found", "Задание не найдено.")
-            return copy.deepcopy({k: v for k, v in job.items() if not k.startswith("_")})
+            result = copy.deepcopy({k: v for k, v in job.items() if not k.startswith("_")})
+            result["elapsed_seconds"] = round(max(0, job.get("finished_at", time.time()) - job.get("started_at", job.get("created_at", time.time()))), 1)
+            return result
 
-    def submit(self, kind, work):
+    def submit(self, kind, work, *, executor=None):
         with self.lock:
             if len(self.jobs) >= 100 or sum(j["status"] in {"queued", "running"} for j in self.jobs.values()) >= 8:
                 raise APIError(429, "queue_full", "Очередь заполнена. Дождитесь завершения текущих заданий.")
             job_id = str(uuid.uuid4())
-            self.jobs[job_id] = {"id": job_id, "kind": kind, "status": "queued", "message": "В очереди"}
+            self.jobs[job_id] = {"id": job_id, "kind": kind, "status": "queued", "message": "В очереди", "created_at": time.time()}
 
         def run():
             with self.lock:
-                self.jobs[job_id].update(status="running", message="Генерация структуры" if kind == "draft" else "Сборка PowerPoint")
+                self.jobs[job_id].update(status="running", started_at=time.time(), message={"draft": "Выбор макетов", "connection": "Проверка ответа модели"}.get(kind, "Сборка PowerPoint"))
             try:
                 result = work(job_id)
                 with self.lock:
-                    self.jobs[job_id].update(result, status="succeeded", message="Готово")
+                    self.jobs[job_id].update(result, status="succeeded", finished_at=time.time(), message="Готово")
             except Exception as exc:
                 with self.lock:
-                    self.jobs[job_id].update(status="failed", message="Не удалось завершить", error=_safe_error(exc))
+                    details = _safe_failure(exc, self.jobs[job_id].get("progress", {}))
+                    message = _failure_message(exc, details)
+                    self.jobs[job_id].update(status="failed", finished_at=time.time(), message="Не удалось завершить", error=message, error_details=details)
+                    _write_json(self.directory / "jobs" / job_id / "diagnostics.json", details)
+                    self.jobs[job_id]["diagnostics_download"] = f"/api/downloads/{job_id}/diagnostics.json"
+                    partial = getattr(exc, "partial_draft", None)
+                    if isinstance(partial, dict) and partial.get("slides"):
+                        try:
+                            self.validate(partial)
+                            _write_json(self.directory / "jobs" / job_id / "partial-draft.json", partial)
+                            self.jobs[job_id]["partial_download"] = f"/api/downloads/{job_id}/partial-draft.json"
+                            self.jobs[job_id]["error"] += f" Сохранены готовые слайды: {len(partial['slides'])}."
+                        except (ValueError, APIError):
+                            pass
 
-        self.executor.submit(run)
+        (executor or self.executor).submit(run)
         return {"job_id": job_id}
+
+    def progress(self, job_id, event):
+        progress = _safe_progress(event)
+        if not progress:
+            return
+        label = _STAGES[progress["stage"]]
+        if progress.get("slide_start"):
+            label += f": {progress['slide_start']}"
+            if progress.get("slide_end", progress["slide_start"]) != progress["slide_start"]:
+                label += f"–{progress['slide_end']}"
+            if progress.get("total_slides"):
+                label += f" из {progress['total_slides']}"
+        if progress.get("stage") == "repair" and progress.get("attempt"):
+            label += f", попытка {progress['attempt']}"
+        with self.lock:
+            self.jobs[job_id].update(progress=progress, message=label)
+
+    def check_connection(self):
+        settings = self.settings()
+        key = os.environ.get(settings.api_key_env, "")
+        if not key:
+            raise APIError(400, "api_key", "Сначала сохраните API-ключ в настройках подключения.")
+
+        def work(job_id):
+            from .llm import _request_content
+            probe = replace(settings, timeout_seconds=min(settings.timeout_seconds, 60), max_output_tokens=1024)
+            self.progress(job_id, {"stage": "connection", "timeout_seconds": probe.timeout_seconds})
+            payload = {"model": probe.model, "messages": [{"role": "user", "content": "Проверка связи. Ответь одним словом: ОК"}], probe.token_limit_parameter: probe.max_output_tokens}
+            if probe.reasoning_effort is not None:
+                payload["reasoning_effort"] = probe.reasoning_effort
+            _request_content(payload, probe, key)
+            return {"model": settings.model, "message": "Модель ответила", "connection_ok": True}
+
+        return self.submit("connection", work, executor=self.probe_executor)
 
     def draft(self, payload):
         _fields(payload, {"task", "document_ids", "slide_count"})
@@ -258,7 +459,11 @@ class WebState:
                         raise ValueError(f"Ожидается ровно {count} слайдов.")
                     try:
                         # Dry-run render: overlong slide text is reported back so the model can shorten it.
-                        check_text_fit(spec, self.template, self.manifest_path, asset_catalog=self.catalog)
+                        if self.source_mode:
+                            from .source_template import check_source_text_fit
+                            check_source_text_fit(spec, self.template, self.manifest_path)
+                        else:
+                            check_text_fit(spec, self.template, self.manifest_path, asset_catalog=self.catalog)
                     except LayoutOverflowError as exc:
                         raise ValueError(
                             "Текст не помещается в поля слайдов. Сократи или суммаризуй текст проблемных полей, "
@@ -267,11 +472,16 @@ class WebState:
                     return spec
 
                 slide_word = "слайда" if count in (3, 4) else "слайдов"
+                if self.source_mode:
+                    from .source_template import source_presentation_schema, source_prompt_catalog
                 result = generate_draft(
                     task.strip() + f"\n\nПодготовь ровно {count} {slide_word}, включая обложку и завершение.",
                     bundle, settings, validate=validate_generated,
-                    schema=presentation_schema(), layout_catalog=self.manifest["layouts"],
+                    schema=source_presentation_schema() if self.source_mode else presentation_schema(),
+                    layout_catalog=source_prompt_catalog(self.manifest) if self.source_mode else self.manifest["layouts"],
                     image_catalog=self.catalog.prompt_catalog(), template_version=self.manifest["template_version"],
+                    icon_catalog=self.icons,
+                    progress_callback=lambda event: self.progress(job_id, event),
                 )
                 validate_generated(result.draft)
                 directory = self.directory / "jobs" / job_id
@@ -308,13 +518,31 @@ class WebState:
         def work(job_id):
             directory = self.directory / "jobs" / job_id
             directory.mkdir(parents=True, exist_ok=True)
-            report = build_presentation(spec, self.template, self.manifest_path, directory / "presentation.pptx",
-                                        source_lookup=lookup, asset_catalog=self.catalog)
+            if self.source_mode:
+                from .source_template import build_source_presentation
+                # Include uploaded photos in a local catalog for this build.
+                photo_path = directory / "photos.json"
+                selected = {update.photo_id for slide in spec.slides for update in slide.updates
+                            if getattr(update, "photo_id", None)}
+                photos = {"images": [copy.deepcopy(item) for item in self.catalog.records if item["id"] in selected]}
+                for item in photos["images"]:
+                    original = self.catalog.resolve(item["id"])
+                    destination = directory / "photos" / (item["id"] + original.suffix)
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(original, destination)
+                    item["file"] = destination.relative_to(directory).as_posix()
+                _write_json(photo_path, photos)
+                report = build_source_presentation(spec, self.template, self.manifest_path, directory / "presentation.pptx",
+                                                   source_lookup=lookup, asset_catalog_path=photo_path,
+                                                   icon_catalog_path=self.icon_catalog_path)
+            else:
+                report = build_presentation(spec, self.template, self.manifest_path, directory / "presentation.pptx",
+                                            source_lookup=lookup, asset_catalog=self.catalog)
             _write_json(directory / "draft.json", draft)
             # The downloadable report needs no absolute local output path.
             report["output"] = "presentation.pptx"
             _write_json(directory / "report.json", report)
-            return {"warnings": report["warnings"], "downloads": {
+            return {"warnings": report.get("warnings", []), "downloads": {
                 "pptx": f"/api/downloads/{job_id}/presentation.pptx", "json": f"/api/downloads/{job_id}/draft.json",
                 "report": f"/api/downloads/{job_id}/report.json"}}
 
@@ -339,6 +567,7 @@ class WebServer(ThreadingHTTPServer):
         super().server_close()
         if hasattr(self, "state"):
             self.state.executor.shutdown(wait=False, cancel_futures=True)
+            self.state.probe_executor.shutdown(wait=False, cancel_futures=True)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -430,11 +659,12 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/bootstrap":
                 return self._json(self.state.bootstrap())
             if path == "/api/example":
-                draft = json.loads((ROOT / "examples" / "variety.json").read_text(encoding="utf-8-sig"))
+                example_name = "severstal_15_types.json" if self.state.source_mode else "variety.json"
+                draft = json.loads((ROOT / "examples" / example_name).read_text(encoding="utf-8-sig"))
                 draft["template_version"] = self.state.manifest["template_version"]
                 self.state.validate(draft)
                 return self._json({"draft": draft, "warnings": ["Демонстрационный пример: все показатели и планы вымышлены."]})
-            if match := re.fullmatch(r"/api/previews/([a-z_]+)/([a-z_]+)\.png", path):
+            if match := re.fullmatch(r"/api/previews/([a-z_]+)/([a-z_0-9]+)\.png", path):
                 image = self.state.previews.get(match.groups())
                 if image:
                     return self._file(image)
@@ -453,11 +683,16 @@ class Handler(BaseHTTPRequestHandler):
                 job = self.state.public_job(job_id)
                 if filename in DOWNLOADS and job["status"] == "succeeded" and job["kind"] == "build":
                     return self._file(self.state.directory / "jobs" / job_id / filename, attachment=filename)
+                if job["status"] == "failed" and (filename == "diagnostics.json" or filename == "partial-draft.json" and job.get("partial_download")):
+                    return self._file(self.state.directory / "jobs" / job_id / filename, attachment=filename)
             static = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
                       "/styles.css": "styles.css", "/assets/logo.svg": "assets/logo.svg"}
             if path in static:
                 return self._file(STATIC / static[path])
         elif self.command == "POST":
+            if path == "/api/connection-check":
+                _fields(self._payload(), set())
+                return self._json(self.state.check_connection(), 202)
             if path == "/api/settings":
                 payload = self._payload()
                 _fields(payload, {"api_key"})
@@ -551,17 +786,19 @@ class Handler(BaseHTTPRequestHandler):
     do_OPTIONS = _handle
 
 
-def create_server(host="127.0.0.1", port=8765, config_path=ROOT / "config" / "llm.local.json"):
+def create_server(host="127.0.0.1", port=8765, config_path=ROOT / "config" / "llm.local.json", *,
+                  template_path=None, manifest_path=None):
     """Create a loopback server. Port 0 is useful for local integration tests."""
     if host not in {"127.0.0.1", "localhost"}:
         raise ValueError("Веб-интерфейс разрешено запускать только на 127.0.0.1 или localhost.")
     if isinstance(port, bool) or not isinstance(port, int) or not 0 <= port <= 65535:
         raise ValueError("Некорректный порт веб-интерфейса.")
-    state = WebState(Path(config_path) if config_path is not None else None)
+    state = WebState(Path(config_path) if config_path is not None else None, template_path, manifest_path)
     try:
         server = WebServer((host, port), Handler)
     except Exception:
         state.executor.shutdown(wait=False, cancel_futures=True)
+        state.probe_executor.shutdown(wait=False, cancel_futures=True)
         raise
     server.state = state
     return server

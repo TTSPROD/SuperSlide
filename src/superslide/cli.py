@@ -19,9 +19,11 @@ from .template import inspect_template, load_template, select_layout
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_TEMPLATE = PROJECT_ROOT / "templates" / "corporate_base.pptx"
-DEFAULT_MANIFEST = PROJECT_ROOT / "templates" / "template_manifest.json"
+DEFAULT_TEMPLATE = PROJECT_ROOT / "templates" / "severstal_source.pptx"
+DEFAULT_MANIFEST = PROJECT_ROOT / "templates" / "severstal_template.json"
 DEFAULT_ASSET_CATALOG = PROJECT_ROOT / "assets" / "images" / "catalog.json"
+SOURCE_PHOTO_CATALOG = PROJECT_ROOT / "assets" / "photos" / "severstal" / "catalog.json"
+SOURCE_ICON_CATALOG = PROJECT_ROOT / "assets" / "icons" / "severstal" / "catalog.json"
 
 
 def _json_text(value):
@@ -59,14 +61,55 @@ def _template_flags(parser):
 
 
 def _asset_flag(parser):
-    parser.add_argument("--asset-catalog", type=Path, default=DEFAULT_ASSET_CATALOG,
+    parser.add_argument("--asset-catalog", type=Path,
                         help="Каталог локальных PNG/JPEG с описаниями")
+    parser.add_argument("--icon-catalog", type=Path, default=SOURCE_ICON_CATALOG,
+                        help="Каталог иконок из исходной библиотеки")
 
 
 def _assets(path):
+    path = path or DEFAULT_ASSET_CATALOG
     if path == DEFAULT_ASSET_CATALOG and not path.exists():
         return None
     return load_asset_catalog(path)
+
+
+def _read_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))
+
+
+def _source_mode(manifest_path):
+    return _read_json(manifest_path).get("template_version") == "2.0"
+
+
+def _source_catalog(path, kind):
+    """Read the extraction catalogs without imposing the legacy image contract."""
+    data = _read_json(path)
+    if isinstance(data, list):
+        return [item for item in data if item.get("selectable", True)]
+    for key in (kind, "images" if kind == "photos" else kind):
+        if isinstance(data.get(key), list):
+            return [item for item in data[key] if item.get("selectable", True)]
+    raise ValueError(f"Каталог {path} должен содержать массив {kind}")
+
+
+def _validate_source_assets(spec, photo_path, icon_path):
+    photo_ids = {item["id"] for item in _source_catalog(photo_path, "photos")}
+    icon_ids = {item["id"] for item in _source_catalog(icon_path, "icons")}
+    for slide in spec.slides:
+        for update in slide.updates:
+            values = update.model_dump() if hasattr(update, "model_dump") else update
+            for key, allowed in (("photo_id", photo_ids), ("icon_id", icon_ids)):
+                if values.get(key) is not None and values[key] not in allowed:
+                    raise ValueError(f"Неизвестный {key}: {values[key]}")
+    return spec
+
+
+def _source_load(input_path, manifest_path, sources, photo_path, icon_path):
+    from .source_template import load_source_manifest, validate_source_presentation
+    return _validate_source_assets(validate_source_presentation(
+        _read_json(input_path), load_source_manifest(manifest_path),
+        set(sources) if sources is not None else None), photo_path, icon_path)
 
 
 def _validate_assets(spec, catalog):
@@ -101,6 +144,7 @@ def parser():
     validate = sub.add_parser("validate", help="Проверить JSON презентации")
     validate.add_argument("input", type=Path)
     validate.add_argument("--sources", type=Path)
+    _template_flags(validate)
     _asset_flag(validate)
     build = sub.add_parser("build", help="Собрать нативный PPTX из JSON")
     build.add_argument("input", type=Path)
@@ -128,6 +172,7 @@ def parser():
     _asset_flag(draft)
     schema = sub.add_parser("schema", help="Вывести JSON Schema контракта презентации")
     schema.add_argument("--output", type=Path)
+    _template_flags(schema)
     models = sub.add_parser("models", help="Получить доступные model aliases из внутреннего API")
     address = models.add_mutually_exclusive_group(required=True)
     address.add_argument("--base-url")
@@ -174,34 +219,62 @@ def _run(args):
             aliases = list_models(args.base_url, args.api_key_env, trust_env_proxy=not args.no_proxy)
         print(_json_text({"models": aliases}), end="")
     elif args.command == "schema":
-        schema = presentation_schema()
+        if _source_mode(args.manifest):
+            from .source_template import source_presentation_schema
+            schema = source_presentation_schema()
+        else:
+            schema = presentation_schema()
         if args.output:
             _write_json(args.output, schema)
             print(f"JSON Schema: {args.output.resolve()}")
         else:
             print(_json_text(schema), end="")
     elif args.command == "inspect-template":
-        print(_json_text(inspect_template(args.template, args.manifest)), end="")
+        if _source_mode(args.manifest):
+            from .source_template import inspect_source_template
+            result = inspect_source_template(args.template, args.manifest)
+        else:
+            result = inspect_template(args.template, args.manifest)
+        print(_json_text(result), end="")
     elif args.command == "assets":
-        catalog = _assets(args.asset_catalog)
-        print(_json_text(catalog.to_dict() if catalog else {"images": []}), end="")
+        photo_path = args.asset_catalog or SOURCE_PHOTO_CATALOG
+        if photo_path == SOURCE_PHOTO_CATALOG:
+            print(_json_text({"photos": _source_catalog(photo_path, "photos"),
+                              "icons": _source_catalog(args.icon_catalog, "icons")}), end="")
+        else:
+            catalog = _assets(photo_path)
+            print(_json_text(catalog.to_dict() if catalog else {"images": []}), end="")
     elif args.command == "validate":
         sources = _source_lookup(args.sources)
-        spec = load_presentation(args.input, set(sources) if sources is not None else None)
-        _validate_assets(spec, _assets(args.asset_catalog))
+        if _read_json(args.input).get("template_version") == "2.0":
+            spec = _source_load(args.input, args.manifest, sources,
+                                args.asset_catalog or SOURCE_PHOTO_CATALOG, args.icon_catalog)
+        else:
+            spec = load_presentation(args.input, set(sources) if sources is not None else None)
+            _validate_assets(spec, _assets(args.asset_catalog))
         print(f"JSON корректен: {len(spec.slides)} слайдов, шаблон {spec.template_version}")
     elif args.command == "build":
         report_path = args.report or args.output.with_suffix(".report.json")
         _check_paths([args.output, report_path], [args.input, args.template, args.manifest, args.sources, args.asset_catalog])
         sources = _source_lookup(args.sources)
-        spec = load_presentation(args.input, set(sources) if sources is not None else None)
-        catalog = _assets(args.asset_catalog)
-        _check_paths([args.output, report_path], _catalog_paths(catalog))
-        report = build_presentation(spec, args.template, args.manifest, args.output,
-                                    source_lookup=sources, report_path=report_path, asset_catalog=catalog)
+        if _source_mode(args.manifest):
+            from .source_template import build_source_presentation
+            photo_path = args.asset_catalog or SOURCE_PHOTO_CATALOG
+            _check_paths([args.output, report_path], [photo_path, args.icon_catalog])
+            spec = _source_load(args.input, args.manifest, sources, photo_path, args.icon_catalog)
+            report = build_source_presentation(spec, args.template, args.manifest, args.output,
+                                               source_lookup=sources, asset_catalog_path=photo_path,
+                                               icon_catalog_path=args.icon_catalog)
+            _write_json(report_path, report)
+        else:
+            spec = load_presentation(args.input, set(sources) if sources is not None else None)
+            catalog = _assets(args.asset_catalog)
+            _check_paths([args.output, report_path], _catalog_paths(catalog))
+            report = build_presentation(spec, args.template, args.manifest, args.output,
+                                        source_lookup=sources, report_path=report_path, asset_catalog=catalog)
         print(f"Создано: {args.output.resolve()} ({len(spec.slides)} слайдов)")
         print(f"Отчёт: {report_path.resolve()}")
-        for warning in report["warnings"]:
+        for warning in report.get("warnings", []):
             print(f"Проверка: {warning}")
     elif args.command == "extract":
         _check_paths([args.output], args.documents)
@@ -217,9 +290,22 @@ def _run(args):
         _check_paths([args.output, sources_path, generation_path, error_path],
                      [*args.documents, args.task_file, args.config, args.template, args.manifest, args.asset_catalog])
         # Check all local prerequisites before sending documents to the configured endpoint.
-        _, manifest, _ = load_template(args.template, args.manifest)
-        catalog = _assets(args.asset_catalog)
-        _check_paths([args.output, sources_path, generation_path, error_path], _catalog_paths(catalog))
+        source_mode = _source_mode(args.manifest)
+        if source_mode:
+            from .source_template import (inspect_source_template, load_source_manifest,
+                                          validate_source_presentation, source_presentation_schema,
+                                          source_prompt_catalog, check_source_text_fit)
+            inspect_source_template(args.template, args.manifest)
+            manifest = load_source_manifest(args.manifest)
+            photo_path = args.asset_catalog or SOURCE_PHOTO_CATALOG
+            photos = _source_catalog(photo_path, "photos")
+            icons = _source_catalog(args.icon_catalog, "icons")
+            _check_paths([args.output, sources_path, generation_path, error_path], [photo_path, args.icon_catalog])
+            catalog = None
+        else:
+            _, manifest, _ = load_template(args.template, args.manifest)
+            catalog = _assets(args.asset_catalog)
+            _check_paths([args.output, sources_path, generation_path, error_path], _catalog_paths(catalog))
         settings = load_llm_settings(args.config)
         task = args.task
         if args.task_file:
@@ -231,6 +317,11 @@ def _run(args):
         _write_json(sources_path, bundle.to_dict())
         try:
             def validate_with_fit(value):
+                if source_mode:
+                    spec = _validate_source_assets(validate_source_presentation(value, manifest, known),
+                                                   photo_path, args.icon_catalog)
+                    check_source_text_fit(spec, args.template, args.manifest)
+                    return spec
                 spec = _validate_designs(_validate_assets(validate_presentation(value, known), catalog), manifest)
                 try:
                     # Dry-run render: overlong slide text is reported back so the model can shorten it.
@@ -244,8 +335,10 @@ def _run(args):
 
             result = generate_draft(
                 task, bundle, settings, validate=validate_with_fit,
-                schema=presentation_schema(), layout_catalog=manifest["layouts"],
-                image_catalog=catalog.prompt_catalog() if catalog else [],
+                schema=source_presentation_schema() if source_mode else presentation_schema(),
+                layout_catalog=source_prompt_catalog(manifest) if source_mode else manifest["layouts"],
+                image_catalog=photos if source_mode else catalog.prompt_catalog() if catalog else [],
+                icon_catalog=icons if source_mode else [],
                 template_version=manifest["template_version"],
             )
         except LLMError as exc:

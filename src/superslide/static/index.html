@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SuperSlide — создание презентаций</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
@@ -35,8 +36,8 @@
     </section>
     <section class="result-column" aria-labelledby="preview-heading">
       <h2 id="preview-heading">Корпоративное оформление</h2>
-      <div class="preview-frame"><img id="preview" src="/api/previews/title_slide/blue_graphic.png" alt="Пример корпоративного оформления слайда"></div>
-      <p id="preview-caption" class="preview-caption">31 композиция в фирменном стиле</p>
+      <div class="preview-frame"><img id="preview" src="/api/previews/title/slide_002.png" alt="Пример корпоративного оформления слайда"></div>
+      <p id="preview-caption" class="preview-caption">15 исходных типов · 211 вариантов</p>
       <div class="result-divider"></div>
       <div id="empty-state"><h2>Здесь появятся ваши слайды</h2><p class="lead">Создайте структуру или откройте демопример</p></div>
       <section id="slides-section" hidden aria-labelledby="slides-heading">
@@ -57,7 +58,10 @@
       <input id="api-key" type="password" autocomplete="off" maxlength="512" placeholder="Введите ключ доступа">
       <p class="muted small">Ключ хранится только в памяти запущенного приложения.</p>
       <div id="settings-status" role="status" aria-live="polite"></div>
-      <button class="primary" type="submit">Сохранить ключ</button>
+      <div class="settings-actions">
+        <button class="primary" type="submit">Сохранить ключ</button>
+        <button class="secondary" id="connection-check" type="button">Проверить подключение</button>
+      </div>
     </form>
   </dialog>
 </body>

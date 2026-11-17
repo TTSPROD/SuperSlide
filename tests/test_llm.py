@@ -208,7 +208,7 @@ class LLMTests(unittest.TestCase):
     def test_unsupported_template_version_fails_before_network(self, request):
         with self.assertRaises(LLMError) as failure:
             generate_draft("Задание", self.bundle, self.settings, validate, self.schema, {},
-                           template_version="2.0")
+                           template_version="3.0")
         self.assertEqual(failure.exception.code, "configuration")
         request.assert_not_called()
 

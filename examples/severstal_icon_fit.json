@@ -1,0 +1,138 @@
+{
+  "template_version": "2.0",
+  "title": "Иконки: квадратная область и сохранение пропорций",
+  "slides": [
+    {
+      "layout_id": "schemes",
+      "variant_id": "slide_001",
+      "updates": [
+        {
+          "field_id": "slide_icon_6",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_sinyaya"
+        },
+        {
+          "field_id": "slide_icon_10",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_sinyaya"
+        },
+        {
+          "field_id": "slide_icon_11",
+          "icon_id": "severstal_metallurgy_press_i_zagotovka_sinyaya"
+        },
+        {
+          "field_id": "slide_icon_12",
+          "icon_id": "severstal_innovation_ochki_virtualnoi_realnosti_sinyaya"
+        },
+        {
+          "field_id": "slide_icon_13",
+          "icon_id": "severstal_miscellaneous_informatsiya_bukva_i_sinyaya"
+        },
+        {
+          "field_id": "slide_text_3",
+          "text": "Иконки без искажений"
+        },
+        {
+          "field_id": "slide_text_35",
+          "paragraphs": [
+            "Широкая",
+            "",
+            "Вписана по ширине квадрата."
+          ]
+        },
+        {
+          "field_id": "slide_text_34",
+          "paragraphs": [
+            "Высокая",
+            "",
+            "Вписана по высоте квадрата."
+          ]
+        },
+        {
+          "field_id": "slide_text_33",
+          "paragraphs": [
+            "Квадратная",
+            "",
+            "Занимает квадратную область."
+          ]
+        },
+        {
+          "field_id": "slide_text_32",
+          "paragraphs": [
+            "Прозрачность",
+            "",
+            "Исходный SVG и его поля сохранены."
+          ]
+        },
+        {
+          "field_id": "slide_text_201",
+          "paragraphs": [
+            "Узкая",
+            "",
+            "Пропорции сохранены, иконка по центру."
+          ]
+        }
+      ]
+    },
+    {
+      "layout_id": "contents",
+      "variant_id": "slide_005",
+      "updates": [
+        {
+          "field_id": "slide_icon_18",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_19",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_21",
+          "icon_id": "severstal_metallurgy_press_i_zagotovka_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_22",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_24",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_25",
+          "icon_id": "severstal_metallurgy_press_i_zagotovka_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_27",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_28",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_30",
+          "icon_id": "severstal_metallurgy_press_i_zagotovka_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_31",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_15",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_16",
+          "icon_id": "severstal_metallurgy_press_i_zagotovka_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_12",
+          "icon_id": "severstal_products_kucha_zheleznoi_rudy_belaya_na_sinem_fone"
+        },
+        {
+          "field_id": "slide_icon_13",
+          "icon_id": "severstal_holidays_prazdnichnaya_svecha_belaya_na_sinem_fone"
+        }
+      ]
+    }
+  ]
+}
