@@ -13,6 +13,16 @@ from superslide.web import ROOT, WebState, _safe_failure, _failure_message
 
 
 class WebDiagnosticsTests(unittest.TestCase):
+    def test_unfilled_content_group_is_reported_without_source_text(self):
+        exc = LLMError("private model text", code="validation", diagnostics=[{
+            "validation_issues": [{"slide_index": 2, "reason": "unfilled_group", "limit": 4, "actual": 2}],
+        }])
+        details = _safe_failure(exc, {"stage": "slides", "slide_start": 2})
+        message = _failure_message(exc, details)
+        self.assertIn("не заполнены все блоки", message)
+        self.assertIn("Слайд 2", message)
+        self.assertNotIn("private model text", message)
+
     def setUp(self):
         self.temporary = temporary_directory()
         self.addCleanup(self.temporary.cleanup)

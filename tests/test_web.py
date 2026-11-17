@@ -11,7 +11,7 @@ import unittest
 import uuid
 from pathlib import Path
 from unittest.mock import patch
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 from PIL import Image
 from pptx import Presentation
@@ -105,7 +105,9 @@ class WebTests(unittest.TestCase):
         status, raw, headers = self.request("GET", job["downloads"]["pptx"])
         self.assertEqual(status, 200)
         self.assertTrue(raw.startswith(b"PK"))
-        self.assertIn('filename="presentation.pptx"', headers["Content-Disposition"])
+        self.assertEqual(job["title"], example["draft"]["title"])
+        self.assertEqual(job["download_filename"], example["draft"]["title"] + ".pptx")
+        self.assertEqual(unquote(headers["Content-Disposition"].split("filename*=UTF-8''", 1)[1]), job["download_filename"])
         path = Path(self.directory.name) / "download.pptx"
         path.write_bytes(raw)
         deck = Presentation(path)
@@ -114,7 +116,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(sum(shape.has_table for slide in deck.slides for shape in slide.shapes), 1)
         status, report, _ = self.request("GET", job["downloads"]["report"])
         self.assertEqual(status, 200)
-        self.assertEqual(report["output"], "presentation.pptx")
+        self.assertEqual(report["output"], job["download_filename"])
         for name in ("sources.json", "../llm.json", "presentation.pptx/../sources.json"):
             status, _, _ = self.request("GET", f"/api/downloads/{job['id']}/{name}")
             self.assertEqual(status, 404)
@@ -165,6 +167,26 @@ class WebTests(unittest.TestCase):
         status, created, _ = self.request("POST", "/api/build", {"draft": imported["draft"]}, json_body=True)
         self.assertEqual(status, 202)
         self.assertEqual(self.poll(created["job_id"])["status"], "succeeded")
+
+    def test_presentation_download_uses_a_readable_safe_generated_name(self):
+        draft = copy.deepcopy(self.example)
+        draft["title"] = "Шаттлы 2D/3D: итоги 2026"
+        draft["slides"] = draft["slides"][:3]
+        status, created, _ = self.request("POST", "/api/build", {"draft": draft}, json_body=True)
+        self.assertEqual(status, 202)
+        job = self.poll(created["job_id"])
+        self.assertEqual(job["status"], "succeeded", job)
+        expected = "Шаттлы 2D 3D итоги 2026.pptx"
+        self.assertEqual(job["download_filename"], expected)
+        status, raw, headers = self.request("GET", job["downloads"]["pptx"])
+        self.assertEqual(status, 200)
+        disposition = headers["Content-Disposition"]
+        self.assertTrue(disposition.isascii())
+        self.assertEqual(unquote(disposition.split("filename*=UTF-8''", 1)[1]), expected)
+        self.assertEqual(Presentation(io.BytesIO(raw)).core_properties.title, draft["title"])
+        # The friendly attachment name grants no access to arbitrary job files.
+        status, _, _ = self.request("GET", f"/api/downloads/{job['id']}/" + quote(expected))
+        self.assertEqual(status, 404)
 
     def test_import_rejects_invalid_drafts_extra_fields_and_foreign_requests(self):
         bad = copy.deepcopy(self.example)

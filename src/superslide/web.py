@@ -15,7 +15,7 @@ from dataclasses import replace
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PureWindowsPath
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, quote, urlsplit
 from zipfile import ZipFile
 
 from pydantic import ValidationError
@@ -25,6 +25,7 @@ from .config import ConfigurationError, load_llm_settings
 from .documents import DocumentBundle, DocumentError, load_documents
 from .llm import LLMError, generate_draft
 from .models import iter_image_refs, presentation_schema, validate_presentation
+from .naming import presentation_filename
 from .paths import (
     PROJECT_ROOT, OUTPUT_DIR, DEFAULT_TEMPLATE, DEFAULT_MANIFEST,
     DEFAULT_ASSET_CATALOG, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG, LEGACY_EXAMPLES,
@@ -77,7 +78,8 @@ def _source_editor_metadata(manifest, template, photos):
     ordinary text boxes, so fall back to the largest actual text run, then the
     uppermost box. Sample level styles and numeric KPI values are not headings.
     """
-    from .source_template import NS, _paragraph_roles, _xml, source_prompt_catalog
+    from .source_template import NS, _xml, source_prompt_catalog
+    from .source_text import source_title_metadata
 
     prompt = source_prompt_catalog(manifest)
     brand_hashes = {field["media_sha256"] for layout in manifest["layouts"].values()
@@ -90,40 +92,7 @@ def _source_editor_metadata(manifest, template, photos):
             for variant_id, variant in layout["variants"].items():
                 root = _xml(archive.read(variant["package_part"]))
                 eligible = prompt[layout_id]["variants"][variant_id]["fields"]
-                text_shapes = {}
-                native_titles = set()
-                for shape in root.xpath(".//p:sp[p:txBody]", namespaces=NS):
-                    ids = shape.xpath("./p:nvSpPr/p:cNvPr/@id", namespaces=NS)
-                    if not ids:
-                        continue
-                    field_id = "slide_text_" + ids[0]
-                    if field_id not in eligible:
-                        continue
-                    text_shapes[field_id] = shape
-                    if shape.xpath("./p:nvSpPr/p:nvPr/p:ph[@type='title' or @type='ctrTitle']", namespaces=NS):
-                        native_titles.add(field_id)
-
-                def heading_score(field_id):
-                    shape = text_shapes[field_id]
-                    # Restrict to displayed paragraphs: lstStyle can contain
-                    # unused large example fonts that are unrelated to this box.
-                    sizes = shape.xpath("./p:txBody/a:p/a:r[a:t[string-length(.) > 0]]/a:rPr/@sz | "
-                                        "./p:txBody/a:p/a:fld[a:t[string-length(.) > 0]]/a:rPr/@sz", namespaces=NS)
-                    if not sizes:
-                        sizes = shape.xpath("./p:txBody/a:p/a:pPr/a:defRPr/@sz | "
-                                            "./p:txBody/a:p/a:endParaRPr/@sz", namespaces=NS)
-                    font_size = max((int(size) for size in sizes if size.isdigit()), default=0)
-                    positions = shape.xpath("./p:spPr/a:xfrm/a:off/@y", namespaces=NS)
-                    top = int(positions[0]) if positions else 0
-                    return (field_id in native_titles, font_size, -top)
-
-                candidates = [field_id for field_id in text_shapes
-                              if field_id in native_titles or any(c.isalpha() for c in variant["fields"][field_id].get("sample_text", ""))]
-                title_id = max(candidates, key=heading_score) if candidates else None
-                title_field = variant["fields"].get(title_id, {})
-                paragraphs = title_field.get("paragraphs", [])
-                roles = _paragraph_roles(title_field, paragraphs) if paragraphs else None
-                title_index = roles.index("heading") if roles and "heading" in roles else None
+                title = source_title_metadata(variant, root, eligible)
 
                 photo_fields = []
                 slide_indices = {placeholder.get("idx", "0")
@@ -143,8 +112,7 @@ def _source_editor_metadata(manifest, template, photos):
                 editable = list(eligible)
                 editable.extend(item["field_id"] for item in photo_fields if item["field_id"] not in eligible)
                 result[(layout_id, variant_id)] = {
-                    "title_field_id": title_id, "title_paragraph_only": title_index is not None,
-                    "title_paragraph_index": title_index, "photo_fields": photo_fields,
+                    **title, "photo_fields": photo_fields,
                     "editable_field_ids": editable,
                 }
     return result
@@ -288,12 +256,15 @@ def _failure_message(exc, details):
                "chart_dimensions": "размер данных диаграммы не совпадает с макетом",
                "cell_paragraph_count": "слишком много абзацев в ячейке", "chart_unsupported": "выбрана диаграмма для ручного заполнения в PowerPoint",
                "slide_count": "неверное число слайдов", "unknown_asset": "ресурс отсутствует в каталоге",
+               "template_placeholder": "остался незаполненный текст образца",
                "missing": "не заполнено обязательное поле", "extra_forbidden": "лишнее поле",
                "string_too_long": "текст длиннее лимита", "literal_error": "недопустимое значение"}
     for issue in details.get("issues", [])[:2]:
         prefix = (f"Слайд {issue['slide_index']}, " if issue.get("slide_index") else "")
         field = issue.get("field_id", issue.get("path", ""))
         reason = reasons.get(issue.get("reason", issue.get("type")))
+        if issue.get("reason") == "unfilled_group":
+            message += f" {prefix}в выбранном макете не заполнены все блоки. Уточните данные или повторите генерацию."
         if field and reason:
             message += f" {prefix}{field}: {reason}."
             if type(issue.get("limit")) is int:
@@ -606,6 +577,7 @@ class WebState:
         lookup = {chunk.id: chunk.to_dict() for chunk in bundle.chunks} if bundle else None
         spec = self.validate(payload.get("draft"), set(lookup) if lookup is not None else None)
         draft = spec.model_dump(mode="json")
+        download_filename = presentation_filename(spec.title)
 
         def work(job_id):
             directory = self.directory / "jobs" / job_id
@@ -632,9 +604,10 @@ class WebState:
                                             source_lookup=lookup, asset_catalog=self.catalog)
             _write_json(directory / "draft.json", draft)
             # The downloadable report needs no absolute local output path.
-            report["output"] = "presentation.pptx"
+            report["output"] = download_filename
             _write_json(directory / "report.json", report)
-            return {"warnings": report.get("warnings", []), "downloads": {
+            return {"title": spec.title, "download_filename": download_filename,
+                    "warnings": report.get("warnings", []), "downloads": {
                 "pptx": f"/api/downloads/{job_id}/presentation.pptx", "json": f"/api/downloads/{job_id}/draft.json",
                 "report": f"/api/downloads/{job_id}/report.json"}}
 
@@ -698,7 +671,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
         if attachment:
-            self.send_header("Content-Disposition", f'attachment; filename="{attachment}"')
+            fallback = attachment if attachment.isascii() else "superslide" + Path(attachment).suffix
+            self.send_header("Content-Disposition", f'attachment; filename="{fallback}"; filename*=UTF-8\'\'{quote(attachment, safe="")}')
         self.end_headers()
 
     def _json(self, value, status=200):
@@ -775,7 +749,8 @@ class Handler(BaseHTTPRequestHandler):
                 job_id, filename = match.groups()
                 job = self.state.public_job(job_id)
                 if filename in DOWNLOADS and job["status"] == "succeeded" and job["kind"] == "build":
-                    return self._file(self.state.directory / "jobs" / job_id / filename, attachment=filename)
+                    attachment = job["download_filename"] if filename == "presentation.pptx" else filename
+                    return self._file(self.state.directory / "jobs" / job_id / filename, attachment=attachment)
                 if job["status"] == "failed" and (filename == "diagnostics.json" or filename == "partial-draft.json" and job.get("partial_download")):
                     return self._file(self.state.directory / "jobs" / job_id / filename, attachment=filename)
             static = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",

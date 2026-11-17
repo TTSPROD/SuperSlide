@@ -30,6 +30,129 @@ def response(payload):
 
 class SourcePromptTests(unittest.TestCase):
     @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planner_must_count_items_for_reviewed_repeating_blocks(self, request):
+        from superslide.llm import _select_source_designs
+        from superslide.source_template import load_source_manifest, source_prompt_catalog
+        catalog = source_prompt_catalog(load_source_manifest(ROOT / "templates/severstal_template.json"))
+        missing = {"title": "Решения", "slides": [
+            {"layout_id": "cards", "variant_id": "slide_006", "item_count": None}], "icon_groups": []}
+        corrected = json.loads(json.dumps(missing))
+        corrected["slides"][0]["item_count"] = 3
+        request.side_effect = [response(missing), response(corrected)]
+        _, _, result = _select_source_designs("Три решения", DocumentBundle(),
+                                              LLMSettings("https://mock.invalid/v1", "test"), catalog, [])
+        self.assertEqual(result.draft["slides"][0]["item_count"], 3)
+        self.assertEqual(request.call_count, 2)
+        self.assertIn("item_count", json.loads(request.call_args.args[0].data)["messages"][-1]["content"])
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planner_uses_reviewed_block_count_when_variant_name_has_no_count(self, request):
+        from superslide.llm import _select_source_designs
+        from superslide.source_template import load_source_manifest, source_prompt_catalog
+        catalog = source_prompt_catalog(load_source_manifest(ROOT / "templates/severstal_template.json"))
+        self.assertEqual(catalog["cards"]["variants"]["slide_006"]["item_slots"]["primary_blocks"]["count"], 3)
+        self.assertEqual(catalog["cards"]["variants"]["slide_007"]["item_slots"]["primary_blocks"]["count"], 4)
+        wrong = {"title": "Четыре решения", "slides": [
+            {"layout_id": "cards", "variant_id": "slide_006", "item_count": 4}], "icon_groups": []}
+        fixed = json.loads(json.dumps(wrong))
+        fixed["slides"][0]["variant_id"] = "slide_007"
+        request.side_effect = [response(wrong), response(fixed)]
+        selected, _, result = _select_source_designs("Четыре решения", DocumentBundle(),
+                                                     LLMSettings("https://mock.invalid/v1", "test"), catalog, [])
+        self.assertEqual(result.draft["slides"][0]["variant_id"], "slide_007")
+        self.assertEqual(request.call_count, 2)
+        payload = json.loads(json.loads(request.call_args_list[0].args[0].data)["messages"][1]["content"])
+        self.assertEqual(payload["layout_catalog"]["cards"]["variants"]["slide_006"]["item_slots"]["primary_blocks"]["count"], 3)
+        self.assertIn("primary_blocks", json.loads(request.call_args_list[0].args[0].data)["messages"][0]["content"])
+        self.assertEqual(set(selected["cards"]["variants"]), {"slide_007"})
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planner_matches_real_cards_with_different_russian_inflections(self, request):
+        from superslide.llm import _select_source_designs
+        from superslide.source_template import load_source_manifest, source_prompt_catalog
+        manifest = load_source_manifest(ROOT / "templates/severstal_template.json")
+        catalog = source_prompt_catalog(manifest)
+        self.assertEqual(catalog["cards"]["variants"]["slide_005"]["item_slots"]["named_item_kind"], "карточек")
+        self.assertEqual(catalog["cards"]["variants"]["slide_016"]["item_slots"]["named_item_kind"], "карточки")
+        incorrect = {"title": "Два преимущества", "slides": [
+            {"layout_id": "cards", "variant_id": "slide_005", "item_count": 2}], "icon_groups": []}
+        corrected = json.loads(json.dumps(incorrect))
+        corrected["slides"][0]["variant_id"] = "slide_016"
+        request.side_effect = [response(incorrect), response(corrected)]
+        selected, _, result = _select_source_designs("Два преимущества", DocumentBundle(),
+                                                     LLMSettings("https://mock.invalid/v1", "test"), catalog, [])
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(result.draft["slides"][0]["variant_id"], "slide_016")
+        self.assertEqual(set(selected["cards"]["variants"]), {"slide_016"})
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planner_does_not_match_unrelated_types_with_same_count(self, request):
+        from superslide.llm import _select_source_designs
+        variants = {
+            "slide_001": {"item_slots": {"named_item_count": 4, "named_item_kind": "карточки", "groups": []}, "fields": {}},
+            "slide_002": {"item_slots": {"named_item_count": 2, "named_item_kind": "диаграммы", "groups": []}, "fields": {}},
+        }
+        plan = {"title": "Два преимущества", "slides": [
+            {"layout_id": "cards", "variant_id": "slide_001", "item_count": 2}], "icon_groups": []}
+        request.return_value = response(plan)
+        _, _, result = _select_source_designs("Два преимущества", DocumentBundle(),
+                                              LLMSettings("https://mock.invalid/v1", "test"),
+                                              {"cards": {"variants": variants}}, [])
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(result.draft["slides"][0]["variant_id"], "slide_001")
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_fact_count_does_not_force_a_different_number_of_charts(self, request):
+        from superslide.llm import _select_source_designs
+        from superslide.source_template import load_source_manifest, source_prompt_catalog
+        manifest = load_source_manifest(ROOT / "templates/severstal_template.json")
+        catalog = source_prompt_catalog(manifest)
+        plan = {"title": "Два результата", "slides": [
+            {"layout_id": "diagram", "variant_id": "slide_004", "item_count": 2}], "icon_groups": []}
+        request.return_value = response(plan)
+        selected, _, result = _select_source_designs("Два результата", DocumentBundle(),
+                                                     LLMSettings("https://mock.invalid/v1", "test"), catalog, [])
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(result.draft["slides"][0]["variant_id"], "slide_004")
+        self.assertEqual(set(selected["diagram"]["variants"]), {"slide_004"})
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planner_repairs_wrong_number_of_cards_when_matching_variant_exists(self, request):
+        from superslide.llm import _select_source_designs
+        variants = {
+            "slide_001": {"name": "Две карточки", "item_slots": {"named_item_count": 2, "groups": []}, "fields": {}},
+            "slide_002": {"name": "Четыре карточки", "item_slots": {"named_item_count": 4, "groups": []}, "fields": {}},
+        }
+        catalog = {"cards": {"name": "Карточки", "variants": variants}}
+        plan = {"title": "Преимущества", "slides": [{"layout_id": "cards", "variant_id": "slide_002", "item_count": 2}], "icon_groups": []}
+        corrected = json.loads(json.dumps(plan))
+        corrected["slides"][0]["variant_id"] = "slide_001"
+        request.side_effect = [response(plan), response(corrected)]
+        selected, _, result = _select_source_designs("Два подтверждённых преимущества", DocumentBundle(),
+                                                     LLMSettings("https://mock.invalid/v1", "test"), catalog, [])
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(result.draft["slides"][0]["item_count"], 2)
+        self.assertEqual(set(selected["cards"]["variants"]), {"slide_001"})
+        request_payload = json.loads(request.call_args_list[0].args[0].data)
+        catalog_payload = json.loads(request_payload["messages"][1]["content"])["layout_catalog"]
+        self.assertEqual(catalog_payload["cards"]["variants"]["slide_001"]["item_slots"]["named_item_count"], 2)
+        self.assertIn("самостоятельных фактов", request_payload["messages"][0]["content"])
+        repair_payload = json.loads(request.call_args_list[1].args[0].data)
+        self.assertIn("4 блоков", repair_payload["messages"][-1]["content"])
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_no_forced_matching_when_catalog_has_no_exact_variant(self, request):
+        from superslide.llm import _select_source_designs
+        variants = {"slide_001": {"item_slots": {"named_item_count": 4, "groups": []}, "fields": {}}}
+        request.return_value = response({"title": "Преимущества", "slides": [
+            {"layout_id": "cards", "variant_id": "slide_001", "item_count": 2}], "icon_groups": []})
+        _, _, result = _select_source_designs("Два преимущества", DocumentBundle(),
+                                             LLMSettings("https://mock.invalid/v1", "test"),
+                                             {"cards": {"variants": variants}}, [])
+        self.assertEqual(result.draft["slides"][0]["item_count"], 2)
+        self.assertEqual(request.call_count, 1)
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
     def test_source_prompt_exposes_bindings_and_catalog_ids_without_asset_paths(self, request):
         request.return_value = response({"title": "Отчёт"})
         generate_draft("Отчёт", DocumentBundle(), LLMSettings("https://mock.invalid/v1", "test"),
@@ -46,11 +169,14 @@ class SourcePromptTests(unittest.TestCase):
         self.assertIn("slide_text_3", payload["layout_catalog"]["title"]["variants"]["slide_001"]["fields"])
         self.assertNotIn("private/", json.dumps(body))
         self.assertIn("updates", body["messages"][0]["content"])
+        self.assertIn("В корневом поле title", body["messages"][0]["content"])
+        self.assertIn("2–8 слов", body["messages"][0]["content"])
         self.assertEqual(request.call_count, 1)
 
     @patch("superslide.llm.urllib.request.OpenerDirector.open")
     def test_large_catalog_selects_existing_designs_and_icon_groups_before_content(self, request):
-        request.side_effect = [response({"slides": [{"layout_id": "title", "variant_id": "slide_002"}],
+        request.side_effect = [response({"title": "Технологии промышленной автоматизации",
+                                          "slides": [{"layout_id": "title", "variant_id": "slide_002"}],
                                           "icon_groups": ["tech"]}), response({"template_version": "2.0", "title": "Готово",
                     "slides": [{"layout_id": "title", "variant_id": "slide_002", "updates": [
                         {"field_id": "slide_icon_2", "icon_id": "server"}]}]})]
@@ -64,8 +190,11 @@ class SourcePromptTests(unittest.TestCase):
                                               {"id": "tree", "group_id": "ecology", "name": "Дерево"}])
         self.assertEqual(request.call_count, 2)
         self.assertEqual(result.attempts, 2)
+        self.assertEqual(result.draft["title"], "Технологии промышленной автоматизации")
         planning = json.loads(request.call_args_list[0].args[0].data)
         self.assertNotIn("sample_text", planning["messages"][1]["content"])
+        self.assertIn("В корневом поле title", planning["messages"][0]["content"])
+        self.assertIn("title", json.loads(planning["messages"][1]["content"])["required_output_schema"]["required"])
         final = json.loads(request.call_args_list[1].args[0].data)
         payload = json.loads(final["messages"][1]["content"])
         self.assertEqual(set(payload["layout_catalog"]["title"]["variants"]), {"slide_002"})
@@ -130,6 +259,42 @@ class SourceBatchTests(unittest.TestCase):
         self.assertGreaterEqual(len(validated), 4)
 
     @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_planned_presentation_title_is_preserved_across_all_content_fragments(self, request):
+        plan = self.plan()
+        plan["title"] = "Результаты автоматизации склада"
+        first, final = self.fragment(1, 2), self.fragment(3, 4)
+        first["title"], final["title"] = "Presentation", "Заключение"
+        request.side_effect = [response(plan), response(first), response(final)]
+        titles = []
+        schema = {"type": "object", "properties": {"title": {"type": "string", "maxLength": 150}}}
+        result = generate_draft("Подготовь ровно 4 слайда", DocumentBundle(),
+                                LLMSettings("https://mock.invalid/v1", "test", max_output_tokens=16000),
+                                lambda value: titles.append(value["title"]), schema,
+                                self.catalog(), template_version="2.0")
+        self.assertEqual(request.call_count, 3)
+        self.assertEqual(result.draft["title"], plan["title"])
+        self.assertTrue(titles)
+        self.assertEqual(set(titles), {plan["title"]})
+        for call in request.call_args_list[1:]:
+            payload = json.loads(json.loads(call.args[0].data)["messages"][1]["content"])
+            self.assertIn(plan["title"], payload["task"])
+            self.assertEqual(payload["required_output_schema"]["properties"]["title"]["const"], plan["title"])
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_missing_plan_title_is_repaired_before_content_generation(self, request):
+        missing = self.plan()
+        del missing["title"]
+        named = self.plan()
+        named["title"] = "Результаты автоматизации склада"
+        request.side_effect = [response(missing), response(named),
+                               response(self.fragment(1, 2)), response(self.fragment(3, 4))]
+        result = self.generate(lambda value: None, [])
+        self.assertEqual(request.call_count, 4)
+        self.assertEqual(result.draft["title"], named["title"])
+        repair = json.loads(request.call_args_list[1].args[0].data)
+        self.assertIn("title", repair["messages"][-1]["content"])
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
     def test_timeout_preserves_completed_slides_and_is_not_retried(self, request):
         request.side_effect = [response(self.plan()), response(self.fragment(1, 2)), socket.timeout("private endpoint")]
         progress = []
@@ -181,7 +346,7 @@ class SourceTextRepairTests(unittest.TestCase):
     def fixture(self):
         plan = {"title": "Результаты", "icon_groups": [], "slides": [
             {"layout_id": "title", "variant_id": "slide_003"},
-            {"layout_id": "bullets", "variant_id": "slide_012"},
+            {"layout_id": "bullets", "variant_id": "slide_012", "item_count": 3},
             {"layout_id": "last_slide", "variant_id": "slide_001"},
         ]}
         def long_paragraph(heading, body, actual):
@@ -191,7 +356,9 @@ class SourceTextRepairTests(unittest.TestCase):
             {"layout_id": "bullets", "variant_id": "slide_012", "source_refs": ["doc1"], "notes": "Пояснение докладчика",
              "updates": [{"field_id": "slide_text_2", "text": "Итоги"},
                          {"field_id": "slide_text_22", "paragraphs": long_paragraph("Результат", "Рост на 42%. ", 284)},
-                         {"field_id": "slide_text_27", "paragraphs": long_paragraph("Эффект", "Экономия 12 млн руб. ", 146)}]},
+                         {"field_id": "slide_text_27", "paragraphs": long_paragraph("Эффект", "Экономия 12 млн руб. ", 146)},
+                         {"field_id": "slide_text_25", "paragraphs": ["Показатель", "Рост производительности."]},
+                         {"field_id": "slide_text_20", "paragraphs": ["Ресурсы", "Учет экономии затрат."]}]},
         ]}
         patch_value = {"field_repairs": [
             {"slide_index": 2, "field_id": "slide_text_22", "paragraphs": ["Результат", "Производительность выросла на 42%."]},
@@ -314,7 +481,7 @@ class SourceCLIIntegrationTests(unittest.TestCase):
         }]}
         invalid = json.loads(json.dumps(final))
         invalid["slides"][0]["updates"][0]["field_id"] = "slide_text_999999"
-        request.side_effect = [response({"slides": [{"layout_id": "title", "variant_id": "slide_003"}],
+        request.side_effect = [response({"title": "Отчёт", "slides": [{"layout_id": "title", "variant_id": "slide_003"}],
                                           "icon_groups": []}), response(invalid), response(final)]
         with temporary_directory() as directory:
             config = Path(directory) / "llm.json"

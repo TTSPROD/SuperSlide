@@ -59,6 +59,22 @@ class LLMTests(unittest.TestCase):
         self.assertIn("doc1:text", body["messages"][1]["content"])
 
     @patch("superslide.llm.urllib.request.OpenerDirector.open")
+    def test_descriptive_presentation_title_is_generated_with_the_content_in_one_request(self, request):
+        request.return_value = api_response('{"title":"Автоматизация складской логистики"}')
+        result = generate_draft("Подготовь итоги автоматизации склада", self.bundle, self.settings,
+                                validate, self.schema, {"bullet_list": {"max_bullets": 5}})
+        self.assertEqual(result.draft["title"], "Автоматизация складской логистики")
+        self.assertEqual(request.call_count, 1)
+        messages = json.loads(request.call_args.args[0].data)["messages"]
+        self.assertIn("В корневом поле title", messages[0]["content"])
+        self.assertIn("2–8 слов", messages[0]["content"])
+        self.assertIn("«Presentation»", messages[0]["content"])
+        self.assertIn("расширение .pptx", messages[0]["content"])
+        payload = json.loads(messages[1]["content"])
+        self.assertEqual(payload["task"], "Подготовь итоги автоматизации склада")
+        self.assertIn("Revenue 125", json.dumps(payload))
+
+    @patch("superslide.llm.urllib.request.OpenerDirector.open")
     def test_json_and_schema_failures_are_repaired(self, request):
         request.side_effect = [api_response("not json"), api_response('{"title":42}'),
                                api_response('{"title":"Исправлено"}')]

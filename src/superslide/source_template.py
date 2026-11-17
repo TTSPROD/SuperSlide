@@ -1,8 +1,9 @@
 """Source-native Severstal templates. Never reconstruct the source artwork.
 
 The JSON describes the editable objects; the PPTX carries the original OOXML,
-fonts, masters, layouts, charts, workbooks and pictures. Only explicit updates
-are applied, and each occurrence gets its own slide/layout/master chain.
+fonts, masters, layouts, charts, workbooks and pictures. Content updates and the
+heading/body weight policy are applied to generated slides; each occurrence
+gets its own slide/layout/master chain when an inherited field changes.
 """
 from __future__ import annotations
 
@@ -24,6 +25,8 @@ from pydantic import Field, model_validator
 from .models import StrictModel, SourceId, Notes, _xml_text
 from .paths import PROJECT_ROOT, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG
 from .source_charts import replace_chart
+from .source_slots import source_slot_metadata, verify_reviewed_slots
+from .source_text import paragraph_roles as _paragraph_roles, source_heading_fields, source_title_metadata
 
 ROOT = PROJECT_ROOT
 P = "http://schemas.openxmlformats.org/presentationml/2006/main"
@@ -225,41 +228,6 @@ def _target_characters(maximum):
     return max(0, maximum * 85 // 100)
 
 
-def _paragraph_roles(field, paragraphs):
-    """Recognize a styled heading/body pair without inventing a semantic role."""
-    styles = []
-    for index, text in enumerate(paragraphs):
-        if not text.strip():
-            styles.append((None, False))
-            continue
-        raw = field.get("paragraph_styles", [])
-        if index >= len(raw):
-            return None
-        try:
-            paragraph = _xml(raw[index].encode("utf-8"))
-        except (E.XMLSyntaxError, AttributeError):
-            return None
-        properties = paragraph.xpath("./a:r[a:t[string-length(.) > 0]]/a:rPr", namespaces=NS)
-        if not properties:
-            properties = paragraph.xpath("./a:pPr/a:defRPr | ./a:endParaRPr", namespaces=NS)
-        if not properties:
-            return None
-        size = properties[0].get("sz")
-        styles.append((int(size) if size and size.isdigit() else None, properties[0].get("b") == "1"))
-    filled = [index for index, text in enumerate(paragraphs) if text.strip()]
-    if len(filled) < 2:
-        return None
-    first = filled[0]
-    size, bold = styles[first]
-    rest_sizes = [styles[index][0] for index in filled[1:] if styles[index][0] is not None]
-    smaller_body = size is not None and rest_sizes and size > max(rest_sizes)
-    plain_body = bold and any(not styles[index][1] for index in filled[1:])
-    if not (smaller_body or plain_body):
-        return None
-    return ["separator" if not text.strip() else "heading" if index == first else "body"
-            for index, text in enumerate(paragraphs)]
-
-
 def _text_budget(field, paragraphs):
     maximum = field["max_characters"]
     target = _target_characters(maximum)
@@ -315,6 +283,8 @@ def source_prompt_catalog(manifest):
     Paragraph character counts describe the original composition as guidance;
     only max_characters and paragraph_count are enforced limits.
     """
+    if manifest.get("render_mode") == "source_native" and set(manifest.get("layouts", {})) == set(SOURCE_TYPES):
+        verify_reviewed_slots(manifest)
     brand_hashes = {field["media_sha256"] for layout in manifest["layouts"].values()
                     for variant in layout["variants"].values() for field in variant["fields"].values()
                     if field.get("scope") == "master" and field.get("media_sha256")}
@@ -335,6 +305,9 @@ def source_prompt_catalog(manifest):
                     continue
                 fields[fid] = _compact_source_field(field)
             variants[vid] = {"name": _prompt_sample(variant["name"], 120), "fields": fields}
+            slots = source_slot_metadata(variant)
+            if slots:
+                variants[vid]["item_slots"] = slots
         catalog[key] = {"name": layout["name"], "text_budget_policy": {
             "counting_rule": "Characters include spaces and punctuation; paragraph separators do not count.",
             "target_rule": "Write at target_characters (85% of hard maximum); do not aim at the maximum.",
@@ -410,6 +383,81 @@ def _write_body(body, paragraphs):
     original = body.findall(f"{{{A}}}p")
     for i, paragraph in enumerate(original):
         _write_paragraph(paragraph, paragraphs[i] if i < len(paragraphs) else "")
+    # Empty trailing bullet slots still consume height in PowerPoint. Remove
+    # only explicitly numbered/bulleted paragraphs that were not supplied;
+    # internal empty separators and non-list layout paragraphs stay intact.
+    for paragraph in reversed(original):
+        if (not _paragraph_text(paragraph).strip() and len(body.findall(f"{{{A}}}p")) > 1
+                and paragraph.xpath("./a:pPr/a:buChar | ./a:pPr/a:buAutoNum", namespaces=NS)):
+            body.remove(paragraph)
+        else:
+            break
+
+
+def _set_paragraph_bold(paragraph, bold):
+    """Override run and paragraph inheritance without changing other styling."""
+    value = "1" if bold else "0"
+    properties = []
+    ppr = paragraph.find(f"{{{A}}}pPr")
+    if ppr is not None:
+        default = ppr.find(f"{{{A}}}defRPr")
+        if default is None:
+            default = E.Element(f"{{{A}}}defRPr")
+            extensions = ppr.find(f"{{{A}}}extLst")
+            ppr.insert(list(ppr).index(extensions) if extensions is not None else len(ppr), default)
+        properties.append(default)
+    for owner in paragraph:
+        if owner.tag not in {f"{{{A}}}r", f"{{{A}}}fld", f"{{{A}}}br"}:
+            continue
+        run_properties = owner.find(f"{{{A}}}rPr")
+        if run_properties is None:
+            run_properties = E.Element(f"{{{A}}}rPr")
+            owner.insert(0, run_properties)
+        properties.append(run_properties)
+    end = paragraph.find(f"{{{A}}}endParaRPr")
+    if end is None:
+        end = E.SubElement(paragraph, f"{{{A}}}endParaRPr")
+    properties.append(end)
+    for node in properties:
+        node.set("b", value)
+
+
+def _normalize_text_weight(root, design, scope, title, heading_fields=(), field_ids=None):
+    """Apply heading/body weight to output content using the original roles."""
+    changed = False
+    for field_id, field in design["fields"].items():
+        if field.get("scope", "slide") != scope or field_ids is not None and field_id not in field_ids:
+            continue
+        sample = field.get("sample_text", "")
+        if (field.get("automatic") or sample.strip() in {FOOTER_DATE_PLACEHOLDER, "‹#›", "<#>"}
+                or " ".join(sample.split()).startswith("Любое несанкционированное копирование")):
+            continue
+        if field["kind"] not in {"text", "table"}:
+            continue
+        shape = _find_shape(root, field["shape_id"])
+        if field["kind"] == "table":
+            table = shape.find(f".//{{{A}}}tbl")
+            props = table.find(f"{{{A}}}tblPr")
+            first_row = props is not None and props.get("firstRow") in {"1", "true"}
+            first_col = props is not None and props.get("firstCol") in {"1", "true"}
+            for row_index, row in enumerate(table.findall(f"{{{A}}}tr")):
+                for col_index, cell in enumerate(row.findall(f"{{{A}}}tc")):
+                    for paragraph in cell.findall(f"{{{A}}}txBody/{{{A}}}p"):
+                        _set_paragraph_bold(paragraph, first_row and row_index == 0 or first_col and col_index == 0)
+            changed = True
+            continue
+        original_text = field.get("paragraphs", sample.split("\n"))
+        roles = _paragraph_roles(field, original_text)
+        # A separate label needs source semantics or a smaller body beneath it;
+        # complete bold paragraphs can also be ordinary descriptions.
+        standalone_heading = scope == "slide" and field_id in heading_fields
+        main_title = scope == "slide" and field_id == title["title_field_id"]
+        native_title = bool(shape.xpath("./p:nvSpPr/p:nvPr/p:ph[@type='title' or @type='ctrTitle']", namespaces=NS))
+        for index, paragraph in enumerate(shape.findall(f"{{{P}}}txBody/{{{A}}}p")):
+            bold = roles[index] == "heading" if roles and index < len(roles) else main_title or native_title or standalone_heading
+            _set_paragraph_bold(paragraph, bold)
+        changed = True
+    return changed
 
 
 def _current_date_text():
@@ -704,6 +752,8 @@ def build_source_presentation(spec, template_path, manifest_path, output_path, *
             registered_masters.add(new_master)
         owner_parts = {"slide": chain[old_slide], "layout": chain.get(old_layout, old_layout), "master": new_master}
         roots = {scope: _xml(package[part]) for scope, part in owner_parts.items()}
+        title = source_title_metadata(design, roots["slide"])
+        heading_fields = source_heading_fields(design, roots["slide"])
         for update in slide.updates:
             field = design["fields"][update.field_id]
             root = roots[field["scope"]]
@@ -765,10 +815,15 @@ def build_source_presentation(spec, template_path, manifest_path, output_path, *
                                 break
                 _replace_image(package, ct, owner_parts[field["scope"]], shape, asset,
                                icon_mode=icon_mode, inherited_shape=inherited_shape)
+        for scope in roots:
+            edited_fields = None if scope == "slide" else {u.field_id for u in slide.updates}
+            if _normalize_text_weight(roots[scope], design, scope, title, heading_fields, edited_fields):
+                updated_scopes.add(scope)
         if _fill_footer_date(roots["slide"], _xml(package[old_layout]), date_text):
             updated_scopes.add("slide")
         for scope, root in roots.items():
-            # Byte-for-byte original slide XML in the absence of changes.
+            # Source artwork is retained; generated content gets explicit
+            # heading/body weight in addition to requested text and date edits.
             if scope in updated_scopes:
                 package[owner_parts[scope]] = _bytes(root)
         # Notes have a back-reference to their owner. Clone them for every
@@ -805,9 +860,24 @@ def build_source_presentation(spec, template_path, manifest_path, output_path, *
     package["ppt/presentation.xml"] = _bytes(presentation)
     package[_relpath("ppt/presentation.xml")] = _bytes(rels)
     package["[Content_Types].xml"] = _bytes(ct)
+    _set_presentation_title(package, spec.title)
     _fill_package_date_prompts(package, date_text)
     _prune_and_save(package, output_path)
-    return {"template_version": "2.0", "render_mode": "source_native", "slide_count": len(report), "footer_date": date_text, "slides": report, "output": str(Path(output_path).resolve())}
+    return {"template_version": "2.0", "render_mode": "source_native", "text_weight_policy": "headings_bold_body_regular", "slide_count": len(report), "footer_date": date_text, "slides": report, "output": str(Path(output_path).resolve())}
+
+
+def _set_presentation_title(package, title):
+    """Name the generated deck without changing other source core properties."""
+    core_path = "docProps/core.xml"
+    if core_path not in package:
+        return
+    core = _xml(package[core_path])
+    title_tag = "{http://purl.org/dc/elements/1.1/}title"
+    node = core.find(title_tag)
+    if node is None:
+        node = E.SubElement(core, title_tag)
+    node.text = title
+    package[core_path] = _bytes(core)
 
 
 def _prune_and_save(package, output_path):

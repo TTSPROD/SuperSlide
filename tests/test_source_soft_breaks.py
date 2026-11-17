@@ -1,5 +1,6 @@
 """Source text edits retain untouched soft breaks and write new native breaks."""
 import unittest
+from copy import deepcopy
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -22,6 +23,16 @@ def paragraph():
     </a:p>'''.encode())
 
 
+def without_text_bold(node):
+    """Compare original text and styling while allowing explicit font weight."""
+    result = deepcopy(node)
+    for properties in result.xpath(".//a:rPr | .//a:defRPr | .//a:endParaRPr", namespaces=NS):
+        properties.attrib.pop("b", None)
+        if not properties.attrib and not len(properties) and not properties.text:
+            properties.getparent().remove(properties)
+    return E.tostring(result, method="c14n")
+
+
 class SourceSoftBreakTests(unittest.TestCase):
     def test_source_update_accepts_soft_breaks_without_relaxing_other_controls(self):
         for operation in (
@@ -39,7 +50,7 @@ class SourceSoftBreakTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             _xml_text("Первая\vвторая строка")
 
-    def test_editing_only_real_source_heading_preserves_body_xml_exactly(self):
+    def test_editing_real_source_heading_preserves_body_except_explicit_text_weight(self):
         manifest_path = ROOT / "templates/severstal_template.json"
         template = ROOT / "templates/severstal_source.pptx"
         manifest = load_source_manifest(manifest_path)
@@ -56,15 +67,19 @@ class SourceSoftBreakTests(unittest.TestCase):
             root = _xml(source.read(variant["package_part"]))
         xpath = ".//p:sp[p:nvSpPr/p:cNvPr[@id='15']]/p:txBody/a:p"
         original = root.xpath(xpath, namespaces=NS)
-        before = E.tostring(original[1])
+        before = without_text_bold(original[1])
         with temporary_directory() as directory:
             output = Path(directory) / "edited-heading.pptx"
             build_source_presentation(spec, template, manifest_path, output)
             with ZipFile(output) as archive:
                 updated = _xml(archive.read("ppt/generated/slide1.xml")).xpath(xpath, namespaces=NS)
         self.assertEqual(_paragraph_text(updated[0]), "Анна Соколова")
-        self.assertEqual(E.tostring(updated[1]), before)
+        self.assertEqual(_paragraph_text(updated[1]), field["paragraphs"][1])
+        self.assertEqual(without_text_bold(updated[1]), before)
         self.assertEqual(len(updated[1].findall(f"{{{A}}}br")), 1)
+        for index, expected_bold in ((0, "1"), (1, "0")):
+            for properties in updated[index].xpath("./a:r/a:rPr | ./a:br/a:rPr", namespaces=NS):
+                self.assertEqual(properties.get("b"), expected_bold)
 
     def test_changed_soft_breaks_become_styled_native_breaks_before_end_properties(self):
         node = paragraph()

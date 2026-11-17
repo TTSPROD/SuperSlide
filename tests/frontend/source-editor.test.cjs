@@ -19,7 +19,7 @@ function editor() {
     fetch: async () => ({ ok: true, json: async () => ({ images: [], layouts: [] }) }),
   });
   const source = fs.readFileSync(path.join(__dirname, '../../src/superslide/static/app.js'), 'utf8');
-  vm.runInContext(source + '\nglobalThis.editor = { sourceTitle, writeSourceTitle, remapSourceUpdates };', context);
+  vm.runInContext(source + '\nglobalThis.editor = { sourceTitle, writeSourceTitle };', context);
   return context.editor;
 }
 function variant(id, paragraphs, mixed = false, heading = null) {
@@ -31,54 +31,58 @@ function variant(id, paragraphs, mixed = false, heading = null) {
 }
 const clone = value => JSON.parse(JSON.stringify(value));
 
-test('an author in a mixed title field cannot become part of a plain heading', () => {
+test('editing an inherited mixed heading preserves body soft breaks and the selected layout', () => {
   const api = editor();
-  const previous = variant('slide_text_26', ['Цитата', 'Имя Фамилия'], true, 0);
-  const next = variant('slide_text_31', ['LOREM', 'IPSUM']);
-  const slide = { updates: [] };
-  api.writeSourceTitle(slide, previous, 'Новый заголовок');
-  const before = structuredClone(slide);
-  assert.throws(() => api.remapSourceUpdates(slide, previous, next), /нельзя сохранить основной текст/);
-  assert.deepEqual(clone(slide), clone(before));
+  const layout = variant('slide_text_15', ['Заголовок', 'Первая\vвторая строка', 'Автор проекта'], true, 0);
+  const original = clone(layout);
+  const slide = { variant_id: 'slide_010', updates: [] };
+  api.writeSourceTitle(slide, layout, 'Результат проекта');
+  assert.deepEqual(clone(slide), {
+    variant_id: 'slide_010',
+    updates: [{ field_id: 'slide_text_15', paragraphs: ['Результат проекта', 'Первая\vвторая строка', 'Автор проекта'] }],
+  });
+  assert.equal(api.sourceTitle(slide, layout), 'Результат проекта');
+  assert.deepEqual(clone(layout), original);
 });
 
-test('a plain heading enters just the heading paragraph of a mixed field', () => {
+test('editing a noninitial heading preserves existing generated body paragraphs', () => {
   const api = editor();
-  const previous = variant('slide_text_31', ['Заголовок']);
-  const next = variant('slide_text_26', ['Цитата', 'Автор и описание'], true, 0);
-  const slide = { updates: [{ field_id: 'slide_text_31', text: 'Результат проекта' }] };
-  assert.deepEqual(clone(api.remapSourceUpdates(slide, previous, next)), [
-    { field_id: 'slide_text_26', paragraphs: ['Результат проекта', 'Автор и описание'] },
+  const layout = variant('slide_text_26', ['Образец', 'Заголовок', 'Подпись'], true, 1);
+  const slide = { variant_id: 'slide_011', updates: [
+    { field_id: 'slide_text_26', paragraphs: ['Содержание\vс переносом', 'Старый заголовок', 'Анна Соколова'] },
+  ] };
+  api.writeSourceTitle(slide, layout, 'Новый заголовок');
+  assert.deepEqual(clone(slide.updates), [
+    { field_id: 'slide_text_26', paragraphs: ['Содержание\vс переносом', 'Новый заголовок', 'Анна Соколова'] },
   ]);
+  assert.equal(slide.variant_id, 'slide_011');
 });
 
-test('compatible mixed fields keep their heading and body with native soft breaks', () => {
+test('editing a plain heading preserves other updates, notes and source references', () => {
   const api = editor();
-  const previous = variant('old', ['Заголовок', 'Тело'], true, 0);
-  const next = variant('new', ['Образец', 'Описание'], true, 0);
-  const slide = { updates: [{ field_id: 'old', paragraphs: ['Итоги', 'Первая\vвторая строка'] }] };
-  assert.deepEqual(clone(api.remapSourceUpdates(slide, previous, next)), [
-    { field_id: 'new', paragraphs: ['Итоги', 'Первая\vвторая строка'] },
+  const layout = variant('slide_text_32', ['Заголовок']);
+  const slide = { layout_id: 'title', variant_id: 'slide_002', notes: 'Заметка докладчику', source_refs: ['chunk_1'], updates: [
+    { field_id: 'slide_picture_16', photo_id: 'worker_portrait_orange_helmet' },
+    { field_id: 'slide_text_32', paragraphs: ['Прежний заголовок'] },
+    { field_id: 'slide_text_10', text: 'Основное содержание' },
+  ] };
+  const expected = structuredClone(slide);
+  expected.updates[1] = { field_id: 'slide_text_32', text: 'Итоги проекта' };
+  api.writeSourceTitle(slide, layout, 'Итоги проекта');
+  assert.deepEqual(clone(slide), expected);
+  assert.equal(api.sourceTitle(slide, layout), 'Итоги проекта');
+});
+
+test('repeated title edits replace the same update without duplicating or resetting body text', () => {
+  const api = editor();
+  const layout = variant('slide_text_15', ['Заголовок', 'Исходный образец'], true, 0);
+  const slide = { variant_id: 'slide_010', updates: [
+    { field_id: 'slide_text_15', paragraphs: ['Первая версия', 'Подтверждённое содержание\vвторой строки'] },
+  ] };
+  for (const title of ['Вторая версия', '', 'Окончательный заголовок']) api.writeSourceTitle(slide, layout, title);
+  assert.deepEqual(clone(slide.updates), [
+    { field_id: 'slide_text_15', paragraphs: ['Окончательный заголовок', 'Подтверждённое содержание\vвторой строки'] },
   ]);
-});
-
-test('a mixed field with a different paragraph structure is rejected without changing the slide', () => {
-  const api = editor();
-  const previous = variant('old', ['Заголовок', 'Тело'], true, 0);
-  for (const next of [variant('new', ['Тело', 'Заголовок'], true, 1), variant('new', ['Заголовок', 'Тело', 'Подпись'], true, 0)]) {
-    const slide = { updates: [{ field_id: 'old', paragraphs: ['Итоги', 'Описание'] }] };
-    const before = structuredClone(slide);
-    assert.throws(() => api.remapSourceUpdates(slide, previous, next), /нельзя сохранить основной текст/);
-    assert.deepEqual(clone(slide), clone(before));
-  }
-});
-
-test('plain multi-paragraph headings retain their content when moving to a plain field', () => {
-  const api = editor();
-  const previous = variant('old', ['Первая', 'Вторая']);
-  const next = variant('new', ['Другая', 'Композиция']);
-  const slide = { updates: [{ field_id: 'old', paragraphs: ['Итоги', 'Проекта'] }] };
-  assert.deepEqual(clone(api.remapSourceUpdates(slide, previous, next)), [
-    { field_id: 'new', paragraphs: ['Итоги', 'Проекта'] },
-  ]);
+  assert.equal(api.sourceTitle(slide, layout), 'Окончательный заголовок');
+  assert.equal(slide.variant_id, 'slide_010');
 });

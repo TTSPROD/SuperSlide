@@ -15,6 +15,16 @@ from superslide.source_template import (
 from superslide.source_charts import inspect_chart
 
 
+def without_text_bold(node):
+    """Allow only the output's explicit text-weight policy to differ."""
+    result = deepcopy(node)
+    for properties in result.xpath(".//a:rPr | .//a:defRPr | .//a:endParaRPr", namespaces={"a": A}):
+        properties.attrib.pop("b", None)
+        if not properties.attrib and not len(properties) and not properties.text:
+            properties.getparent().remove(properties)
+    return E.tostring(result, method="c14n")
+
+
 class SourceNativeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -42,7 +52,8 @@ class SourceNativeTests(unittest.TestCase):
             with ZipFile(output) as archive:
                 package = {n: archive.read(n) for n in archive.namelist()}
             original = package["ppt/generated/slide6.xml"]
-            # The automatic footer is the only change on this untouched slide.
+            # The automatic footer and explicit text weight are the only
+            # changes on a slide with no content updates.
             with ZipFile(self.template) as source:
                 expected = _xml(source.read(original_variant["package_part"]))
             actual = _xml(original)
@@ -52,7 +63,7 @@ class SourceNativeTests(unittest.TestCase):
                     sid = shape.find(f"{{{P}}}nvSpPr/{{{P}}}cNvPr").get("id")
                     target = actual.xpath(f".//p:sp[p:nvSpPr/p:cNvPr[@id='{sid}']]", namespaces={"p": P})[0]
                     target.replace(target.find(f"{{{P}}}txBody"), deepcopy(body))
-            self.assertEqual(E.tostring(actual, method="c14n"), E.tostring(expected, method="c14n"))
+            self.assertEqual(without_text_bold(actual), without_text_bold(expected))
             changed = _xml(package["ppt/generated/slide5.xml"])
             self.assertTrue(changed.xpath(".//*[local-name()='svgBlip']"))
             self.assertFalse(_xml(original).xpath(".//*[local-name()='svgBlip']"))

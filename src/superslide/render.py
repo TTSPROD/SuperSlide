@@ -133,6 +133,12 @@ def _bullet_style(paragraph, enabled):
 
 
 def _fill_text(slide, field, value, *, font_family, default_color, report, slide_number, field_name):
+    # Font weight follows the semantic field rather than emphasis left in a
+    # source template. Use the same weight for fitting and for the saved text.
+    base, _, suffix = field_name.rpartition("_")
+    heading = (field_name in {"title", "heading", "left_heading", "right_heading"}
+               or suffix.isdecimal() and base in {"title", "heading", "label", "step_title"})
+    field = {**field, "bold": heading}
     ph = slide.placeholders[field["idx"]]
     # Bboxes in the prepared template already include the intended padding.
     # Do not let Office's implicit default insets reduce the usable field height.
@@ -159,6 +165,7 @@ def _fill_text(slide, field, value, *, font_family, default_color, report, slide
         p.line_spacing = float(field.get("line_spacing", 1.12))
         p.space_before = Pt(0)
         p.space_after = Pt(float(field.get("space_after_pt", 7 if is_bullets else 0)))
+        p.font.bold = heading
         _bullet_style(p, is_bullets)
         for run in p.runs:
             run.font.name = font_family

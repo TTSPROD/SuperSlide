@@ -3,7 +3,6 @@
 const $ = (id) => document.getElementById(id);
 const state = { bootstrap: null, draft: null, sourceJob: null, uploads: [], images: [], busy: false };
 const requestHeaders = { "X-SuperSlide-Request": "1" };
-const sourceVariantCache = new WeakMap();
 let photoTarget = null;
 
 async function api(path, options = {}) {
@@ -23,7 +22,7 @@ function status(message, error = false) {
 function setBusy(busy) {
   state.busy = busy;
   for (const id of ["create", "download-pptx", "files", "task", "slide-count"]) $(id).disabled = busy;
-  document.querySelectorAll(".slide-title, .variant-select, .remove-file, .image-cell, .image-upload, .image-choose, .catalog-image, .image-search").forEach((element) => { element.disabled = busy; });
+  document.querySelectorAll(".slide-title, .remove-file, .image-cell, .image-upload, .image-choose, .catalog-image, .image-search").forEach((element) => { element.disabled = busy; });
 }
 function element(tag, className, value) {
   const node = document.createElement(tag);
@@ -186,30 +185,6 @@ function renderSlides() {
     title.setAttribute("aria-label", `${quote ? "Цитата" : "Заголовок"} слайда ${index + 1}`);
     title.addEventListener("input", () => { slide[quote ? "quote" : "title"] = title.value; invalidateDownload(); });
     content.append(title);
-    if (layout && layout.variants.length > 1) {
-      const wrap = element("div", "variant-wrap");
-      const label = element("label", "", "Оформление");
-      const select = element("select", "variant-select");
-      select.id = `variant-${index}`; label.htmlFor = select.id;
-      for (const variant of layout.variants) {
-        const option = element("option", "", variant.name);
-        option.value = variant.id;
-        // Photo cover requires an image; other cover variants prohibit one.
-        if (slide.layout_id === "title_slide") option.disabled = (variant.id === "photo") !== Boolean(slide.image);
-        select.append(option);
-      }
-      select.value = slide.variant_id || "default";
-      select.addEventListener("change", () => {
-        slide.variant_id = select.value;
-        // The contract allows a cover photo only in the photo variant.
-        if (slide.layout_id === "title_slide" && slide.variant_id !== "photo" && slide.image) {
-          slide.image = null;
-          renderSlides();
-        }
-        invalidateDownload();
-      });
-      wrap.append(label, select); content.append(wrap);
-    }
     if (slide.layout_id === "title_slide") {
       content.append(imagePicker("Фото обложки (вариант «Фотообложка»)", slide.image, slide, true));
     } else if (slide.layout_id === "photo_text" || slide.layout_id === "image_spotlight") {
@@ -219,7 +194,7 @@ function renderSlides() {
     }
     row.append(content); list.append(row);
   });
-  $("slides-subtitle").textContent = `${slideCountLabel(state.draft.slides.length)} · заголовки и оформление можно изменить`;
+  $("slides-subtitle").textContent = `${slideCountLabel(state.draft.slides.length)} · заголовки и изображения`;
   $("slides-section").hidden = false;
   invalidateDownload();
 }
@@ -238,7 +213,6 @@ function setSourceUpdate(slide, update) {
   else slide.updates[index] = update;
 }
 function writeSourceTitle(slide, variant, value) {
-  sourceVariantCache.delete(slide);
   const id = variant.title_field_id;
   if (variant.title_paragraph_only) {
     const paragraphs = sourceParagraphs(slide, id, variant.fields[id]);
@@ -246,78 +220,12 @@ function writeSourceTitle(slide, variant, value) {
     setSourceUpdate(slide, { field_id: id, paragraphs });
   } else setSourceUpdate(slide, { field_id: id, text: value });
 }
-function remapSourceUpdates(slide, previous, next) {
-  const allowed = new Set(next.editable_field_ids || Object.keys(next.fields || {}));
-  const photoSlots = new Set((next.photo_fields || []).map((field) => field.field_id));
-  const accepts = (update, id) => !update.photo_id || photoSlots.has(id);
-  const used = new Set();
-  const result = [], pending = [];
-  const put = (update, id) => { result.push({ ...structuredClone(update), field_id: id }); used.add(id); };
-  for (const update of slide.updates) {
-    const field = previous.fields[update.field_id];
-    if (update.field_id === previous.title_field_id) {
-      if (!next.title_field_id) throw new Error("В выбранном макете нет места для заголовка. Выберите другой макет.");
-      if (previous.title_paragraph_only) {
-        const paragraphs = sourceParagraphs(slide, previous.title_field_id, field);
-        const target = next.fields[next.title_field_id];
-        if (!next.title_paragraph_only || paragraphs.length !== target.paragraph_count ||
-            previous.title_paragraph_index !== next.title_paragraph_index) {
-          throw new Error("В этом макете нельзя сохранить основной текст вместе с заголовком. Выберите другой макет — текущий слайд сохранён.");
-        }
-        put({ paragraphs }, next.title_field_id);
-      } else if (next.title_paragraph_only) {
-        const candidate = { updates: [] };
-        writeSourceTitle(candidate, next, sourceTitle(slide, previous));
-        put(candidate.updates[0], next.title_field_id);
-      } else put(update, next.title_field_id);
-    } else pending.push({ update, field });
-  }
-  const unmatched = [];
-  for (const item of pending) {
-    const id = item.update.field_id, target = next.fields[id];
-    if (!used.has(id) && id !== next.title_field_id && allowed.has(id) && accepts(item.update, id) && target?.kind === item.field?.kind && target?.scope === item.field?.scope) put(item.update, id);
-    else unmatched.push(item);
-  }
-  for (const { update, field } of unmatched) {
-    const target = Object.entries(next.fields).find(([id, candidate]) => allowed.has(id) && accepts(update, id) && !used.has(id) && id !== next.title_field_id && candidate.kind === field?.kind && candidate.scope === field?.scope);
-    if (!target) throw new Error("В этом макете недостаточно полей для содержания слайда. Выберите другой макет — текущий слайд сохранён.");
-    put(update, target[0]);
-  }
-  // Even an unedited source title follows the slide when its layout changes.
-  if (!used.has(next.title_field_id) && next.title_field_id && previous.title_field_id) {
-    const candidate = { updates: result };
-    writeSourceTitle(candidate, next, sourceTitle(slide, previous));
-  }
-  return result;
-}
-async function changeSourceVariant(slide, previous, nextId) {
-  if (state.busy || nextId === slide.variant_id) return;
-  const next = layoutFor(slide.layout_id).variants.find((item) => item.id === nextId);
-  let cache = sourceVariantCache.get(slide);
-  if (!cache) { cache = new Map(); sourceVariantCache.set(slide, cache); }
-  cache.set(slide.variant_id, structuredClone(slide.updates));
-  setBusy(true);
-  try {
-    const updates = cache.has(nextId) ? structuredClone(cache.get(nextId)) : remapSourceUpdates(slide, previous, next);
-    const candidate = structuredClone(state.draft);
-    const index = state.draft.slides.indexOf(slide);
-    candidate.slides[index].variant_id = nextId;
-    candidate.slides[index].updates = updates;
-    const checked = await api("/api/import", jsonOptions({ draft: candidate }));
-    slide.variant_id = nextId;
-    slide.updates = checked.draft.slides[index].updates;
-    invalidateDownload();
-    status("Макет изменён. Содержание слайда сохранено.");
-  } catch (error) { status(`Макет не изменён. ${error.message}`, true); }
-  finally { renderSlides(); setBusy(false); }
-}
 function sourcePhotoChoice(slide, field) {
   const update = slide.updates.find((item) => item.field_id === field.field_id);
   const id = update ? update.photo_id : field.photo_id;
   return state.images.find((item) => item.id === id);
 }
 function chooseSourcePhoto(target, image) {
-  sourceVariantCache.delete(target.slide);
   setSourceUpdate(target.slide, { field_id: target.field.field_id, photo_id: image.id });
   invalidateDownload();
   renderSlides();
@@ -421,19 +329,6 @@ function renderSourceSlides() {
       input.addEventListener("input", () => { writeSourceTitle(slide, variant, input.value); invalidateDownload(); });
       content.append(label, input);
     }
-    if (layout) {
-      const wrap = element("div", "source-variant-wrap");
-      const label = element("label", "slide-field-label", "Макет");
-      const select = element("select", "variant-select");
-      select.id = `variant-${index}`; label.htmlFor = select.id;
-      for (const choice of layout.variants) {
-        const option = element("option", "", choice.name);
-        option.value = choice.id; select.append(option);
-      }
-      select.value = slide.variant_id;
-      select.addEventListener("change", () => changeSourceVariant(slide, variant, select.value));
-      wrap.append(label, select); content.append(wrap);
-    }
     const photos = (variant?.photo_fields || []).slice();
     for (const update of slide.updates) {
       const field = variant?.fields?.[update.field_id];
@@ -444,7 +339,7 @@ function renderSourceSlides() {
     photos.forEach((field, i) => content.append(sourcePhotoPicker(slide, field, i, photos.length)));
     row.append(content); list.append(row);
   });
-  $("slides-subtitle").textContent = `${slideCountLabel(state.draft.slides.length)} · заголовки, макеты и изображения`;
+  $("slides-subtitle").textContent = `${slideCountLabel(state.draft.slides.length)} · заголовки и изображения`;
   $("slides-section").hidden = false;
   invalidateDownload();
 }
@@ -477,7 +372,7 @@ $("draft-form").addEventListener("submit", async (event) => {
   } catch (error) { status(error.message, true); }
   finally { setBusy(false); }
 });
-async function downloadPresentation(url) {
+async function downloadPresentation(url, filename) {
   const response = await fetch(url);
   if (!response.ok) {
     let message = "Не удалось скачать PPTX. Повторите попытку.";
@@ -488,7 +383,7 @@ async function downloadPresentation(url) {
   if (!blob.size) throw new Error("Файл презентации пуст. Повторите попытку.");
   const objectUrl = URL.createObjectURL(blob);
   const link = element("a");
-  link.href = objectUrl; link.download = "presentation.pptx"; link.hidden = true;
+  link.href = objectUrl; link.download = filename || "Презентация.pptx"; link.hidden = true;
   document.body.append(link);
   link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
@@ -507,9 +402,9 @@ $("download-pptx").addEventListener("click", async () => {
     const started = await api("/api/build", jsonOptions({ draft: state.draft, source_job_id: state.sourceJob }));
     const job = await poll(started.job_id, downloadStatus);
     downloadStatus("Скачивание PPTX…");
-    await downloadPresentation(job.downloads.pptx);
+    await downloadPresentation(job.downloads.pptx, job.download_filename);
     showWarnings(job.warnings);
-    downloadStatus("PPTX готов. Скачивание началось.");
+    downloadStatus(`Файл «${job.download_filename}» готов. Скачивание началось.`);
   } catch (error) { downloadStatus(error.message, true); }
   finally {
     button.textContent = "Скачать PPTX";
