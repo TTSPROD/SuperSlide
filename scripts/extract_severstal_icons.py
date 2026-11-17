@@ -24,7 +24,7 @@ from lxml import etree as E
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "SeverstalBrand/Template/Severstal_Icons.pptx"
+SOURCE = ROOT / "resources/severstal/templates/Severstal_Icons.pptx"
 OUT = ROOT / "assets/icons/severstal"
 NS = {"p": "http://schemas.openxmlformats.org/presentationml/2006/main",
       "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -228,10 +228,11 @@ def expand_names(entry):
     return result
 
 
-def build(previews=None, allow_unnamed=False, render=False):
-    names_path = ROOT / "scripts/severstal_icon_names.json"
+def build(previews=None, allow_unnamed=False, render=False, diagnostics=None):
+    diagnostics = Path(diagnostics or ROOT / "output/assets/icons/severstal")
+    names_path = ROOT / "scripts/data/severstal_icon_names.json"
     names=json.loads(names_path.read_text(encoding="utf-8")) if names_path.exists() else {}
-    for part in sorted((ROOT/"scripts").glob("severstal_icon_names_part*.json")):
+    for part in sorted((ROOT/"scripts/data").glob("severstal_icon_names_part*.json")):
         names.update(json.loads(part.read_text(encoding="utf-8")))
     old_catalog=json.loads((OUT/"catalog.json").read_text(encoding="utf-8")) if (OUT/"catalog.json").exists() else {}
     used_paths=set()
@@ -337,8 +338,8 @@ def build(previews=None, allow_unnamed=False, render=False):
                     xx,yy=(i%cols)*tw,(i//cols)*th
                     sheet.paste(crop,(xx+(tw-crop.width)//2,yy+4))
                     draw.text((xx+4,yy+106),str(index),fill="black",font=font)
-                dest=OUT/"contact_sheets"/f"{num:02}_{gid}.jpg"
-                dest.parent.mkdir(exist_ok=True)
+                dest=diagnostics/"contact_sheets"/f"{num:02}_{gid}.jpg"
+                dest.parent.mkdir(parents=True,exist_ok=True)
                 sheet.save(dest,quality=90)
     catalog={"version":"1.0","brand":"Северсталь","source":SOURCE.relative_to(ROOT).as_posix(),
              "source_sha256":hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
@@ -351,7 +352,7 @@ def build(previews=None, allow_unnamed=False, render=False):
                       "with_embedded_raster":sum(not x["is_vector"] for x in records),
                       "extraction":dict(Counter(x["extraction"] for x in records))}}
     jwrite(OUT/"catalog.json",catalog)
-    jwrite(OUT/"source_inventory.json",inventory)
+    jwrite(diagnostics/"source_inventory.json",inventory)
     # Only remove files explicitly owned by the previous generated catalog.
     for record in old_catalog.get("icons",[]):
         for field in ("path","preview_path","png_file"):
@@ -367,5 +368,7 @@ if __name__=="__main__":
     parser.add_argument("--previews",type=Path,help="PowerPoint PNG exports, slide-01.png through slide-33.png")
     parser.add_argument("--allow-unnamed",action="store_true",help="Only for preparing annotation contact sheets")
     parser.add_argument("--render",action="store_true",help="Also render transparent PNG files (requires resvg_py)")
+    parser.add_argument("--diagnostics-output",type=Path,default=ROOT/"output/assets/icons/severstal",
+                        help="Contact sheets and source inventory, separate from versioned assets")
     args=parser.parse_args()
-    build(args.previews,args.allow_unnamed,args.render)
+    build(args.previews,args.allow_unnamed,args.render,args.diagnostics_output)

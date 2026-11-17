@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
 from superslide.models import SUPPORTED_VARIANTS, validate_presentation
 
 
 def main():
-    original = json.loads((ROOT / "examples/variety.json").read_text(encoding="utf-8"))
+    original = json.loads((ROOT / "examples/legacy/variety.json").read_text(encoding="utf-8"))
     samples = {slide["layout_id"]: slide for slide in original["slides"]}
     samples["title_slide"]["subtitle"] = "Коллекция композиций · все показатели и планы вымышлены"
     samples["photo_text"]["bullets"] = ["Единые цели для команды", "Обратная связь сотрудников", "Фокус на качестве"]
@@ -40,7 +40,7 @@ def main():
             slides.append(slide)
     payload = {"template_version": "1.2", "title": "SuperSlide — фирменные варианты композиций", "slides": slides}
     validate_presentation(payload)
-    output = ROOT / "examples/variants.json"
+    output = ROOT / "examples/legacy/variants.json"
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{output}: {len(slides)} slides")
 

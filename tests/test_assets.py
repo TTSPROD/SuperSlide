@@ -1,6 +1,5 @@
 import json
 import struct
-import tempfile
 import unittest
 import zlib
 from pathlib import Path
@@ -8,12 +7,13 @@ from unittest.mock import patch
 
 from PIL import Image
 
+from support import temporary_directory
 from superslide.assets import AssetError, MAX_IMAGE_BYTES, load_asset_catalog
 
 
 class AssetCatalogTests(unittest.TestCase):
     def setUp(self):
-        self.directory = tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1])
+        self.directory = temporary_directory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
         self.image_path = self.root / "photo.png"

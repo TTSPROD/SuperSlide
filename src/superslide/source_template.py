@@ -22,9 +22,10 @@ from PIL import Image, ImageOps
 from pydantic import Field, model_validator
 
 from .models import StrictModel, SourceId, Notes, _xml_text
+from .paths import PROJECT_ROOT, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG
 from .source_charts import replace_chart
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = PROJECT_ROOT
 P = "http://schemas.openxmlformats.org/presentationml/2006/main"
 A = "http://schemas.openxmlformats.org/drawingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -725,7 +726,7 @@ def build_source_presentation(spec, template_path, manifest_path, output_path, *
                 chart_relation.set("Target", "/" + new_chart)
                 package[_relpath(owner)] = _bytes(owner_rels)
             else:
-                asset = _asset(asset_catalog_path or ROOT / "assets/photos/severstal/catalog.json", update.photo_id) if update.photo_id else _asset(icon_catalog_path or ROOT / "assets/icons/severstal/catalog.json", update.icon_id)
+                asset = _asset(asset_catalog_path or SOURCE_PHOTO_CATALOG, update.photo_id) if update.photo_id else _asset(icon_catalog_path or SOURCE_ICON_CATALOG, update.icon_id)
                 icon_mode = bool(update.icon_id) or field["kind"] == "icon"
                 inherited_shape = None
                 if field["scope"] != "master":

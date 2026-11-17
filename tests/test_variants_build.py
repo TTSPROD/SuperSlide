@@ -2,12 +2,12 @@
 
 import copy
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
 from pptx import Presentation
 
+from support import temporary_directory
 from superslide.assets import load_asset_catalog
 from superslide.models import SUPPORTED_VARIANTS, validate_presentation
 from superslide.render import build_presentation
@@ -15,16 +15,16 @@ from superslide.template import TemplateError, iter_layout_designs, load_templat
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE = ROOT / "templates/corporate_base.pptx"
-MANIFEST = ROOT / "templates/template_manifest.json"
+TEMPLATE = ROOT / "templates/legacy/corporate_base.pptx"
+MANIFEST = ROOT / "templates/legacy/template_manifest.json"
 
 
 class VariantBuildTests(unittest.TestCase):
     def setUp(self):
-        self.directory = tempfile.TemporaryDirectory(dir=ROOT)
+        self.directory = temporary_directory()
         self.addCleanup(self.directory.cleanup)
         self.output = Path(self.directory.name) / "variants.pptx"
-        self.payload = json.loads((ROOT / "examples/variants.json").read_text(encoding="utf-8"))
+        self.payload = json.loads((ROOT / "examples/legacy/variants.json").read_text(encoding="utf-8"))
         self.catalog = load_asset_catalog(ROOT / "assets/images/catalog.json")
 
     def build(self):

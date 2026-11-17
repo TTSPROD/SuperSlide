@@ -1,14 +1,14 @@
-import tempfile
 import unittest
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from support import temporary_directory
 from superslide.documents import DocumentError, load_documents
 
 
 class DocumentTests(unittest.TestCase):
     def setUp(self):
-        self.directory = tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1])
+        self.directory = temporary_directory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
 

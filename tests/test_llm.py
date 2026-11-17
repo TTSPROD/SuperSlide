@@ -2,13 +2,13 @@ import io
 import json
 import os
 import socket
-import tempfile
 import unittest
 import urllib.error
 import urllib.request
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from support import temporary_directory
 from superslide.config import ConfigurationError, LLMSettings, load_llm_settings
 from superslide.documents import DocumentBundle, SourceChunk
 from superslide.llm import LLMError, _NoRedirects, _strict_response_schema, generate_draft, list_models
@@ -267,7 +267,7 @@ class LLMTests(unittest.TestCase):
         self.assertIsNone(_NoRedirects().redirect_request(None, None, 302, "", {}, "http://other"))
 
     def test_config_load_and_secret_rejection(self):
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]) as directory:
+        with temporary_directory() as directory:
             path = Path(directory) / "settings.json"
             path.write_text('{"base_url":"http://local/v1","model":"m","response_format":"none"}', encoding="utf-8-sig")
             with patch.dict(os.environ, {"SUPERSLIDE_LLM_MODEL": "override"}):

@@ -24,11 +24,15 @@ from .config import ConfigurationError, load_llm_settings
 from .documents import DocumentBundle, DocumentError, load_documents
 from .llm import LLMError, generate_draft
 from .models import iter_image_refs, presentation_schema, validate_presentation
+from .paths import (
+    PROJECT_ROOT, OUTPUT_DIR, DEFAULT_TEMPLATE, DEFAULT_MANIFEST,
+    DEFAULT_ASSET_CATALOG, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG, LEGACY_EXAMPLES,
+)
 from .render import LayoutOverflowError, build_presentation, check_text_fit
 from .template import load_template, select_layout
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = PROJECT_ROOT
 STATIC = Path(__file__).resolve().parent / "static"
 MAX_JSON = 2 * 1024 * 1024
 MAX_UPLOAD = 25 * 1024 * 1024
@@ -223,8 +227,8 @@ def _failure_message(exc, details):
 class WebState:
     def __init__(self, config_path: Path | None, template_path=None, manifest_path=None):
         self.config_path = config_path
-        self.template = Path(template_path or ROOT / "templates" / "severstal_source.pptx")
-        self.manifest_path = Path(manifest_path or ROOT / "templates" / "severstal_template.json")
+        self.template = Path(template_path or DEFAULT_TEMPLATE)
+        self.manifest_path = Path(manifest_path or DEFAULT_MANIFEST)
         self.manifest = json.loads(self.manifest_path.read_text(encoding="utf-8-sig"))
         self.source_mode = self.manifest.get("template_version") == "2.0"
         if self.source_mode:
@@ -232,14 +236,13 @@ class WebState:
             inspect_source_template(self.template, self.manifest_path)
         else:
             _, self.manifest, _ = load_template(self.template, self.manifest_path)
-        self.photo_catalog_path = (ROOT / "assets" / "photos" / "severstal" / "catalog.json"
-                                   if self.source_mode else ROOT / "assets" / "images" / "catalog.json")
-        self.icon_catalog_path = ROOT / "assets" / "icons" / "severstal" / "catalog.json"
+        self.photo_catalog_path = SOURCE_PHOTO_CATALOG if self.source_mode else DEFAULT_ASSET_CATALOG
+        self.icon_catalog_path = SOURCE_ICON_CATALOG
         self.catalog = load_asset_catalog(self.photo_catalog_path)
         self.icons = (json.loads(self.icon_catalog_path.read_text(encoding="utf-8-sig"))["icons"]
                       if self.source_mode else [])
         self.icons = [icon for icon in self.icons if icon.get("selectable", True)]
-        self.directory = ROOT / "output" / "web"
+        self.directory = ROOT / OUTPUT_DIR.name / "web"
         self.image_directory = self.directory / "images"
         self.image_sizes: dict[str, int] = {}
         self.lock = threading.RLock()
@@ -255,7 +258,7 @@ class WebState:
                         preview = ROOT / variant["preview"]
                         if preview.is_file():
                             self.previews[(layout_id, variant_id)] = preview
-        variants = ROOT / "examples" / "variants.json"
+        variants = LEGACY_EXAMPLES / "variants.json"
         if variants.exists():
             records = json.loads(variants.read_text(encoding="utf-8-sig"))["slides"]
             for n, slide in enumerate(records, 1):
@@ -659,8 +662,9 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/bootstrap":
                 return self._json(self.state.bootstrap())
             if path == "/api/example":
-                example_name = "severstal_15_types.json" if self.state.source_mode else "variety.json"
-                draft = json.loads((ROOT / "examples" / example_name).read_text(encoding="utf-8-sig"))
+                example = (ROOT / "examples" / "severstal_15_types.json" if self.state.source_mode
+                           else LEGACY_EXAMPLES / "variety.json")
+                draft = json.loads(example.read_text(encoding="utf-8-sig"))
                 draft["template_version"] = self.state.manifest["template_version"]
                 self.state.validate(draft)
                 return self._json({"draft": draft, "warnings": ["Демонстрационный пример: все показатели и планы вымышлены."]})

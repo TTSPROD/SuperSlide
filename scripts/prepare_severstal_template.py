@@ -170,7 +170,7 @@ def _fields_and_objects(prs, source_package, part, scope, prefix):
 
 
 def prepare(root=ROOT):
-    sources = root / "SeverstalBrand/Template"
+    sources = root / "resources/severstal/templates"
     template = root / "templates/severstal_source.pptx"
     manifest_path = root / "templates/severstal_template.json"
     designs_dir = root / "templates/severstal_designs"
@@ -192,7 +192,7 @@ def prepare(root=ROOT):
     notes_masters = E.Element(f"{{{P}}}notesMasterIdLst")
     presentation.insert(list(presentation).index(slides), notes_masters)
     manifest = {"template_version": "2.0", "render_mode": "source_native", "name": "Северсталь — исходные 15 типов",
-        "slide_size_emu": [12192000, 6858000], "source_directory": "SeverstalBrand/Template",
+        "slide_size_emu": [12192000, 6858000], "source_directory": "resources/severstal/templates",
         "policy": {"allowed_types": "Only the 15 supplied source files", "design": "Original native OOXML, no re-drawn layouts or font substitutions", "variants": "Every supplied source slide is a variant inside its original type", "text": "Keep original paragraph/run styling and object bounds; shorten content when necessary"},
         "photo_catalog": "assets/photos/severstal/catalog.json", "icon_catalog": "assets/icons/severstal/catalog.json",
         "icon_placement_policy": {"fit": "contain", "preserve_aspect_ratio": True, "alignment": "center", "slot_shape": "square", "square_side_policy": "min_original_extent", "coordinate_space": "parent"},

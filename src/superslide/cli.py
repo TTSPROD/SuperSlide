@@ -14,16 +14,12 @@ from .config import ConfigurationError, load_llm_settings
 from .documents import DocumentError, DocumentBundle, load_documents
 from .llm import LLMError, generate_draft, list_models
 from .models import iter_image_refs, load_presentation, presentation_schema, validate_presentation
+from .paths import (
+    PROJECT_ROOT, OUTPUT_DIR, DEFAULT_TEMPLATE, DEFAULT_MANIFEST,
+    DEFAULT_ASSET_CATALOG, SOURCE_PHOTO_CATALOG, SOURCE_ICON_CATALOG,
+)
 from .render import LayoutOverflowError, build_presentation, check_text_fit
 from .template import inspect_template, load_template, select_layout
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_TEMPLATE = PROJECT_ROOT / "templates" / "severstal_source.pptx"
-DEFAULT_MANIFEST = PROJECT_ROOT / "templates" / "severstal_template.json"
-DEFAULT_ASSET_CATALOG = PROJECT_ROOT / "assets" / "images" / "catalog.json"
-SOURCE_PHOTO_CATALOG = PROJECT_ROOT / "assets" / "photos" / "severstal" / "catalog.json"
-SOURCE_ICON_CATALOG = PROJECT_ROOT / "assets" / "icons" / "severstal" / "catalog.json"
 
 
 def _json_text(value):
@@ -148,7 +144,7 @@ def parser():
     _asset_flag(validate)
     build = sub.add_parser("build", help="Собрать нативный PPTX из JSON")
     build.add_argument("input", type=Path)
-    build.add_argument("--output", type=Path, required=True)
+    build.add_argument("--output", type=Path, help="PPTX; по умолчанию output/<имя входного файла>.pptx")
     build.add_argument("--report", type=Path)
     build.add_argument("--sources", type=Path)
     _template_flags(build)
@@ -157,7 +153,7 @@ def parser():
     _asset_flag(assets)
     extract = sub.add_parser("extract", help="Извлечь текст и источники из TXT/MD/DOCX/PDF")
     extract.add_argument("documents", type=Path, nargs="+")
-    extract.add_argument("--output", type=Path, required=True)
+    extract.add_argument("--output", type=Path, help="JSON источников; по умолчанию output/sources.json")
     extract.add_argument("--max-total-chars", type=int, default=160_000)
     draft = sub.add_parser("draft", help="Получить JSON от настроенной корпоративной LLM")
     task = draft.add_mutually_exclusive_group(required=True)
@@ -165,7 +161,7 @@ def parser():
     task.add_argument("--task-file", type=Path)
     draft.add_argument("--documents", type=Path, nargs="*", default=[])
     draft.add_argument("--config", type=Path)
-    draft.add_argument("--output", type=Path, required=True)
+    draft.add_argument("--output", type=Path, help="JSON презентации; по умолчанию output/draft.json")
     draft.add_argument("--sources-output", type=Path)
     draft.add_argument("--max-total-chars", type=int, default=160_000)
     _template_flags(draft)
@@ -192,6 +188,10 @@ def _check_paths(outputs, protected):
 
 
 def _run(args):
+    if args.command in {"build", "extract", "draft"} and args.output is None:
+        filename = (f"{args.input.stem}.pptx" if args.command == "build"
+                    else {"extract": "sources.json", "draft": "draft.json"}[args.command])
+        args.output = OUTPUT_DIR / filename
     if args.command == "serve":
         from .web import create_server
         import threading

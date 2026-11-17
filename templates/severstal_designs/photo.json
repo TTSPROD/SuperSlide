@@ -1,6 +1,6 @@
 {
   "layout_id": "photo",
-  "source_file": "SeverstalBrand/Template/Severstal_Photo.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Photo.pptx",
   "parts": {
     "sources/photo/ppt/slides/slide1.xml": {
       "scope": "slide",

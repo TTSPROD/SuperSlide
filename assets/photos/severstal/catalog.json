@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "brand": "Северсталь",
-  "source_directory": "SeverstalBrand/Template",
+  "source_directory": "resources/severstal/templates",
   "description": "Все фотографии из 15 исходных PPTX. Дедупликация только по SHA-256 исходных байтов; разные кадры и размеры сохранены отдельно.",
   "summary": {
     "source_decks": 15,
@@ -4471,10 +4471,10 @@
     }
   ],
   "contact_sheets": [
-    "contact_sheet_01.jpg",
-    "contact_sheet_02.jpg",
-    "contact_sheet_03.jpg",
-    "contact_sheet_04.jpg",
-    "contact_sheet_05.jpg"
+    "output/assets/photos/severstal/contact_sheet_01.jpg",
+    "output/assets/photos/severstal/contact_sheet_02.jpg",
+    "output/assets/photos/severstal/contact_sheet_03.jpg",
+    "output/assets/photos/severstal/contact_sheet_04.jpg",
+    "output/assets/photos/severstal/contact_sheet_05.jpg"
   ]
 }

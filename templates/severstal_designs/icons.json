@@ -1,6 +1,6 @@
 {
   "layout_id": "icons",
-  "source_file": "SeverstalBrand/Template/Severstal_Icons.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Icons.pptx",
   "parts": {
     "sources/icons/ppt/slides/slide1.xml": {
       "scope": "slide",

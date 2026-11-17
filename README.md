@@ -1,8 +1,28 @@
 # SuperSlide
 
-Локальная генерация редактируемых презентаций PowerPoint в оформлении «Северстали». Активный шаблон **2.0** подготовлен из **15 файлов в `SeverstalBrand/Template`**. В нём ровно **15 типов слайдов и 211 исходных вариантов**. Новые типы и композиции не добавлялись.
+Локальная генерация редактируемых презентаций PowerPoint в оформлении «Северстали». Активный шаблон **2.0** подготовлен из **15 файлов в `resources/severstal/templates`**. В нём ровно **15 типов слайдов и 211 исходных вариантов**. Новые типы и композиции не добавлялись.
 
 Модель выбирает существующий тип и вариант, затем заполняет его поля. Дизайн хранится исходными объектами PowerPoint: фигурами, группами, текстом, макетами, мастерами, темами, таблицами и диаграммами. Исходные размеры, шрифты, цвета, контуры и порядок объектов сохраняются. Новое фото заполняет исходную рамку с сохранением пропорций и центральным кадрированием.
+
+## Структура репозитория
+
+| Папка | Назначение |
+| --- | --- |
+| `src/superslide/` | Python-пакет: CLI, генератор, локальный веб-сервер и `static/` с интерфейсом |
+| `resources/severstal/` | Исходный брендбук и PPTX; 15 активных исходников находятся в `templates/` внутри этой папки |
+| `templates/` | Подготовленный активный шаблон, manifest и исходный DrawingML |
+| `assets/` | Ресурсы для сборки: фотографии, SVG/PNG и их семантические каталоги |
+| `examples/`, `schemas/` | Примеры входных данных и JSON Schema |
+| `config/` | Пример настройки LLM и игнорируемая локальная конфигурация |
+| `scripts/` | Подготовка, извлечение ресурсов, аудит и экспорт через PowerPoint |
+| `scripts/data/` | Проверенные метаданные фотографий и названия иконок для повторного извлечения |
+| `tests/` | Автоматические проверки; временные данные создаются в `output/tests/` |
+| `docs/` | Описание подготовки шаблона; документация версии 1.x находится в `docs/legacy/` |
+| `output/` | Все результаты запусков, отчёты, превью и временные файлы; папка исключена из Git |
+
+Файлы версии 1.x собраны в `templates/legacy/`, `examples/legacy/` и `scripts/legacy/`. Корневые `run.ps1`, `run-web.ps1` и `start-web.cmd` — точки входа для Windows.
+
+Подготовленные шаблоны и каталоги в `templates/` и `assets/` хранятся в Git: они нужны для работы приложения после клонирования. Скрипты подготовки намеренно обновляют эти ресурсы. Контактные листы, диагностические отчёты и экспортированные презентации хранятся отдельно в `output/`.
 
 ## Готовые файлы
 
@@ -11,7 +31,7 @@
 | [templates/severstal_template.json](templates/severstal_template.json) | Активный JSON-каталог 15 типов, 211 вариантов и привязок редактируемых полей |
 | [templates/severstal_designs](templates/severstal_designs) | Полные исходные DrawingML и описание объектов для каждого типа |
 | [templates/severstal_source.pptx](templates/severstal_source.pptx) | Нативная библиотека всех 211 исходных слайдов с зависимостями |
-| [assets/icons/severstal](assets/icons/severstal) | 30 групп иконок, названия, SVG, PNG, контактные листы и JSON-каталог |
+| [assets/icons/severstal](assets/icons/severstal) | 30 групп иконок, названия, SVG, PNG и JSON-каталог |
 | [assets/photos/severstal](assets/photos/severstal) | 99 фотографий с понятными именами, описаниями, тегами и JSON-каталогом |
 | [examples/severstal_15_types.json](examples/severstal_15_types.json) | По одному исходному варианту каждого типа |
 | [examples/severstal_all_variants.json](examples/severstal_all_variants.json) | Все 211 исходных вариантов |
@@ -44,6 +64,8 @@
 
 Нужен Python 3.11+ с зависимостями проекта. `run.ps1` использует `.venv`, `SUPERSLIDE_PYTHON` или Python из среды Codex. Самостоятельная установка:
 
+Для получения больших PPTX нужен Git LFS. Установите его и выполните `git lfs install`, затем после клонирования — `git lfs pull`. В LFS хранятся исходная библиотека `resources/severstal/severstal-template-v29.pptx` и активный шаблон `templates/severstal_source.pptx`.
+
 ```powershell
 py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e .
@@ -54,7 +76,7 @@ py -3 -m venv .venv
 ```powershell
 .\run.ps1 inspect-template
 .\run.ps1 validate examples/severstal_15_types.json
-.\run.ps1 build examples/severstal_15_types.json --output output/severstal_15_types.pptx
+.\run.ps1 build examples/severstal_15_types.json
 .\run.ps1 build examples/severstal_editable.json --output output/severstal_editable.pptx
 .\run.ps1 build examples/severstal_all_variants.json --output output/severstal_all_variants.pptx
 ```
@@ -64,6 +86,8 @@ py -3 -m venv .venv
 ```powershell
 .\run.ps1 serve --host 127.0.0.1 --port 8765 --open
 ```
+
+Двойной щелчок по `start-web.cmd` также запускает интерфейс. Если `--output` не указан, `build` пишет `output/<имя входного JSON>.pptx` и соседний `.report.json`, `extract` — `output/sources.json`, а `draft` — `output/draft.json` с сопутствующими файлами источников и диагностики. Эти пути отсчитываются от корня проекта, независимо от текущего рабочего каталога. Явный `--output` задаёт свой путь; относительный путь отсчитывается от текущего рабочего каталога.
 
 ## Заполнение JSON
 
@@ -97,7 +121,7 @@ py -3 -m venv .venv
 
 Для вставки иконок действует единое правило: **квадратная область → пропорциональное вписывание (`contain`) → центрирование**. Квадрат вписан в исходное место с сохранением его центра; широкая иконка заполняет ширину, высокая — высоту. Размер считается по меньшей стороне исходной области, чтобы не заходить на соседний текст. Масштаб родительских групп компенсируется. В PowerPoint это невидимая квадратная группа с отдельным объектом SVG/PNG внутри и блокировкой изменения пропорций; прежнее кадрирование к иконке не применяется. Модель задаёт только `icon_id`, геометрию определяет генератор.
 
-Политика и геометрия мест записаны в `icon_placement_policy` и `fields.*.placement` активного JSON-шаблона. Проверочный пример: [JSON](examples/severstal_icon_fit.json), [PowerPoint](output/severstal_icon_fit.pptx), [PDF](output/severstal-icon-fit-powerpoint/presentation.pdf).
+Политика и геометрия мест записаны в `icon_placement_policy` и `fields.*.placement` активного JSON-шаблона. Проверочный пример: [examples/severstal_icon_fit.json](examples/severstal_icon_fit.json). Его можно собрать командой `.\run.ps1 build examples/severstal_icon_fit.json`, затем экспортировать через `scripts/verify_powerpoint.ps1`.
 
 Для большого каталога модель сначала выбирает исходные варианты и группы иконок, затем заполняет презентацию порциями по одному-два слайда. В каждый запрос попадают только поля текущей порции и подходящие ресурсы. Лимит ответа рассчитывается по объёму полей. При ошибке исправляется только текущая порция; готовые слайды сохраняются отдельно. Положение и стиль объектов модель не задаёт.
 
@@ -116,7 +140,7 @@ py -3 -m venv .venv
 
 ## Воспроизводимость и проверка
 
-При запуске Python напрямую задайте `PYTHONPATH=src`. Подготовка и аудит:
+При запуске Python напрямую используйте окружение с установленными зависимостями. Из корня проекта в PowerShell задайте `$env:PYTHONPATH = (Join-Path $PWD 'src')`. Подготовка и аудит:
 
 ```powershell
 python scripts/prepare_severstal_template.py
@@ -128,8 +152,23 @@ python -m unittest discover -s tests
 
 Для генерации PNG иконок нужен дополнительный `resvg_py` (`python -m pip install resvg_py`); вставка уже подготовленной библиотеки его не требует. Для экспорта превью и PDF нужен установленный Microsoft PowerPoint: `scripts/export_severstal_sources.ps1` и `scripts/verify_powerpoint.ps1`.
 
+Результаты проверок и извлечения:
+
+| Путь | Содержимое |
+| --- | --- |
+| `output/assets/photos/severstal/` | Фотоконтактные листы и `extraction_report.json` |
+| `output/assets/icons/severstal/` | `contact_sheets/` и `source_inventory.json` |
+| `output/assets/images/` | Превью библиотеки фотографий версии 1.x |
+| `output/severstal-audit.json` | Отчёт аудита активного шаблона |
+| `output/severstal-source-previews/` | PNG исходных слайдов и отчёт экспорта PowerPoint |
+| `output/powerpoint/` | PDF, PNG и отчёт проверки PPTX через PowerPoint |
+| `output/web/` | Загруженные документы, задания, черновики и результаты веб-интерфейса |
+| `output/tests/`, `output/tmp/` | Временные данные проверок и локальной работы |
+
+`output/` создаётся по мере запуска команд и отсутствует в чистом клоне. Её содержимое не требуется добавлять в Git. Команды извлечения пересоздают контактные листы и отчёты; повторная сборка пересоздаёт PPTX. Пользовательские результаты и загруженные документы сохраняйте отдельно перед очисткой этой папки.
+
 Аудит проверяет побайтное совпадение исходных слайдов, макетов, медиа, диаграмм и встроенных файлов, полноту каталогов и целостность внутренних связей. Служебные идентификаторы masters/layouts нормализованы для объединения исходных презентаций, notesMaster приведён к одному экземпляру. Оформление объектов не изменяется.
 
-Проверочные результаты находятся в `output`: `severstal_15_types.pptx`, `severstal_editable.pptx`, `severstal-all-powerpoint/presentation.pdf`, `severstal-audit.json`. Все 211 исходных вариантов открыты и экспортированы Microsoft PowerPoint 16.0. Изменённый пример также открыт и экспортирован; проверка текстовых рамок не выявила переполнений в нём. Особенности и пометки исходного шаблона сохраняются.
+Для проверки всех 211 вариантов соберите `examples/severstal_all_variants.json` и откройте результат в PowerPoint либо запустите `scripts/verify_powerpoint.ps1 -InputFile output/severstal_all_variants.pptx`. Структурный аудит и автоматические тесты не заменяют просмотр оформления и переполнений нового содержания. Особенности и пометки исходного шаблона сохраняются.
 
-Предыдущая версия с 14 типами и 31 композицией описана в [архивной инструкции](docs/legacy-v1.md). Её файлы `templates/corporate_base.pptx` и `templates/template_manifest.json` оставлены для явного открытия старых JSON через `--template` и `--manifest`. Они не входят в активный каталог 15 типов.
+Предыдущая версия с 14 типами и 31 композицией описана в [архивной инструкции](docs/legacy/v1.md). Её файлы `templates/legacy/corporate_base.pptx` и `templates/legacy/template_manifest.json` оставлены для явного открытия старых JSON через `--template` и `--manifest`. Они не входят в активный каталог 15 типов.

@@ -1,6 +1,6 @@
 {
   "layout_id": "circle_schemes",
-  "source_file": "SeverstalBrand/Template/Severstal_CircleSchemes.pptx",
+  "source_file": "resources/severstal/templates/Severstal_CircleSchemes.pptx",
   "parts": {
     "sources/circle_schemes/ppt/slides/slide1.xml": {
       "scope": "slide",

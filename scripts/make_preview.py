@@ -5,11 +5,13 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
-    parser.add_argument("--output", type=Path, default=Path("output/preview.png"))
+    parser.add_argument("--output", type=Path, default=ROOT / "output/preview.png")
     parser.add_argument("--columns", type=int, choices=(1, 2, 3, 4), default=2)
     parser.add_argument("--slides", help="Номера слайдов через запятую; по умолчанию все")
     args = parser.parse_args()

@@ -2,7 +2,6 @@
 
 import copy
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -10,6 +9,7 @@ from PIL import Image
 from pptx import Presentation
 from pydantic import ValidationError
 
+from support import temporary_directory
 from superslide.assets import load_asset_catalog
 from superslide.models import iter_image_refs, validate_presentation
 from superslide.render import build_presentation
@@ -17,17 +17,17 @@ from superslide.template import TemplateError, load_template
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE = ROOT / "templates/corporate_base.pptx"
-MANIFEST = ROOT / "templates/template_manifest.json"
+TEMPLATE = ROOT / "templates/legacy/corporate_base.pptx"
+MANIFEST = ROOT / "templates/legacy/template_manifest.json"
 CATALOG = ROOT / "assets/images/catalog.json"
 
 
 class VarietyTests(unittest.TestCase):
     def setUp(self):
-        self.directory = tempfile.TemporaryDirectory(dir=ROOT)
+        self.directory = temporary_directory()
         self.addCleanup(self.directory.cleanup)
         self.output = Path(self.directory.name) / "deck.pptx"
-        self.payload = json.loads((ROOT / "examples/variety.json").read_text(encoding="utf-8"))
+        self.payload = json.loads((ROOT / "examples/legacy/variety.json").read_text(encoding="utf-8"))
         self.catalog = load_asset_catalog(CATALOG)
 
     def build(self, payload=None):
@@ -107,7 +107,7 @@ class VarietyTests(unittest.TestCase):
             load_template(TEMPLATE, path)
 
     def test_old_version_still_builds_without_asset_catalog(self):
-        payload = json.loads((ROOT / "examples/presentation.json").read_text(encoding="utf-8"))
+        payload = json.loads((ROOT / "examples/legacy/presentation.json").read_text(encoding="utf-8"))
         spec = validate_presentation(payload)
         self.assertEqual(list(iter_image_refs(spec)), [])
         build_presentation(spec, TEMPLATE, MANIFEST, self.output)

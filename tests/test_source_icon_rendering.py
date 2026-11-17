@@ -1,11 +1,11 @@
 """The native renderer contains icons in a square, without inherited crop."""
-import tempfile
 import unittest
 from pathlib import Path
 
 from lxml import etree as E
 from PIL import Image
 
+from support import temporary_directory
 from superslide.source_template import P, A, CT, NS, _xml, _replace_image
 
 
@@ -34,7 +34,7 @@ def root_with_shape(nested=False):
 
 class IconRenderingTests(unittest.TestCase):
     def render(self, size, *, nested=False, icon_mode=True):
-        with tempfile.TemporaryDirectory() as temporary:
+        with temporary_directory() as temporary:
             path = Path(temporary) / "icon.png"
             Image.new("RGBA", size, (0, 47, 108, 255)).save(path)
             root, shape = root_with_shape(nested)

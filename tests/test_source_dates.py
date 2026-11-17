@@ -1,11 +1,11 @@
 """The source's footer prompt becomes a visible build date on actual slides."""
 import json
-import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 from zipfile import ZipFile
 
+from support import temporary_directory
 from superslide.source_template import (
     ROOT, P, NS, FOOTER_DATE_PLACEHOLDER, build_source_presentation,
     load_source_manifest, source_prompt_catalog, _xml,
@@ -30,7 +30,7 @@ class SourceDateTests(unittest.TestCase):
             # The source archive retains its prompt; generated output resolves it.
             self.assertTrue(any(FOOTER_DATE_PLACEHOLDER in "".join(_xml(source.read(n)).xpath(".//a:t/text()", namespaces=NS))
                                 for n in source.namelist() if "/slideLayouts/" in n and n.endswith(".xml")))
-        with tempfile.TemporaryDirectory() as temp:
+        with temporary_directory() as temp:
             output = Path(temp) / "dated.pptx"
             with patch("superslide.source_template._current_date_text", return_value="17.11.2026"):
                 report = build_source_presentation(spec, ROOT / "templates/severstal_source.pptx", ROOT / "templates/severstal_template.json", output)
@@ -58,7 +58,7 @@ class SourceDateTests(unittest.TestCase):
         catalog = source_prompt_catalog(manifest)
         self.assertNotIn(FOOTER_DATE_PLACEHOLDER, json.dumps(catalog, ensure_ascii=False))
         spec = {"template_version": "2.0", "title": "Дата", "slides": [{"layout_id": "tables", "variant_id": "slide_018", "updates": []}]}
-        with tempfile.TemporaryDirectory() as temp:
+        with temporary_directory() as temp:
             for date in ("31.12.2026", "01.01.2027"):
                 output = Path(temp) / "dated.pptx"
                 with patch("superslide.source_template._current_date_text", return_value=date):

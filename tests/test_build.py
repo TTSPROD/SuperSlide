@@ -1,7 +1,6 @@
 import copy
 import io
 import json
-import tempfile
 import unittest
 from xml.etree import ElementTree as ET
 from pathlib import Path
@@ -10,22 +9,23 @@ from zipfile import ZipFile
 from pptx import Presentation
 from pydantic import ValidationError
 
+from support import temporary_directory
 from superslide.models import validate_presentation
 from superslide.render import LayoutOverflowError, build_presentation, check_text_fit
 from superslide.template import TemplateError, load_template
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE = ROOT / "templates/corporate_base.pptx"
-MANIFEST = ROOT / "templates/template_manifest.json"
+TEMPLATE = ROOT / "templates/legacy/corporate_base.pptx"
+MANIFEST = ROOT / "templates/legacy/template_manifest.json"
 
 
 class BuildTests(unittest.TestCase):
     def setUp(self):
-        self.workspace = tempfile.TemporaryDirectory(dir=ROOT)
+        self.workspace = temporary_directory()
         self.addCleanup(self.workspace.cleanup)
         self.work = Path(self.workspace.name)
-        self.payload = json.loads((ROOT / "examples/presentation.json").read_text(encoding="utf-8"))
+        self.payload = json.loads((ROOT / "examples/legacy/presentation.json").read_text(encoding="utf-8"))
 
     def build(self, payload=None, template=TEMPLATE, manifest=MANIFEST):
         out = self.work / "test.pptx"

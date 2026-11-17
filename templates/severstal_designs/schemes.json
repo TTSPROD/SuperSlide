@@ -1,6 +1,6 @@
 {
   "layout_id": "schemes",
-  "source_file": "SeverstalBrand/Template/Severstal_Schemes.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Schemes.pptx",
   "parts": {
     "sources/schemes/ppt/slides/slide1.xml": {
       "scope": "slide",

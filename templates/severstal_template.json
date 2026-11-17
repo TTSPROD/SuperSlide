@@ -6,7 +6,7 @@
     12192000,
     6858000
   ],
-  "source_directory": "SeverstalBrand/Template",
+  "source_directory": "resources/severstal/templates",
   "policy": {
     "allowed_types": "Only the 15 supplied source files",
     "design": "Original native OOXML, no re-drawn layouts or font substitutions",
@@ -42,7 +42,7 @@
   "layouts": {
     "title": {
       "name": "Титульные слайды",
-      "source_file": "SeverstalBrand/Template/Severstal_Title.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Title.pptx",
       "source_sha256": "56a98222c4627fe77311b80ff69291ac91d28489ca6902a952e7c4f9dacf96d6",
       "default_variant": "slide_002",
       "variants": {
@@ -2371,7 +2371,7 @@
     },
     "contents": {
       "name": "Оглавление",
-      "source_file": "SeverstalBrand/Template/Severstal_Contents.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Contents.pptx",
       "source_sha256": "c5278b1bf150d8f2f42b79ed4bdebcc649a8041c7f1fdc3020605c22d11f65f1",
       "default_variant": "slide_001",
       "variants": {
@@ -4751,7 +4751,7 @@
     },
     "separators": {
       "name": "Разделители",
-      "source_file": "SeverstalBrand/Template/Severstal_Separators.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Separators.pptx",
       "source_sha256": "89217cdbbc1d158559d1cade257c8751fb878f589ce3bed0580f2c009cbc9bb3",
       "default_variant": "slide_001",
       "variants": {
@@ -5929,7 +5929,7 @@
     },
     "big_text": {
       "name": "Крупный текст",
-      "source_file": "SeverstalBrand/Template/Severstal_BigText.pptx",
+      "source_file": "resources/severstal/templates/Severstal_BigText.pptx",
       "source_sha256": "24d7fde461dbc0f43897a62de053e9df59212bcda399d4452f6575120833dfcc",
       "default_variant": "slide_001",
       "variants": {
@@ -6751,7 +6751,7 @@
     },
     "bullets": {
       "name": "Буллиты",
-      "source_file": "SeverstalBrand/Template/Severstal_Bullits.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Bullits.pptx",
       "source_sha256": "667efe510cb77221932efc7e9a8273126a3998b189cb4b579a5d2899c60dc84a",
       "default_variant": "slide_001",
       "variants": {
@@ -14481,7 +14481,7 @@
     },
     "cards": {
       "name": "Карточки",
-      "source_file": "SeverstalBrand/Template/Severstal_Cards.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Cards.pptx",
       "source_sha256": "afa6bf28299b79d807826c83888c787cb31c903619381d270f1e2039eba7b518",
       "default_variant": "slide_001",
       "variants": {
@@ -24555,7 +24555,7 @@
     },
     "tables": {
       "name": "Таблицы",
-      "source_file": "SeverstalBrand/Template/Severstal_Tables.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Tables.pptx",
       "source_sha256": "c1d621c65e8da61bdc7d5af4c9e79907318353d68be24dbcf2b30f58f4a9d665",
       "default_variant": "slide_001",
       "variants": {
@@ -30505,7 +30505,7 @@
     },
     "diagram": {
       "name": "Диаграммы и графики",
-      "source_file": "SeverstalBrand/Template/Severstal_Diagram.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Diagram.pptx",
       "source_sha256": "cba3a0e080f6a38ac5953b2c0fde4a58d62c49c3292373085bd935ca399f6b02",
       "default_variant": "slide_001",
       "variants": {
@@ -46196,7 +46196,7 @@
     },
     "schemes": {
       "name": "Схемы",
-      "source_file": "SeverstalBrand/Template/Severstal_Schemes.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Schemes.pptx",
       "source_sha256": "5777e342e6f5d1788106bf1486fc9838c0050d84775fff33f27b8b57fe6b4b06",
       "default_variant": "slide_001",
       "variants": {
@@ -52206,7 +52206,7 @@
     },
     "circle_schemes": {
       "name": "Круговые схемы",
-      "source_file": "SeverstalBrand/Template/Severstal_CircleSchemes.pptx",
+      "source_file": "resources/severstal/templates/Severstal_CircleSchemes.pptx",
       "source_sha256": "b07c544b8e176e8fa9c121eac43daffcc32112e7fa806388b4b084b510dff42c",
       "default_variant": "slide_001",
       "variants": {
@@ -54063,7 +54063,7 @@
     },
     "team": {
       "name": "Команда",
-      "source_file": "SeverstalBrand/Template/Severstal_Team.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Team.pptx",
       "source_sha256": "13ba1c7a6eb795e4c3ab7fe1e23ecc82059678de497a578f765cac69003b9b7f",
       "default_variant": "slide_001",
       "variants": {
@@ -57867,7 +57867,7 @@
     },
     "photo": {
       "name": "Фотографии",
-      "source_file": "SeverstalBrand/Template/Severstal_Photo.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Photo.pptx",
       "source_sha256": "4288dfd749a12759a0a19270d8c4fab6c8b8f21d87dd19f694094c1f8374a8fc",
       "default_variant": "slide_001",
       "variants": {
@@ -63121,7 +63121,7 @@
     },
     "quotes": {
       "name": "Цитаты",
-      "source_file": "SeverstalBrand/Template/Severstal_Quotes.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Quotes.pptx",
       "source_sha256": "7d47788ca502cdda0893602cf41f723a941c0c696652e1767993e7fcf43e56c7",
       "default_variant": "slide_001",
       "variants": {
@@ -68769,7 +68769,7 @@
     },
     "icons": {
       "name": "Иконки",
-      "source_file": "SeverstalBrand/Template/Severstal_Icons.pptx",
+      "source_file": "resources/severstal/templates/Severstal_Icons.pptx",
       "source_sha256": "07eb022efd7629c00c72be3732c42ca510e1b6aaedc2b56519b1171232bdbda4",
       "default_variant": "slide_001",
       "variants": {
@@ -134129,7 +134129,7 @@
     },
     "last_slide": {
       "name": "Завершающие слайды",
-      "source_file": "SeverstalBrand/Template/Severstal_LastSlide.pptx",
+      "source_file": "resources/severstal/templates/Severstal_LastSlide.pptx",
       "source_sha256": "3367864c544bae92e840d46b490268c3ee47cf218eade813484ae6f9709db57e",
       "default_variant": "slide_001",
       "variants": {

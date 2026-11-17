@@ -19,12 +19,12 @@ from lxml import etree as ET
 
 try:
     from .prepare_variants import add_variant_specs, make_variant_layout, physical_designs
-except ImportError:  # Direct ``python scripts/prepare_template.py`` invocation.
+except ImportError:  # Direct ``python scripts/legacy/prepare_template.py`` invocation.
     from prepare_variants import add_variant_specs, make_variant_layout, physical_designs
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "SeverstalBrand" / "severstal-template-v29.pptx"
+ROOT = Path(__file__).resolve().parents[2]
+SOURCE = ROOT / "resources" / "severstal" / "severstal-template-v29.pptx"
 EMU_PER_INCH = 914400
 NS = {
     "p": "http://schemas.openxmlformats.org/presentationml/2006/main",
@@ -526,7 +526,7 @@ def prepare(source_path: Path, output_dir: Path) -> dict:
     return {"template": str(target), "bytes": target.stat().st_size, "layouts": list(specs), "design_count": len(list(physical_designs(specs))), "source_sha256": before}
 
 
-def prepare_photos(source_path: Path, image_dir: Path) -> dict:
+def prepare_photos(source_path: Path, image_dir: Path, preview_dir: Path | None = None) -> dict:
     """Re-extract the visually approved selection recorded in catalog.json.
 
     Keep original bytes when the source is below 2 MB. The hall photograph needs
@@ -565,7 +565,9 @@ def prepare_photos(source_path: Path, image_dir: Path) -> dict:
             thumb = ImageOps.contain(picture.convert("RGB"), (450, 370))
             preview.paste(thumb, (x + (480 - thumb.width) // 2, y + 12 + (370 - thumb.height) // 2))
         draw.text((x + 15, y + 395), f"{asset['id']} | source slide {asset['source_slide']}", font=font, fill="#002F6C")
-    preview_path = image_dir / "selection_preview.jpg"
+    preview_dir = preview_dir or ROOT / "output" / "assets" / "images"
+    preview_dir.mkdir(parents=True, exist_ok=True)
+    preview_path = preview_dir / "selection_preview.jpg"
     preview.save(preview_path, "JPEG", quality=88, optimize=True)
     return {"photos": len(catalog["images"]), "catalog": str(image_dir / "catalog.json"), "contact_sheet": str(preview_path)}
 
@@ -573,13 +575,14 @@ def prepare_photos(source_path: Path, image_dir: Path) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, default=SOURCE)
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "templates")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "templates" / "legacy")
     parser.add_argument("--extract-images", action="store_true", help="Re-extract the approved catalog photos and create a contact sheet")
     parser.add_argument("--image-dir", type=Path, default=ROOT / "assets" / "images")
+    parser.add_argument("--preview-dir", type=Path, default=ROOT / "output" / "assets" / "images")
     args = parser.parse_args()
     report = prepare(args.source, args.output_dir)
     if args.extract_images:
-        report.update(prepare_photos(args.source, args.image_dir))
+        report.update(prepare_photos(args.source, args.image_dir, args.preview_dir))
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 

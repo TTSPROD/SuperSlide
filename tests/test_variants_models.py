@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class VariantModelTests(unittest.TestCase):
     def setUp(self):
-        self.payload = json.loads((ROOT / "examples/variety.json").read_text(encoding="utf-8"))
+        self.payload = json.loads((ROOT / "examples/legacy/variety.json").read_text(encoding="utf-8"))
         self.payload["template_version"] = "1.2"
         self.by_layout = {slide["layout_id"]: slide for slide in self.payload["slides"]}
 
@@ -42,7 +42,7 @@ class VariantModelTests(unittest.TestCase):
     def test_old_presentations_keep_default_composition(self):
         for file_name in ("presentation.json", "variety.json"):
             with self.subTest(file=file_name):
-                legacy = json.loads((ROOT / "examples" / file_name).read_text(encoding="utf-8"))
+                legacy = json.loads((ROOT / "examples" / "legacy" / file_name).read_text(encoding="utf-8"))
                 for slide in legacy["slides"]:
                     slide.pop("variant_id", None)
                 spec = validate_presentation(legacy)

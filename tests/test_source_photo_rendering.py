@@ -1,12 +1,12 @@
 """Native photo replacement covers frames without changing source artwork."""
 import io
-import tempfile
 import unittest
 from pathlib import Path
 
 from lxml import etree as E
 from PIL import Image
 
+from support import temporary_directory
 from superslide.source_template import (
     A, CT, NS, P, R, _relations, _replace_image, _target, _xml,
 )
@@ -43,7 +43,7 @@ def group(child, scale_x, scale_y, *, rotation=0, flip_h=False):
 
 class PhotoRenderingTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = temporary_directory()
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
 

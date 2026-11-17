@@ -1,11 +1,11 @@
 """Photo cover crops preserve the displayed aspect and source frame geometry."""
-import tempfile
 import unittest
 from pathlib import Path
 
 from lxml import etree as E
 from PIL import Image
 
+from support import temporary_directory
 from superslide.source_icons import A, P
 from superslide.source_photos import describe_photo_frame, photo_crop
 
@@ -36,7 +36,7 @@ def group(child, scale_x, scale_y, *, rotation=None, flip_h=False):
 
 class SourcePhotoTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = temporary_directory()
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
 

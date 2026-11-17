@@ -4,12 +4,12 @@ import io
 import json
 import os
 import socket
-import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from support import temporary_directory
 from superslide.cli import main
 from superslide.config import LLMSettings
 from superslide.documents import DocumentBundle, SourceChunk
@@ -290,7 +290,7 @@ class SourceCLIIntegrationTests(unittest.TestCase):
         self.assertEqual(len(schema["$defs"]["SourceSlide"]["properties"]["layout_id"]["enum"]), 15)
 
     def test_source_json_validates_and_builds_through_cli(self):
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+        with temporary_directory() as directory:
             output = Path(directory) / "source.pptx"
             status, _, errors = self.invoke(["validate", str(ROOT / "examples/severstal_15_types.json")])
             self.assertEqual(status, 0, errors)
@@ -316,7 +316,7 @@ class SourceCLIIntegrationTests(unittest.TestCase):
         invalid["slides"][0]["updates"][0]["field_id"] = "slide_text_999999"
         request.side_effect = [response({"slides": [{"layout_id": "title", "variant_id": "slide_003"}],
                                           "icon_groups": []}), response(invalid), response(final)]
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+        with temporary_directory() as directory:
             config = Path(directory) / "llm.json"
             config.write_text(json.dumps({"base_url": "https://mock.invalid/v1", "model": "test",
                                            "api_key_env": "SUPERSLIDE_SOURCE_TEST_KEY"}), encoding="utf-8")

@@ -1,13 +1,13 @@
 """Native edits must retain artwork, isolate repeated slides and sync workbooks."""
 import hashlib
 import json
-import tempfile
 import unittest
 from copy import deepcopy
 from lxml import etree as E
 from pathlib import Path
 from zipfile import ZipFile
 
+from support import temporary_directory
 from superslide.source_template import (
     ROOT, P, A, R, load_source_manifest, validate_source_presentation,
     build_source_presentation, _xml, _relations, _target,
@@ -36,7 +36,7 @@ class SourceNativeTests(unittest.TestCase):
             {"layout_id": lid, "variant_id": vid, "updates": [{"field_id": fid, "text": "Тест"}]},
             {"layout_id": lid, "variant_id": vid, "updates": []},
         ])
-        with tempfile.TemporaryDirectory() as temporary:
+        with temporary_directory() as temporary:
             output = Path(temporary) / "edited.pptx"
             build_source_presentation(spec, self.template, self.manifest_path, output)
             with ZipFile(output) as archive:

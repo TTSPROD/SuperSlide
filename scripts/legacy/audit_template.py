@@ -19,7 +19,7 @@ from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 NS = {
     "p": "http://schemas.openxmlformats.org/presentationml/2006/main",
     "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -335,9 +335,9 @@ def audit(template: Path, manifest_path: Path, source_path: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--template", type=Path, default=ROOT / "templates" / "corporate_base.pptx")
-    parser.add_argument("--manifest", type=Path, default=ROOT / "templates" / "template_manifest.json")
-    parser.add_argument("--source", type=Path, default=ROOT / "SeverstalBrand" / "severstal-template-v29.pptx")
+    parser.add_argument("--template", type=Path, default=ROOT / "templates" / "legacy" / "corporate_base.pptx")
+    parser.add_argument("--manifest", type=Path, default=ROOT / "templates" / "legacy" / "template_manifest.json")
+    parser.add_argument("--source", type=Path, default=ROOT / "resources" / "severstal" / "severstal-template-v29.pptx")
     args = parser.parse_args()
     print(json.dumps(audit(args.template, args.manifest, args.source), indent=2))
 

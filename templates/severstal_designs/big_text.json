@@ -1,6 +1,6 @@
 {
   "layout_id": "big_text",
-  "source_file": "SeverstalBrand/Template/Severstal_BigText.pptx",
+  "source_file": "resources/severstal/templates/Severstal_BigText.pptx",
   "parts": {
     "sources/big_text/ppt/slides/slide1.xml": {
       "scope": "slide",

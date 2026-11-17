@@ -1,6 +1,6 @@
 {
   "layout_id": "last_slide",
-  "source_file": "SeverstalBrand/Template/Severstal_LastSlide.pptx",
+  "source_file": "resources/severstal/templates/Severstal_LastSlide.pptx",
   "parts": {
     "sources/last_slide/ppt/slides/slide1.xml": {
       "scope": "slide",

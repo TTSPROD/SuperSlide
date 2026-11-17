@@ -1,6 +1,6 @@
 {
   "layout_id": "separators",
-  "source_file": "SeverstalBrand/Template/Severstal_Separators.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Separators.pptx",
   "parts": {
     "sources/separators/ppt/slides/slide1.xml": {
       "scope": "slide",

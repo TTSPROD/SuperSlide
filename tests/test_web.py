@@ -5,7 +5,6 @@ import http.client
 import io
 import json
 import os
-import tempfile
 import threading
 import time
 import unittest
@@ -17,6 +16,7 @@ from urllib.parse import quote
 from PIL import Image
 from pptx import Presentation
 
+from support import temporary_directory
 from superslide.llm import GenerationResult, LLMError
 from superslide.web import MAX_JSON, MAX_UPLOAD, ROOT, create_server
 
@@ -24,19 +24,19 @@ from superslide.web import MAX_JSON, MAX_UPLOAD, ROOT, create_server
 class WebTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.directory = tempfile.TemporaryDirectory(dir=ROOT)
+        cls.directory = temporary_directory()
         cls.addClassCleanup(cls.directory.cleanup)
         cls.config = Path(cls.directory.name) / "llm.json"
         cls.config.write_text(json.dumps({"base_url": "https://internal.invalid/v1", "model": "test-model",
                                           "api_key_env": "SUPERSLIDE_WEB_TEST_KEY"}), encoding="utf-8")
         cls.server = create_server(port=0, config_path=cls.config,
-                                   template_path=ROOT / "templates/corporate_base.pptx",
-                                   manifest_path=ROOT / "templates/template_manifest.json")
+                                   template_path=ROOT / "templates/legacy/corporate_base.pptx",
+                                   manifest_path=ROOT / "templates/legacy/template_manifest.json")
         cls.server.state.directory = Path(cls.directory.name) / "web"
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
         cls.port = cls.server.server_address[1]
-        cls.example = json.loads((ROOT / "examples/variety.json").read_text(encoding="utf-8"))
+        cls.example = json.loads((ROOT / "examples/legacy/variety.json").read_text(encoding="utf-8"))
 
     @classmethod
     def tearDownClass(cls):

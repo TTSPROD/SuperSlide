@@ -3,13 +3,13 @@
 import io
 import json
 import os
-import tempfile
 import unittest
 import urllib.error
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from support import temporary_directory
 from superslide.cli import main
 
 
@@ -26,11 +26,11 @@ def response_for(payload):
 class DraftCLIIntegrationTests(unittest.TestCase):
     def setUp(self):
         project_root = Path(__file__).resolve().parents[1]
-        self.directory = tempfile.TemporaryDirectory(dir=project_root)
+        self.directory = temporary_directory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.template_args = ["--template", str(project_root / "templates/corporate_base.pptx"),
-                              "--manifest", str(project_root / "templates/template_manifest.json")]
+        self.template_args = ["--template", str(project_root / "templates/legacy/corporate_base.pptx"),
+                              "--manifest", str(project_root / "templates/legacy/template_manifest.json")]
         self.config = self.root / "llm.json"
         self.config.write_text(json.dumps({
             "base_url": "https://mock-corporate.invalid/v1", "model": "internal",

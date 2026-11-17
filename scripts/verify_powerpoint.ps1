@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$InputFile,
-    [string]$OutputDirectory = 'output/powerpoint'
+    [string]$OutputDirectory = (Join-Path (Split-Path -Parent $PSScriptRoot) 'output/powerpoint')
 )
 
 $ErrorActionPreference = 'Stop'

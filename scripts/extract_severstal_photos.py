@@ -113,7 +113,9 @@ def inventory(source: Path) -> tuple[dict, list]:
     return blobs, decks
 
 
-def previews(destination: Path, photos: list[dict]) -> list[str]:
+def previews(destination: Path, photos: list[dict], output: Path) -> list[str]:
+    """Build diagnostic sheets separately from the runtime photo library."""
+    output.mkdir(parents=True, exist_ok=True)
     files = []
     try:
         font = ImageFont.truetype("arial.ttf", 15)
@@ -136,12 +138,14 @@ def previews(destination: Path, photos: list[dict]) -> list[str]:
                 label = label[:cut] + "\n" + label[cut + 1:]
             draw.text((x + 10, y + 225), f"{page * 24 + i + 1}. {label}", font=font, fill="#002f6c")
         filename = f"contact_sheet_{page + 1:02d}.jpg"
-        sheet.save(destination / filename, quality=88)
-        files.append(filename)
+        path = output / filename
+        sheet.save(path, quality=88)
+        files.append(path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else str(path))
     return files
 
 
-def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
+def extract(source: Path, destination: Path, metadata_path: Path, diagnostics: Path | None = None) -> dict:
+    diagnostics = (diagnostics or ROOT / "output/assets/photos/severstal").resolve()
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     blobs, decks = inventory(source)
     photos_by_hash = {item["sha256"]: item for item in metadata["photos"]}
@@ -191,7 +195,7 @@ def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
             "sources": blob["sources"], "usages": blob["usages"],
             "use": "Original Office image-effect source; use associated PNG photo for insertion.",
         })
-    sheets = previews(destination, photos)
+    sheets = previews(destination, photos, diagnostics)
     summary = {
         "source_decks": len(decks), "unique_media": len(blobs), "photos": len(photos),
         "embedded_originals": len(originals), "excluded_non_photographic_media": sum(d in excluded for d in blobs),
@@ -200,13 +204,13 @@ def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
         "unclassified_media": 0,
     }
     catalog = {
-        "schema_version": "1.0", "brand": "Северсталь", "source_directory": "SeverstalBrand/Template",
+        "schema_version": "1.0", "brand": "Северсталь", "source_directory": "resources/severstal/templates",
         "description": "Все фотографии из 15 исходных PPTX. Дедупликация только по SHA-256 исходных байтов; разные кадры и размеры сохранены отдельно.",
         "summary": summary, "source_decks": decks, "images": photos,
         "embedded_originals": originals, "contact_sheets": sheets,
     }
     write_json(destination / "catalog.json", catalog)
-    write_json(destination / "extraction_report.json", {
+    write_json(diagnostics / "extraction_report.json", {
         "summary": summary,
         "classification_method": metadata["classification_method"],
         "excluded_counts": dict(Counter(excluded[d] for d in blobs if d in excluded)),
@@ -217,7 +221,7 @@ def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
     })
     (destination / "README.md").write_text(
         "# Фотографии Северстали\n\n"
-        f"Из 15 файлов `SeverstalBrand/Template` извлечены **{len(photos)} фотографий**. "
+        f"Из 15 файлов `resources/severstal/templates` извлечены **{len(photos)} фотографий**. "
         "PNG и JPEG сохранены побайтно, без пересжатия, изменения размеров и кадрирования. "
         "Одинаковые исходные байты объединены; разные исходные кадры, размеры и обработки одного сюжета оставлены отдельно.\n\n"
         "`catalog.json` содержит русские названия, описания, теги, размеры, SHA-256 и все исходные использования "
@@ -225,11 +229,12 @@ def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
         "Изображения не подтверждают личности изображенных сотрудников; портреты подписаны по внешнему виду.\n\n"
         "Два исходника JPEG XR из слоя эффектов PowerPoint сохранены в `originals/` и связаны с соответствующими PNG "
         "через `embedded_originals[].photo_id`. Для обычной вставки используйте PNG из `images`.\n\n"
-        "`contact_sheet_*.jpg` — визуальный каталог. `extraction_report.json` перечисляет исключенные нефотографические "
+        "В `output/assets/photos/severstal/` создаются `contact_sheet_*.jpg` — визуальный каталог — и "
+        "`extraction_report.json`, который перечисляет исключенные нефотографические "
         "media: иконки, логотипы, цифры, фирменную графику, рамки устройств и образцы диаграмм. "
         "Эти объекты остаются в первоисточниках; библиотека иконок находится в `assets/icons/severstal`.\n\n"
         "Повторное извлечение из корня проекта: `python scripts/extract_severstal_photos.py`. "
-        "Семантическая классификация хранится в `scripts/severstal_photo_metadata.json`; "
+        "Семантическая классификация хранится в `scripts/data/severstal_photo_metadata.json`; "
         "неизвестный SHA-256 останавливает скрипт, чтобы новые фото не были молча исключены.\n",
         encoding="utf-8",
     )
@@ -238,11 +243,13 @@ def extract(source: Path, destination: Path, metadata_path: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=ROOT / "SeverstalBrand/Template")
+    parser.add_argument("--source", type=Path, default=ROOT / "resources/severstal/templates")
     parser.add_argument("--output", type=Path, default=ROOT / "assets/photos/severstal")
-    parser.add_argument("--metadata", type=Path, default=Path(__file__).with_name("severstal_photo_metadata.json"))
+    parser.add_argument("--metadata", type=Path, default=ROOT / "scripts/data/severstal_photo_metadata.json")
+    parser.add_argument("--diagnostics-output", type=Path, default=ROOT / "output/assets/photos/severstal",
+                        help="Contact sheets and extraction report, separate from versioned assets")
     args = parser.parse_args()
-    print(json.dumps(extract(args.source, args.output, args.metadata), ensure_ascii=False, indent=2))
+    print(json.dumps(extract(args.source, args.output, args.metadata, args.diagnostics_output), ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 {
   "layout_id": "quotes",
-  "source_file": "SeverstalBrand/Template/Severstal_Quotes.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Quotes.pptx",
   "parts": {
     "sources/quotes/ppt/slides/slide1.xml": {
       "scope": "slide",

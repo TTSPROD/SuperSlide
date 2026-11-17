@@ -1,4 +1,4 @@
-param([string]$Root)
+param([string]$Root = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference='Stop'
 $app=$null
 $deck=$null
@@ -10,7 +10,7 @@ try {
  $oldAlerts=$app.DisplayAlerts
  $app.DisplayAlerts=1
  $reports=@()
- foreach($source in Get-ChildItem -LiteralPath (Join-Path $Root 'SeverstalBrand\Template') -Filter '*.pptx') {
+ foreach($source in Get-ChildItem -LiteralPath (Join-Path $Root 'resources\severstal\templates') -Filter '*.pptx') {
   $dest=Join-Path $Root ('output\severstal-source-previews\'+$source.BaseName)
   New-Item -ItemType Directory -Path $dest -Force | Out-Null
   $deck=$app.Presentations.Open($source.FullName,-1,0,0)

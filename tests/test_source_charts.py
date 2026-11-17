@@ -18,7 +18,7 @@ X = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
 
 def source_charts():
-    for path in sorted((ROOT / "SeverstalBrand/Template").glob("*.pptx")):
+    for path in sorted((ROOT / "resources/severstal/templates").glob("*.pptx")):
         with ZipFile(path) as archive:
             for part in archive.namelist():
                 if "/charts/chart" in part and part.endswith(".xml") and "/_rels/" not in part:

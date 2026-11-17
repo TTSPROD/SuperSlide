@@ -75,7 +75,7 @@ def load_template(template_path: str | Path, manifest_path: str | Path):
     if len(prs.slides):
         raise TemplateError(
             "Генераторный шаблон должен содержать 0 слайдов. "
-            "Используйте templates/corporate_base.pptx, а не исходную библиотеку примеров."
+            "Используйте templates/legacy/corporate_base.pptx, а не исходную библиотеку примеров."
         )
     layouts = {}
     for master in prs.slide_masters:

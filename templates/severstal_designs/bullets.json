@@ -1,6 +1,6 @@
 {
   "layout_id": "bullets",
-  "source_file": "SeverstalBrand/Template/Severstal_Bullits.pptx",
+  "source_file": "resources/severstal/templates/Severstal_Bullits.pptx",
   "parts": {
     "sources/bullets/ppt/slides/slide1.xml": {
       "scope": "slide",

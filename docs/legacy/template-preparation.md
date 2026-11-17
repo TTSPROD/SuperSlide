@@ -1,6 +1,6 @@
 # Подготовка корпоративного шаблона
 
-`templates/corporate_base.pptx` версии **1.2** — обычный PPTX формата 16:9 с **нулём слайдов**, одним настоящим slide master и **31 настоящим layout** для 14 типов содержания. Исходник `SeverstalBrand/severstal-template-v29.pptx` не изменяется. Генератор добавляет слайды через `presentation.slides.add_slide(layout)`, а не копирует образцы из исходной презентации. Имена, поля и геометрия всех 14 базовых композиций версии 1.1 сохранены; manifest объявляет `compatible_versions: ["1.0", "1.1", "1.2"]`. Ниже описаны базовые композиции; происхождение 17 дополнительных вариантов и их сопоставление с брендбуком приведены в [brand-variants.md](brand-variants.md).
+`templates/legacy/corporate_base.pptx` версии **1.2** — обычный PPTX формата 16:9 с **нулём слайдов**, одним настоящим slide master и **31 настоящим layout** для 14 типов содержания. Исходник `resources/severstal/severstal-template-v29.pptx` не изменяется. Генератор добавляет слайды через `presentation.slides.add_slide(layout)`, а не копирует образцы из исходной презентации. Имена, поля и геометрия всех 14 базовых композиций версии 1.1 сохранены; manifest объявляет `compatible_versions: ["1.0", "1.1", "1.2"]`. Ниже описаны базовые композиции; происхождение 17 дополнительных вариантов и их сопоставление с брендбуком приведены в [brand-variants.md](brand-variants.md).
 
 ## Происхождение оформления
 
@@ -14,7 +14,7 @@
 
 ## Контракт manifest
 
-`templates/template_manifest.json` содержит `template_version`, `compatible_versions`, `template_file`, `font_family`, `colors` и `layouts`. Идентификаторы базовых композиций совпадают с их PowerPoint-именами: `title_slide`, `bullet_list`, `two_columns`, `quote`, `table`, `bar_chart`, `section_divider`, `photo_text`, `image_spotlight`, `gallery`, `kpi_cards`, `timeline`, `comparison`, `closing`. Дополнительные композиции находятся в `layouts[id].variants[variant_id]` и имеют отдельные PowerPoint-имена вида `photo_text__photo_right`. При отсутствии `variant_id` выбирается базовая композиция `default`.
+`templates/legacy/template_manifest.json` содержит `template_version`, `compatible_versions`, `template_file`, `font_family`, `colors` и `layouts`. Идентификаторы базовых композиций совпадают с их PowerPoint-именами: `title_slide`, `bullet_list`, `two_columns`, `quote`, `table`, `bar_chart`, `section_divider`, `photo_text`, `image_spotlight`, `gallery`, `kpi_cards`, `timeline`, `comparison`, `closing`. Дополнительные композиции находятся в `layouts[id].variants[variant_id]` и имеют отдельные PowerPoint-имена вида `photo_text__photo_right`. При отсутствии `variant_id` выбирается базовая композиция `default`.
 
 В каждом `layouts[id]` есть `layout_name`, `fields`, `background_color` и `show_footer`. Последние два ключа позволяют рендереру корректно обрабатывать синие и фотографические слайды. Поле содержит:
 
@@ -49,7 +49,7 @@
 
 ## Локальная библиотека фотографий
 
-`assets/images/catalog.json` содержит только шесть визуально отобранных фотографий исходного PPTX. Сначала локально просмотрены три контакт-листа с 90 кандидатами; затем проверен итоговый `assets/images/selection_preview.jpg`. Фотографии не загружались из интернета и не генерировались нейросетью. Мокапы и иллюстрации в библиотеку не включены.
+`assets/images/catalog.json` содержит только шесть визуально отобранных фотографий исходного PPTX. Сначала локально просмотрены три контакт-листа с 90 кандидатами; затем проверен итоговый `output/assets/images/selection_preview.jpg`. Фотографии не загружались из интернета и не генерировались нейросетью. Мокапы и иллюстрации в библиотеку не включены.
 
 | ID | Содержание | Исходный слайд / media |
 |---|---|---|
@@ -77,11 +77,11 @@
 Из корня проекта с Python, где установлены `lxml` и `python-pptx`:
 
 ```powershell
-python scripts/prepare_template.py
-python scripts/audit_template.py
+python scripts/legacy/prepare_template.py
+python scripts/legacy/audit_template.py
 
 # Повторно извлечь проверенные фотографии и сформировать контакт-лист:
-python scripts/prepare_template.py --extract-images
+python scripts/legacy/prepare_template.py --extract-images
 ```
 
 Подготовка воспроизводима: ZIP-метки времени фиксированы, порядок частей стабилен, исходный файл проверяется SHA-256 до и после. Входной путь можно задать `--source`, каталог результата — `--output-dir`. Необязательный `--extract-images` использует зафиксированный проверенный catalog; путь к нему можно задать `--image-dir`. Команда не выбирает новые изображения автоматически.

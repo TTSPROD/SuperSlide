@@ -76,7 +76,7 @@ def audit(root):
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
     with ZipFile(package_path) as archive:
         package = {part: archive.read(part) for part in archive.namelist()}
-    source_dir = root / "SeverstalBrand/Template"
+    source_dir = root / "resources/severstal/templates"
     expected_files = {f"Severstal_{stem}.pptx" for stem, _ in EXPECTED.values()}
     require({path.name for path in source_dir.glob("*.pptx")} == expected_files, "Папка источников должна содержать ровно 15 заданных PPTX")
     require(set(manifest["layouts"]) == set(EXPECTED), "Manifest должен содержать ровно 15 исходных типов")

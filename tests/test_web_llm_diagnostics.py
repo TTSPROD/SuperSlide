@@ -1,20 +1,20 @@
 """Failures retain field-level evidence, while credentials/responses stay private."""
 import json
 import os
-import tempfile
 import threading
 import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from support import temporary_directory
 from superslide.llm import LLMError
 from superslide.web import ROOT, WebState, _safe_failure, _failure_message
 
 
 class WebDiagnosticsTests(unittest.TestCase):
     def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory()
+        self.temporary = temporary_directory()
         self.addCleanup(self.temporary.cleanup)
         self.config = Path(self.temporary.name) / "config.json"
         self.config.write_text(json.dumps({"base_url": "https://private.invalid/v1", "model": "test", "api_key_env": "SUPERSLIDE_PROBE_TEST_KEY", "timeout_seconds": 240}), encoding="utf-8")
